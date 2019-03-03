@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profile: {
+    borderRadius: 20,
     height: 150,
     width: 150,
   },
