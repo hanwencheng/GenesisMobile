@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import Tinode from 'tinode-sdk';
+import Tinode from '../../tinode/tinode';
 import { NavigationActions, StackActions } from 'react-navigation';
 import _ from 'lodash';
 import { chatConfig, wsInfo } from '../../config';
