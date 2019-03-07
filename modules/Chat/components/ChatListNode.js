@@ -26,7 +26,7 @@ export default class ChatListNode extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={renderImageSource(chatNode.public.photo)} />
+          <Text style={styles.image}>{chatNode.public.fn.substring(0,1)}</Text>
           {unread > 0 && (
             <View style={styles.imageFloat}>
               <Text style={styles.unreadNumber}>{unread < 100 ? unread.toString() : '..'}</Text>
@@ -73,12 +73,13 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     marginRight: 10,
-    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    height: 50,
-    width: 50,
-    resizeMode: 'contain',
+    fontFamily: AppStyle.mainFontBold,
+    fontSize: AppStyle.fontMiddleBig,
+    color: AppStyle.backgroundGreen,
   },
   imageFloat: {
     position: 'absolute',
