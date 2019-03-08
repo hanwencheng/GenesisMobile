@@ -14,9 +14,6 @@ export default class Connector extends React.Component {
   }
 
   componentDidMount() {
-    //TODO to be removed
-    const username = 'bob';
-    const password = 'bob123';
   }
 
   render() {

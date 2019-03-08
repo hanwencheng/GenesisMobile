@@ -16,6 +16,7 @@ class RulesList extends React.Component {
     hasVoting: PropTypes.bool.isRequired,
     navigation: PropTypes.object.isRequired,
     allowEdit: PropTypes.bool.isRequired,
+    isJoined: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {};
@@ -39,8 +40,9 @@ class RulesList extends React.Component {
   }
 
   renderCurrentAndProposing() {
-    const { voteOrigin, voteCached, isEdited } = this.props;
-    if (isEdited) {
+    const { voteOrigin, voteCached, isEdited, isJoined } = this.props;
+    const isNewTopic = !isJoined;
+    if (isEdited && !isNewTopic) {
       return (
         <React.Fragment>
           {this.renderSingleRule(true, voteCached, 'Proposing')}

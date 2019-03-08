@@ -27,7 +27,7 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
     case chatActionType.UPDATE_CHAT_MAP: {
       const topicId = action.data.topic || action.data.name;
       const oldSeq = _.get(state.chatMap, `${topicId}.seq`, -1);
-      const currentSeq = _.get(action.data, 'seq', -1);
+      const currentSeq = _.get(action.data, 'seq', 0);
       if (currentSeq < oldSeq) {
         return state;
       } else {
