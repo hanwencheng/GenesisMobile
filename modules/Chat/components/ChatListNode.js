@@ -26,7 +26,7 @@ export default class ChatListNode extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Text style={styles.image}>{chatNode.public.fn.substring(0,1)}</Text>
+          <Text style={styles.image}>{chatNode.public.fn.substring(0, 1)}</Text>
           {unread > 0 && (
             <View style={styles.imageFloat}>
               <Text style={styles.unreadNumber}>{unread < 100 ? unread.toString() : '..'}</Text>
