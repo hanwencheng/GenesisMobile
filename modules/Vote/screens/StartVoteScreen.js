@@ -79,7 +79,7 @@ const t = {
   GROUP_TOPIC_TITLE: 'Country Name',
   TOPIC_DESCRIPTION_TITLE: 'Description',
   TOPIC_RULES: 'Rules',
-  BUTTON_TEXT: 'Confirm and starting Voting',
+  BUTTON_TEXT: 'Confirm and Start Voting',
 };
 
 const styles = StyleSheet.create({

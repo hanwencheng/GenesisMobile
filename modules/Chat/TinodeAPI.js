@@ -13,6 +13,23 @@ import { loaderAction } from '../../actions/loaderAction';
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
+var newVoteReturnJSON = {
+  "id"   : "1"   ,
+  "user" : "bob" ,
+  "topic": "xyz" ,
+  "name" : "xyz" ,
+  "what" : "new" , 
+  "newvote" : "todo"
+};
+var voteReturnJSON = {
+  "id"   : "1"   ,
+  "user" : "bob" ,
+  "topic": "xyz" ,
+  "name" : "xyz" ,
+  "what" : "vote" , 
+  "ballot" : 0
+};
+
 class TinodeAPIClass {
   constructor() {
     this.init();
@@ -382,6 +399,10 @@ class TinodeAPIClass {
       .catch(err => {
         this.handleError(err.message);
       });
+  }
+
+  createNewVote(topicId) {
+    return this.tinode.note(topicId, "vote", 1);
   }
 
   logout(navigation) {

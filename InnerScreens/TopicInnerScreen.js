@@ -54,7 +54,7 @@ class TopicInnerScreen extends React.Component {
   }
 
   onPayment() {
-    const { voteCached, navigation, showPopup, walletAddress } = this.props;
+    const { voteCached, navigation, showPopup, topic, walletAddress } = this.props;
     Alert.alert(
       'Payment',
       `${voteCached.voteCost} NES`,
@@ -62,11 +62,15 @@ class TopicInnerScreen extends React.Component {
         {
           text: 'Pay now',
           onPress: () => {
+            return TinodeAPI.createNewVote(topic.topic);
             if (_.isEmpty(walletAddress)) {
               showPopup(t.NO_WALLET);
             } else {
-              lockScreen(navigation).then(() => {
-                showPopup(aboutInfo.todo);
+              return TinodeAPI.createNewVote(voteCached, topic, userId).then(ctrl => {
+                  console.log('create new vote is', ctrl);
+                  navigation.navigate(screensList.ChatList.label);
+              //lockScreen(navigation).then(() => {
+              //  showPopup(aboutInfo.todo);
               });
             }
           },
@@ -181,7 +185,7 @@ class TopicInnerScreen extends React.Component {
     const { voteCached } = this.props;
     if (_.isEmpty(voteCached.countryName)) return { error: t.CREATE_NAME_ERROR };
     if (_.isEmpty(voteCached.description)) return { error: t.CREATE_DESCRIPTION_ERROR };
-    if (_.isEmpty(voteCached.profile)) return { error: t.CREATE_PHOTO_ERROR };
+    //if (_.isEmpty(voteCached.profile)) return { error: t.CREATE_PHOTO_ERROR };
     return { error: null };
   }
 
@@ -316,7 +320,7 @@ const t = {
   TOPIC_META_TITLE: 'National Treasure',
   VIEW_MORE_MEMBERS: 'View more members',
 
-  BUTTON_CONFIRM_EDIT: 'Confirm and starting Voting',
+  BUTTON_CONFIRM_EDIT: 'Confirm and Start Voting',
   BUTTON_RESET_EDIT: 'Reset the rules',
   BUTTON_LEAVE: 'Delete and leave',
   BUTTON_JOIN: 'Join',
