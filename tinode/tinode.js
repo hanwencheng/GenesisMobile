@@ -1383,6 +1383,25 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
           },
         };
 
+      case 'initTxRequest':
+        return {
+          tx: {
+            what: 'init',
+            topic,
+            version: VERSION,
+            id: getNextUniqueId(),
+          }
+        };
+      case 'sendTx':
+        return {
+          tx: {
+            what: 'send',
+            topic,
+            version: VERSION,
+            id: getNextUniqueId(),
+          }
+        }
+
       default:
         throw new Error('Unknown packet type requested: ' + type);
     }
@@ -1536,7 +1555,16 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
         if (this.onInfoMessage) {
           this.onInfoMessage(pkt.info);
         }
-      } else {
+      } else if(pkt.txres) {
+        const topic = cacheGet('topic', pkt.txres.topic);
+        if (topic) {
+          topic._routeTx(pkt.txres);
+
+          if (this.onTxMessage) {
+            this.onTxMessage(pkt.txres);
+          }
+        }
+      }else {
         this.logger('ERROR: Unknown packet received.');
       }
     }
@@ -2181,6 +2209,22 @@ Tinode.prototype = {
    *
    * @returns {Promise} Promise which will be resolved/rejected on receiving server reply.
    */
+
+
+  initTxRequest(topic, params) {
+    const pkt = this.initPacket('initTxRequest', topic);
+    pkt.tx = mergeObj(pkt.tx, params);
+
+    return this.send(pkt, pkt.tx.id)
+  },
+
+  sendTx(topic, params){
+    const pkt = this.initPacket('sendTx', topic);
+    pkt.tx = mergeObj(pkt.tx, params);
+
+    return this.send(pkt, pkt.tx.id)
+  },
+
   getMeta(topic, params) {
     const pkt = this.initPacket('get', topic);
 
@@ -2539,6 +2583,13 @@ Tinode.prototype = {
    * @type {Tinode.onPresMessage}
    */
   onPresMessage: undefined,
+
+  /**
+   * Callback to receive {tx} (transaction) messages.
+   * @memberof Tinode#
+   * @type {Tinode.onTxMessage}
+   */
+  onTxMessage: undefined,
 
   /**
    * Callback to receive all messages as objects.
@@ -3127,7 +3178,7 @@ AccessMode.prototype = {
  * @param {callback} callbacks.onMetaSub - Called for a single subscription record change.
  * @param {callback} callbacks.onSubsUpdated - Called after a batch of subscription changes have been recieved and cached.
  * @param {callback} callbacks.onDeleteTopic - Called after the topic is deleted.
- * @param {callback} callbacls.onAllMessagesReceived - Called when all requested {data} messages have been recived.
+ * @param {callback} callbacks.onAllMessagesReceived - Called when all requested {data} messages have been recived.
  */
 var Topic = function(name, callbacks) {
   // Parent Tinode object.
@@ -3191,6 +3242,7 @@ var Topic = function(name, callbacks) {
     this.onMetaSub = callbacks.onMetaSub;
     // All subscription records received;
     this.onSubsUpdated = callbacks.onSubsUpdated;
+    this.onTxMessage = callback.onTxMessage;
     this.onTagsUpdated = callbacks.onTagsUpdated;
     this.onDeleteTopic = callbacks.onDeleteTopic;
     this.onAllMessagesReceived = callbacks.onAllMessagesReceived;
@@ -4211,6 +4263,10 @@ Topic.prototype = {
     if (this.onInfo) {
       this.onInfo(info);
     }
+  },
+
+  _routeTx(tx) {
+    console.log('tx callback is', tx);
   },
 
   // Called by Tinode when meta.desc packet is received.

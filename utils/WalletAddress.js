@@ -1,5 +1,6 @@
 import { ec as Ec } from 'elliptic';
 import sha3 from 'js-sha3';
+import { ethereumConfig } from '../config';
 
 const secp256k1 = new Ec('secp256k1');
 
@@ -88,6 +89,7 @@ class EthereumAddress {
   }
 }
 
-const WalletAddress = (privateKey, network = 'mainnet') => new EthereumAddress(privateKey);
+const WalletAddress = (privateKey, network = ethereumConfig.network) =>
+  new EthereumAddress(privateKey);
 
 export default WalletAddress;

@@ -9,6 +9,7 @@ import { chatReducer } from '../modules/Chat/reducers/chatReducer';
 import { topicsReducer } from '../modules/Chat/reducers/topicsReducer';
 import { voteReducer } from '../modules/Vote/reducer/voteReducer';
 import { userRegisterReducer } from '../modules/User/reducer/userRegisterReducer';
+import { transactionReducer } from './transaction';
 
 const logger = store => next => action => {
   console.group(action.type);
@@ -41,6 +42,7 @@ const reducers = combineReducers({
   topics: topicsReducer,
   vote: voteReducer,
   userRegister: userRegisterReducer,
+  transaction: transactionReducer,
 });
 
 export const store = createStore(enableBatching(reducers), applyMiddleware(logger));
