@@ -8,3 +8,31 @@ export const resetNavigation = (navigation, nextScreenLabel) => {
   });
   navigation.dispatch(resetAction);
 }
+
+export const resetNavigationToWallet = (navigation, params) => {
+  const resetAction = StackActions.reset({
+    index: 1,
+    actions: [
+      NavigationActions.navigate({ routeName: screensList.Settings.label }),
+      NavigationActions.navigate({
+        routeName: screensList.Wallet.label,
+        params,
+      }),
+    ],
+  });
+  navigation.dispatch(resetAction);
+}
+
+export const resetNavigationToTopic = (navigation, params) => {
+  const resetAction = StackActions.reset({
+    index: 1,
+    actions: [
+      NavigationActions.navigate({ routeName: screensList.ChatList.label }),
+      NavigationActions.navigate({
+        routeName: screensList.Topic.label,
+        params,
+      }),
+    ],
+  });
+  navigation.dispatch(resetAction);
+}
