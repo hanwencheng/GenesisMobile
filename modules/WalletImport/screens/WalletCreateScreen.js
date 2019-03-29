@@ -14,7 +14,7 @@ import { saveMnemonicAsync, savePrivateKeyAsync } from '../../../utils/secureSto
 import { lockScreen } from '../../Unlock/lockScreenUtils';
 import { loaderAction } from '../../../actions/loaderAction';
 import Container from '../../../components/Container';
-import { resetNavigation } from '../../../utils/navigationUtils';
+import { resetNavigationToWallet } from '../../../utils/navigationUtils';
 
 class WalletCreateScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -74,7 +74,7 @@ class WalletCreateScreen extends React.Component {
         return lockScreen(navigation);
       })
       .then(() => {
-        resetNavigation(navigation, screensList.Wallet.label)
+        resetNavigationToWallet(navigation);
       })
       .catch(e => {
         console.log(e);
