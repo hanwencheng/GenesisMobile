@@ -43,6 +43,10 @@
  */
 'use strict';
 
+import { store } from '../reducers/store';
+import { popupAction } from '../actions/popupAction';
+import _ from 'lodash';
+
 // NOTE TO DEVELOPERS:
 // Localizable strings should be double quoted "строка на другом языке",
 // non-localizable strings should be single quoted 'non-localized'.
@@ -1556,14 +1560,7 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
           this.onInfoMessage(pkt.info);
         }
       } else if(pkt.txres) {
-        const topic = cacheGet('topic', pkt.txres.topic);
-        if (topic) {
-          topic._routeTx(pkt.txres);
-
-          if (this.onTxMessage) {
-            this.onTxMessage(pkt.txres);
-          }
-        }
+        execPromise(pkt.txres.id, 200, pkt.txres, 'transaction init error');
       }else {
         this.logger('ERROR: Unknown packet received.');
       }
@@ -2212,7 +2209,7 @@ Tinode.prototype = {
 
 
   initTxRequest(topic, params) {
-    const pkt = this.initPacket('initTxRequest', topic);
+    const pkt = this.initPacket('initTxRequest', topic = '');
     pkt.tx = mergeObj(pkt.tx, params);
 
     return this.send(pkt, pkt.tx.id)
@@ -4265,15 +4262,11 @@ Topic.prototype = {
     }
   },
 
-  _routeTx(tx) {
-    console.log('tx callback is', tx);
-  },
-
   // Called by Tinode when meta.desc packet is received.
   // Called by 'me' topic on contact update (fromMe is true).
   _processMetaDesc(desc, fromMe) {
     // Copy parameters from desc object to this topic.
-    mergeObj(this, desc);
+    _.merge(this, desc);
 
     if (typeof this.created == 'string') {
       this.created = new Date(this.created);
