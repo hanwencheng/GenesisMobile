@@ -19,9 +19,15 @@ import { renderImageSource } from '../utils/imageUtils';
 import RulesList from './components/RulesList';
 import SingleLineSingleValueDisplay from '../components/SingleLineSingleValueDisplay';
 import { lockScreen } from '../modules/Unlock/lockScreenUtils';
-import { aboutInfo } from '../config';
+import { aboutInfo, contractInfo } from '../config';
 import DappsList from './components/DappList';
 import { generatePublicInfo } from '../utils/chatUtils';
+import { store } from '../reducers/store';
+import { resetNavigation, resetNavigationToTopic } from '../utils/navigationUtils';
+import { createGroup } from '../utils/contractUtils';
+import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
+import VoteSession from '../modules/Chat/components/VoteSession';
+import { signTransaction } from '../utils/ethereumUtils';
 
 class TopicInnerScreen extends React.Component {
   static propTypes = {
@@ -47,14 +53,14 @@ class TopicInnerScreen extends React.Component {
     const { initVote, topic, voteOrigin } = this.props;
     const voteData = _.merge({}, voteOrigin, {
       countryName: _.get(topic, 'public.fn', voteOrigin.countryName),
-      description: _.get(topic, 'private.comment', 'No permission'),
+      description: _.get(topic, 'private.comment', 'Country Description'),
       profile: _.get(topic, 'public.photo', voteOrigin.profile),
     });
     initVote(voteData);
   }
 
-  onPayment() {
-    const { voteCached, navigation, showPopup, walletAddress } = this.props;
+  onVotePayment() {
+    const { voteCached, navigation, showPopup, walletAddress, topic, voteOrigin } = this.props;
     Alert.alert(
       'Payment',
       `${voteCached.voteCost} NES`,
@@ -62,11 +68,17 @@ class TopicInnerScreen extends React.Component {
         {
           text: 'Pay now',
           onPress: () => {
+            //Test case
             if (_.isEmpty(walletAddress)) {
               showPopup(t.NO_WALLET);
             } else {
-              lockScreen(navigation).then(() => {
-                showPopup(aboutInfo.todo);
+              this.prepareTransaction(() => {
+                TinodeAPI.createNewVote(topic.topic);
+                showPopup(t.SEND_TRANSACTION);
+                resetNavigationToTopic(navigation, {
+                  topicId: topic.topic || topic.name,
+                  title: _.get(topic, 'public.fn', voteOrigin.countryName),
+                });
               });
             }
           },
@@ -77,28 +89,21 @@ class TopicInnerScreen extends React.Component {
   }
 
   onJoin() {
-    const { voteCached, navigation, topic } = this.props;
+    const { voteCached, navigation, topic, showPopup } = this.props;
     Alert.alert(
       'Payment',
-      `${voteCached.voteCost} NES`,
+      `${voteCached.entryCost} NES`,
       [
         {
           text: 'Pay now (test version no fee)',
           onPress: () => {
-            const resetAction = StackActions.reset({
-              index: 1,
-              actions: [
-                NavigationActions.navigate({ routeName: screensList.ChatList.label }),
-                NavigationActions.navigate({
-                  routeName: screensList.Topic.label,
-                  params: {
-                    topicId: topic.topic || topic.name,
-                    title: voteCached.countryName,
-                  },
-                }),
-              ],
+            this.prepareTransaction(() => {
+              showPopup(t.SEND_TRANSACTION);
+              return resetNavigationToTopic(navigation, {
+                topicId: topic.topic || topic.name,
+                title: voteCached.countryName,
+              });
             });
-            navigation.dispatch(resetAction);
           },
         },
       ],
@@ -107,12 +112,27 @@ class TopicInnerScreen extends React.Component {
   }
 
   onLeave() {
-    const { navigation, topic } = this.props;
+    const { navigation, topic, voteCached, showPopup } = this.props;
     if (_.isEmpty(_.get(topic, 'topic', null))) return;
-    return TinodeAPI.leaveTopic(topic.topic).then(ctrl => {
-      console.log('leave ctrl is', ctrl);
-      navigation.navigate(screensList.ChatList.label);
-    });
+    Alert.alert(
+      'Payment',
+      `${voteCached.exitCost} NES`,
+      [
+        {
+          text: 'Pay now (test version no fee)',
+          onPress: () => {
+            this.prepareTransaction(() => {
+              showPopup(t.SEND_TRANSACTION);
+              resetNavigation(navigation, screensList.ChatList.label);
+              return TinodeAPI.leaveTopic(topic.topic).then(ctrl => {
+                console.log('leave ctrl is', ctrl);
+              });
+            });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   }
 
   showVoteNeededAlert() {
@@ -139,7 +159,7 @@ class TopicInnerScreen extends React.Component {
     if (this.isCreatingNewTopic)
       return (
         <GenesisButton
-          action={() => this.createNewTopic()}
+          action={() => this.onCreate()}
           text={t.BUTTON_CREATE}
           variant={variantList.CREATE}
         />
@@ -153,7 +173,7 @@ class TopicInnerScreen extends React.Component {
             variant={variantList.PRIMARY}
           />
           <GenesisButton
-            action={() => this.onPayment()}
+            action={() => this.onVotePayment()}
             text={t.BUTTON_CONFIRM_EDIT}
             variant={variantList.CONFIRM}
           />
@@ -181,29 +201,54 @@ class TopicInnerScreen extends React.Component {
     const { voteCached } = this.props;
     if (_.isEmpty(voteCached.countryName)) return { error: t.CREATE_NAME_ERROR };
     if (_.isEmpty(voteCached.description)) return { error: t.CREATE_DESCRIPTION_ERROR };
-    if (_.isEmpty(voteCached.profile)) return { error: t.CREATE_PHOTO_ERROR };
+    // if (_.isEmpty(voteCached.profile)) return { error: t.CREATE_PHOTO_ERROR };
     return { error: null };
   }
 
-  createNewTopic() {
-    const { voteCached, userId, showPopup, navigation } = this.props;
+  prepareTransaction(callback) {
+    const { walletAddress, navigation, showPopup } = this.props;
+    if (_.isEmpty(walletAddress)) {
+      showPopup(t.NO_WALLET);
+    } else {
+      lockScreen(navigation)
+        .then(() => new Promise(getPrivateKeyAsync))
+        .then(callback);
+    }
+  }
+
+  onCreate() {
+    const { voteCached, walletAddress, topic, userId, showPopup, navigation } = this.props;
     const paramError = _.get(this.validateTopicParams(), 'error', null);
     if (paramError) return showPopup(paramError);
-    TinodeAPI.createAndSubscribeNewTopic(voteCached, userId).then(ctrl => {
-      const resetAction = StackActions.reset({
-        index: 1,
-        actions: [
-          NavigationActions.navigate({ routeName: screensList.ChatList.label }),
-          NavigationActions.navigate({
-            routeName: screensList.Topic.label,
-            params: {
-              topicId: ctrl.topic,
-              title: voteCached.countryName,
-            },
-          }),
-        ],
+    this.prepareTransaction(privateKey => {
+      showPopup(t.SEND_TRANSACTION);
+      createGroup(walletAddress, userId).then((tx)=> {
+        const txRaw = {
+          nonce: tx.nonce,
+          gasLimit: tx.gaslimit,
+          gasPrice: tx.gasprice,
+          data: tx.data,
+          value: contractInfo.defaultValue,
+          chainId: 3,
+        };
+        signTransaction(
+          txRaw,
+          privateKey
+        ).then(signature => {
+          console.log('signature is ', signature);
+          const topicId = topic ? topic.topic : null;
+          TinodeAPI.sendTransaction(topicId, _.assign(tx, { signedtx: signature }));
+        });
+        console.log('receive response', tx);
+        resetNavigation(navigation, screensList.ChatList.label);
+        // TinodeAPI.createAndSubscribeNewTopic(voteCached).then(ctrl => {
+        //   resetNavigationToTopic(navigation, {
+        //     topicId: ctrl.topic,
+        //     title: voteCached.countryName,
+        //   });
+        // });
       });
-      navigation.dispatch(resetAction);
+
     });
   }
 
@@ -227,15 +272,17 @@ class TopicInnerScreen extends React.Component {
   }
 
   render() {
-    const { navigation, allowEdit, isJoined, voteCached, edited, voteOrigin } = this.props;
+    const { navigation, allowEdit, isJoined, voteCached, edited, voteOrigin, topic } = this.props;
     //TODO remove defensive check
     if (_.isEmpty(voteCached)) return null;
 
+    const hasVote = !_.isEmpty(topic.VoteName);
     const topicTitle = voteCached.countryName;
     const topicDescription = voteCached.description;
 
     return (
       <ScrollView style={styles.container}>
+        {isJoined && allowEdit && hasVote && <VoteSession/>}
         {this.renderIntroOrMemberList()}
         <Text style={styles.rulesTitle}>{t.META_INFO_TITLE}</Text>
 
@@ -271,9 +318,10 @@ class TopicInnerScreen extends React.Component {
         <RulesList
           voteOrigin={voteOrigin}
           voteCached={voteCached}
+          isJoined={isJoined}
           hasVoting={false}
           isEdited={edited}
-          allowEdit={allowEdit}
+          allowEdit={allowEdit && !hasVote}
         />
         {/* TODO disable Dapp Store Now <Text style={styles.rulesTitle}>{t.MINI_DAPPS}</Text>*/}
         {/* TODO disable Dapp Store Now <DappsList />*/}
@@ -316,7 +364,7 @@ const t = {
   TOPIC_META_TITLE: 'National Treasure',
   VIEW_MORE_MEMBERS: 'View more members',
 
-  BUTTON_CONFIRM_EDIT: 'Confirm and starting Voting',
+  BUTTON_CONFIRM_EDIT: 'Confirm and start Voting',
   BUTTON_RESET_EDIT: 'Reset the rules',
   BUTTON_LEAVE: 'Delete and leave',
   BUTTON_JOIN: 'Join',
@@ -330,6 +378,7 @@ const t = {
   CREATE_PHOTO_ERROR: 'Please upload a profile photo for the country',
 
   NO_WALLET: 'please set wallet first',
+  SEND_TRANSACTION: 'Transaction sending to the blockchain network',
 };
 
 const styles = StyleSheet.create({

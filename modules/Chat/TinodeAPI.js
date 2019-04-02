@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import _ from 'lodash';
 import Tinode from '../../tinode/tinode';
-import { chatConfig, wsInfo } from '../../config';
+import { chatConfig, contractInfo, wsInfo } from '../../config';
 import { store } from '../../reducers/store';
 import { chatAction } from './actions/chatAction';
 import { screensList } from '../../navigation/screensList';
@@ -10,8 +10,9 @@ import { topicsAction } from './actions/topicsAction';
 import * as chatUtils from '../../utils/chatUtils';
 import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
-import { signTransaction } from '../../utils/ethereumUtils';
+import { hexlify, signTransaction } from '../../utils/ethereumUtils';
 import { transactionAction } from '../../actions/transactionAction';
+import { contractProps, countryProps } from '../../utils/contractUtils';
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -48,11 +49,11 @@ class TinodeAPIClass {
   }
 
   initTransaction(topic, params) {
-    this.tinode.initTxRequest(topic, params).catch(err => console.log('err is', err));
+    return this.tinode.initTxRequest(topic, params).catch(err => console.log('err is', err));
   }
 
   sendTransaction(topic, params) {
-    this.tinode.sendTx(topic, params).catch(err => console.log('err is', err));
+    return this.tinode.sendTx(topic, params).catch(err => console.log('err is', err));
   }
 
   connect() {
@@ -224,8 +225,8 @@ class TinodeAPIClass {
     // topic.onAllMessagesReceived = this.handleAllMessagesReceived;
     topic.onInfo = this.handleInfoReceipt.bind(this, topic, topicId);
     topic.onMetaDesc = this.handleDescChange.bind(this, topic, topicId);
+    // topic.onMetaSub = this.handleMetaSubChange.bind(this, topic, topicId);
     topic.onSubsUpdated = this.handleSubsUpdated.bind(this, topic, topicId, userId);
-    topic.onTxMessage = this.handleServerResponse.bind(this, topic);
 
     // topic.onPres = this.handleSubsUpdated.bind(this, topic, topicId, userId);
 
@@ -303,22 +304,38 @@ class TinodeAPIClass {
     store.dispatch(topicsAction.updateTopicMessages(topicId, messages));
   }
 
-  //TODO this function does not work
   handleServerResponse(topic, tx) {
-    console.log('receive response', tx);
-    const signature = signTransaction(
-      _.pick(topic, ['nounce', 'gasLimit', 'gasPrice', 'data', 'chainId']),
-      '0x8fc43c1919a58f1baf255c8a3ac93e439adbce42816601b80862c584c725e0e6'
-    );
-    TinodeAPI.sendTransaction(topic.topic, {
-      // pubaddr: walletAddress,
-      chainid: 3,
-      type: 'depcon',
-      signedtx: signature,
-      // user: userId,
-      fn: '',
-      inputs: ['kingdom', 'this is a new country', '100', '200'],
-    });
+    if (!tx) {
+      tx = topic;
+      topic = null;
+    }
+    console.log('topic is', topic, 'receive response', tx);
+    if (tx.hasOwnProperty('confirmed') && tx.confirmed) {
+      store.dispatch(popupAction.showPopup('transaction successfully deployed'));
+    }
+    const txRaw = {
+      nonce: tx.nonce,
+      gasLimit: tx.gaslimit,
+      gasPrice: tx.gasprice,
+      data: tx.data,
+      value: contractInfo.defaultValue,
+    };
+    let txRawWithTo;
+    switch (tx.fn) {
+      case 'constructor': {
+        txRawWithTo = _.merge(txRaw, {
+          // to: contractInfo.testAddress,
+        });
+        signTransaction(
+          txRaw,
+          '0x6df173482eae86af187f51e637c5c33cd50d26f965392478d1145c8d35c41379'
+        ).then(signature => {
+          console.log('signature is ', signature);
+          const topicId = topic ? topic.topic : null;
+          TinodeAPI.sendTransaction(topicId, _.assign(tx, { signedtx: signature }));
+        });
+      }
+    }
   }
 
   handleInfoReceipt(topic, topicId, info) {
@@ -338,18 +355,25 @@ class TinodeAPIClass {
       store.dispatch(
         topicsAction.updateTopicMeta(
           topicId,
-          _.pick(topic, [
-            'private',
-            'public',
-            'topic',
-            'created',
-            'touched',
-            'updated',
-            '_tags',
-            'online',
-            'acs',
-            'name',
-          ])
+          _.pick(
+            topic,
+            _.concat(
+              [
+                'private',
+                'public',
+                'topic',
+                'created',
+                'touched',
+                'updated',
+                '_tags',
+                'online',
+                'acs',
+                'name',
+              ],
+              countryProps,
+              contractProps
+            )
+          )
         )
       );
     } else {
@@ -394,7 +418,7 @@ class TinodeAPIClass {
       });
   }
 
-  createAndSubscribeNewTopic(cachedVote, userId) {
+  createAndSubscribeNewTopic(cachedVote) {
     const { countryName, profile, description } = cachedVote;
     const publicInfo = chatUtils.generatePublicInfo(countryName, profile);
     const topicName = this.tinode.newGroupTopicName();
