@@ -33,9 +33,9 @@ class AmendInput extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    Object.entries(this.props).forEach(
-      ([key, val]) => prevProps[key] !== val && console.log(`Prop '${key}' changed`)
-    );
+    // Object.entries(this.props).forEach(
+    //   ([key, val]) => prevProps[key] !== val && console.log(`Prop '${key}' changed`)
+    // );
   }
 
   render() {
@@ -51,7 +51,7 @@ class AmendInput extends React.Component {
       reader,
       writer,
     } = this.props;
-    const numberWriter = v => Number(Number.parseFloat(v).toFixed(1));
+    const numberWriter = v => (isNaN(v) || v === '' ? 0 : Number(Number.parseFloat(v).toFixed(1)));
     const numberReader = v => v.toString();
     const defaultValue = _.get(INIT_VALUE.origin, propertyPath);
     const value = _.get(voteCached, propertyPath, defaultValue);

@@ -27,12 +27,14 @@ export const INIT_VALUE = {
 
 export const voteReducer = (state = INIT_VALUE, action) => {
   switch (action.type) {
-    case voteActionType.INIT:
+    case voteActionType.INIT: {
+      const initData = action.data || INIT_VALUE.origin;
       return {
         ...state,
-        origin: action.data,
-        cached: action.data,
+        origin: initData,
+        cached: initData,
       };
+    }
     case voteActionType.SET: {
       return {
         ...state,

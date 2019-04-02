@@ -16,6 +16,7 @@ import { lockScreen } from '../modules/Unlock/lockScreenUtils';
 import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import HeaderButton from '../components/HeaderButton';
 import { alertNormal } from '../utils/alertUtils';
+import { ethereumConfig } from '../config';
 
 class WalletScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -48,6 +49,11 @@ class WalletScreen extends React.Component {
 
   updateBalance() {
     const { walletAddress, updateNes, updateEth } = this.props;
+    if (ethereumConfig.network === 'ropsten') {
+      return getEtherBalance(walletAddress)
+        .then(ethBalance => updateEth(ethBalance))
+        .catch(e => console.log('err', e));
+    }
     return getTokenBalance(walletAddress)
       .then(nesBalance => updateNes(nesBalance))
       .then(() => getEtherBalance(walletAddress))

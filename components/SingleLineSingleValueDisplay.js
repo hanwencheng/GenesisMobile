@@ -11,35 +11,39 @@ export default class SingleLineSingleValueDisplay extends React.Component {
     style: PropTypes.object,
     Icon: PropTypes.func,
     fontSize: PropTypes.number,
+    fontColor: PropTypes.string,
   };
 
   static defaultProps = {
     onClick: null,
     object: {},
     Icon: null,
+    fontColor: 'black',
     fontSize: AppStyle.fontMiddleSmall,
   };
 
   renderTitle() {
-    const { Icon, title, fontSize } = this.props;
-    const fontSizeObject = { fontSize };
+    const { Icon, title, fontSize, fontColor } = this.props;
+    const fontStyleObject = { fontSize, color: fontColor };
     if (!Icon) {
-      return <Text style={[styles.title, fontSizeObject]}>{title}</Text>;
+      return <Text style={[styles.title, fontStyleObject]}>{title}</Text>;
     }
     return (
       <View style={styles.titleContainer}>
         <Icon style={styles.icon} />
-        <Text style={[styles.title, { paddingLeft: 10 }, fontSizeObject]}>{title}</Text>
+        <Text style={[styles.title, { paddingLeft: 10 }, fontStyleObject]}>{title}</Text>
       </View>
     );
   }
 
   render() {
-    const { onClick, style } = this.props;
+    const { onClick, style, fontColor } = this.props;
 
     if (!onClick) {
       return <View style={[styles.container, style]}>{this.renderTitle()}</View>;
     }
+
+    const arrowColor = fontColor !== 'black' ? fontColor : AppStyle.lightGrey;
 
     return (
       <TouchableOpacity onPress={onClick} style={[styles.container, style]}>
@@ -49,7 +53,7 @@ export default class SingleLineSingleValueDisplay extends React.Component {
             name="right"
             size={AppStyle.fontMiddle}
             style={styles.arrowIcon}
-            color={AppStyle.lightGrey}
+            color={arrowColor}
           />
         </View>
       </TouchableOpacity>
@@ -75,7 +79,6 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 2,
-    color: 'black',
   },
   arrowContainer: {
     flexDirection: 'row',

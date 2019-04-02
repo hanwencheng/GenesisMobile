@@ -21,7 +21,12 @@ export default class LockListNode extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={renderImageSource(lockNode.public.photo)} />
+          <Text style={styles.image}>{chatNode.public.fn.substring(0, 1)}</Text>
+          {unread > 0 && (
+            <View style={styles.imageFloat}>
+              <Text style={styles.unreadNumber}>{unread < 100 ? unread.toString() : '..'}</Text>
+            </View>
+          )}
         </View>
         <View style={styles.textContainer}>
           <View style={styles.firstLineContainer}>
@@ -61,12 +66,13 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     marginRight: 10,
-    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    height: 50,
-    width: 50,
-    resizeMode: 'contain',
+    fontFamily: AppStyle.mainFontBold,
+    fontSize: AppStyle.fontMiddleBig,
+    color: AppStyle.backgroundGreen,
   },
   textContainer: {
     flex: 1,

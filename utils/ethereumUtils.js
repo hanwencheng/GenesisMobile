@@ -1,16 +1,16 @@
-import util from 'ethereumjs-util';
+import { isValidPrivate } from 'ethereumjs-util';
 import { Wallet, Contract, ethers, utils as etherUtils } from 'ethers';
-import { contractInfo } from '../config';
+import { contractInfo, ethereumConfig } from '../config';
 
 const path = "m/44'/60'/0'/0/index";
-const provider = ethers.getDefaultProvider();
+const provider = ethers.getDefaultProvider(ethereumConfig.network);
 
 export const getAddressFromPrivateKey = privateKey => {
   if (privateKey.indexOf('0x') === 0) {
     privateKey = privateKey.slice(2);
   }
   const privateBuffer = global.Buffer.from(privateKey, 'hex');
-  if (!util.isValidPrivate(privateBuffer)) return false;
+  if (!isValidPrivate(privateBuffer)) return false;
 
   try {
     return new Wallet(privateKey);
@@ -18,6 +18,12 @@ export const getAddressFromPrivateKey = privateKey => {
     console.log(t.WALLET_ERROR, e);
     return false;
   }
+};
+
+export const signTransaction = async (transaction, privateKey) => {
+  let wallet = new Wallet(privateKey);
+  const signature = await wallet.sign(transaction);
+  return signature;
 };
 
 export const getAddressFromMnemonic = mnemonic => {

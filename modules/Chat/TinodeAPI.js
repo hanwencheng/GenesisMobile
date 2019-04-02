@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
-import Tinode from 'tinode-sdk';
 import { NavigationActions, StackActions } from 'react-navigation';
 import _ from 'lodash';
+import Tinode from '../../tinode/tinode';
 import { chatConfig, wsInfo } from '../../config';
 import { store } from '../../reducers/store';
 import { chatAction } from './actions/chatAction';
@@ -10,6 +10,8 @@ import { topicsAction } from './actions/topicsAction';
 import * as chatUtils from '../../utils/chatUtils';
 import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
+import { signTransaction } from '../../utils/ethereumUtils';
+import { transactionAction } from '../../actions/transactionAction';
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -43,6 +45,14 @@ class TinodeAPIClass {
   handleError(err) {
     console.log('error is', err);
     store.dispatch(popupAction.showPopup(err.toString()));
+  }
+
+  initTransaction(topic, params) {
+    this.tinode.initTxRequest(topic, params).catch(err => console.log('err is', err));
+  }
+
+  sendTransaction(topic, params) {
+    this.tinode.sendTx(topic, params).catch(err => console.log('err is', err));
   }
 
   connect() {
@@ -128,7 +138,6 @@ class TinodeAPIClass {
       // this.handleLoginSuccessful();
     }
   }
-  M;
 
   tnMeMetaSub(meTopic, topicData) {
     store.dispatch(chatAction.updateChatMap(topicData));
@@ -146,6 +155,11 @@ class TinodeAPIClass {
     if (topic && topic.isSubscribed()) {
       return topic.leave(true).catch(err => this.handleError(err));
     }
+    return Promise.resolve();
+  }
+
+  createNewVote(topicId) {
+    return this.tinode.note(topicId, 'vote', 1);
   }
 
   fetchMoreTopics(topicId) {
@@ -211,6 +225,8 @@ class TinodeAPIClass {
     topic.onInfo = this.handleInfoReceipt.bind(this, topic, topicId);
     topic.onMetaDesc = this.handleDescChange.bind(this, topic, topicId);
     topic.onSubsUpdated = this.handleSubsUpdated.bind(this, topic, topicId, userId);
+    topic.onTxMessage = this.handleServerResponse.bind(this, topic);
+
     // topic.onPres = this.handleSubsUpdated.bind(this, topic, topicId, userId);
 
     //TODO why? add title and avatar?
@@ -285,6 +301,24 @@ class TinodeAPIClass {
       topic.noteRead(msg.seq);
     }
     store.dispatch(topicsAction.updateTopicMessages(topicId, messages));
+  }
+
+  //TODO this function does not work
+  handleServerResponse(topic, tx) {
+    console.log('receive response', tx);
+    const signature = signTransaction(
+      _.pick(topic, ['nounce', 'gasLimit', 'gasPrice', 'data', 'chainId']),
+      '0x8fc43c1919a58f1baf255c8a3ac93e439adbce42816601b80862c584c725e0e6'
+    );
+    TinodeAPI.sendTransaction(topic.topic, {
+      // pubaddr: walletAddress,
+      chainid: 3,
+      type: 'depcon',
+      signedtx: signature,
+      // user: userId,
+      fn: '',
+      inputs: ['kingdom', 'this is a new country', '100', '200'],
+    });
   }
 
   handleInfoReceipt(topic, topicId, info) {

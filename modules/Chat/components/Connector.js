@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Platform } from 'react-native';
-import Tinode from 'tinode-sdk';
 import { wsInfo } from '../../../config';
 import TinodeAPI from '../TinodeAPI';
 
@@ -15,8 +14,6 @@ export default class Connector extends React.Component {
   }
 
   componentDidMount() {
-    const username = 'bob';
-    const password = 'bob123';
   }
 
   render() {
