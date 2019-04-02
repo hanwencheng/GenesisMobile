@@ -10,6 +10,8 @@ import Images from '../../../commons/Images';
 import { screensList } from '../../../navigation/screensList';
 import TinodeAPI from '../TinodeAPI';
 import { popupAction } from '../../../actions/popupAction';
+import { contractInfo } from '../../../config';
+import { createGroup } from '../../../utils/contractUtils';
 
 class ActionList extends React.Component {
   static propTypes = {
@@ -46,16 +48,7 @@ class ActionList extends React.Component {
           if (_.isEmpty(walletAddress)) {
             showPopup(t.NO_WALLET);
           } else {
-            TinodeAPI.initTransaction(topic.topic, {
-              type: 'depcon',
-              pubaddr: walletAddress,
-              chainid: 3,
-              signedtx: '',
-              conaddr: '',
-              user: userId,
-              fn: '',
-              inputs: ['kingdom', 'this is a new country', '100', '200'],
-            });
+            createGroup(topic, walletAddress, userId);
           }
         },
       },

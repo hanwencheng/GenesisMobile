@@ -93,7 +93,7 @@ class VoteInfoScreen extends React.Component {
           <Text style={styles.listSubtitleText}>{props.supportRateText}</Text>
         </View>
         <View style={styles.supportList}>
-          <MemberList list={props.list} limit={12} />
+          <MemberList list={props.list} limit={12} withFutureMember={false}/>
           {props.list.length > 12 && (
             <LightButton
               onPress={() =>
