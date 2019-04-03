@@ -16,12 +16,12 @@ import { Header } from 'react-navigation';
 import AppStyle from '../../../commons/AppStyle';
 import { screensList } from '../../../navigation/screensList';
 import TinodeAPI from '../TinodeAPI';
-import LockListNode from '../components/ChatListNode';
+import ChatListNode from '../components/ChatListNode';
 import { loaderAction } from '../../../actions/loaderAction';
 
-class LockListScreen extends React.Component {
+class ChatListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: screensList.LockList.title,
+    headerTitle: screensList.ChatList.title,
     headerBackTitle: ' ',
     headerRight: (
       <TouchableOpacity
@@ -41,7 +41,8 @@ class LockListScreen extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object,
-    locksMap: PropTypes.object.isRequired,
+    chatMap: PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -52,19 +53,25 @@ class LockListScreen extends React.Component {
   }
 
   componentDidMount() {
+    TinodeAPI.fetchTopics();
   }
 
   onRefresh = () => {
-  
+    this.setState({ refreshing: true });
+    TinodeAPI.fetchTopics().then(() => {
+      this.setState({ refreshing: false });
+    });
   };
 
   render() {
-    const { locksMap, navigation } = this.props;
-    const sortedList = _.values(locksMap).sort((a, b) => {
+    const { chatMap, navigation } = this.props;
+    const sortedList = _.values(chatMap).sort((a, b) => {
       //TODO add timestamp sorting
-      const dateA = a.created || new Date(0);
-      const dateB = b.created || new Date(0);
-      return dateA.getTime() < dateB.getTime();
+      const conditionA = a.isSubscribed < b.isSubscribed;
+      const dateA = a.updated || new Date(0);
+      const dateB = b.updated || new Date(0);
+      const conditionB = dateA.getTime() < dateB.getTime();
+      return conditionA;
     });
 
     return (
@@ -77,20 +84,27 @@ class LockListScreen extends React.Component {
           style={styles.listContainer}
           data={sortedList}
           extraData={sortedList}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.topic}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={[
-                styles.lockNode,
-                { backgroundColor: item.isValid ? 'white' : AppStyle.mainBackgroundColor },
+                styles.chatNode,
+                { backgroundColor: item.isSubscribed ? 'white' : AppStyle.mainBackgroundColor },
               ]}
               onPress={() =>
-                navigation.navigate(screensList.Lock.label, {
-                  lockId: item.id,
-                  title: item.description,
-                })
+                item.isSubscribed
+                  ? navigation.navigate(screensList.Topic.label, {
+                      topicId: item.topic,
+                      title: item.public.fn,
+                    })
+                  : navigation.navigate(screensList.TopicInfo.label, {
+                      title: item.public.fn,
+                      topic: item,
+                      allowEdit: false,
+                      isJoined: false,
+                    })
               }>
-              <LockListNode chatNode={item} />
+              <ChatListNode chatNode={item} />
             </TouchableOpacity>
           )}
         />
@@ -101,8 +115,8 @@ class LockListScreen extends React.Component {
 
 const mapStateToProps = state => ({
   walletAddress: state.appState.walletAddress,
-  locksMap: state.lock.locksMap,
-  // userId: state.appState.userId,
+  chatMap: state.chat.chatMap,
+  userId: state.appState.userId,
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({
@@ -112,7 +126,7 @@ const mapDispatchToProps = _.curry(bindActionCreators)({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LockListScreen);
+)(ChatListScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -134,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  lockNode: {
+  chatNode: {
     padding: 10,
     borderBottomWidth: 1,
     borderColor: AppStyle.chatBorder,

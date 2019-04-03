@@ -12,7 +12,7 @@ export const screensList = {
   AccountSetting: { label: 'AccountSetting', title: 'Account Settings' },
   Settings: { label: 'Settings', title: 'Settings' },
   About: { label: 'About', title: 'About' },
-  LockList: { label: 'LockList', title: 'Litentry' },
+  ChatList: { label: 'ChatList', title: 'Genesis Space' },
   Start: { label: 'Start', title: 'Start' },
   CreateAccount: { label: 'CreateAccount', title: 'Create Account' },
   VerifyCredential: { label: 'VerifyCredential', title: 'Verify Phone' },

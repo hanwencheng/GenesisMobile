@@ -8,15 +8,20 @@ import { makeImageUrl } from '../lib/blob-helpers';
 import Images from '../../../commons/Images';
 import { renderImageSource } from '../../../utils/imageUtils';
 
-export default class LockListNode extends React.Component {
+export default class ChatListNode extends React.Component {
   static propTypes = {
-    lockNode: PropTypes.object.isRequired,
+    chatNode: PropTypes.object.isRequired,
   };
 
   static defaultProps = {};
 
   render() {
-    const { lockNode } = this.props;
+    const { chatNode } = this.props;
+    const { unread } = chatNode;
+    if (!chatNode.public) {
+      console.log('topic with null publis is', chatNode);
+      return null;
+    }
 
     return (
       <View style={styles.container}>
@@ -31,17 +36,19 @@ export default class LockListNode extends React.Component {
         <View style={styles.textContainer}>
           <View style={styles.firstLineContainer}>
             <Text style={styles.title} numberOfLines={1}>
-              {lockNode.id}
+              {chatNode.public.fn}
             </Text>
             <Text style={styles.date} numberOfLines={1}>
-              {isValidDate(lockNode.updated)
-                ? shortDateFormat(new Date(lockNode.created))
+              {isValidDate(chatNode.updated)
+                ? shortDateFormat(new Date(chatNode.updated))
                 : t.DATE_PLACEHOLDER}
             </Text>
           </View>
           <View style={styles.secondLineContainer}>
             <Text style={styles.text} numberOfLines={1}>
-              {lockNode.description}
+              {chatNode.isSubscribed && chatNode.lastmsg
+                ? chatNode.lastmsg
+                : t.DESCRIPTION_PLACEHOLDER}
             </Text>
           </View>
         </View>
@@ -73,6 +80,22 @@ const styles = StyleSheet.create({
     fontFamily: AppStyle.mainFontBold,
     fontSize: AppStyle.fontMiddleBig,
     color: AppStyle.backgroundGreen,
+  },
+  imageFloat: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  unreadNumber: {
+    fontSize: 10,
+    color: 'white',
+    fontFamily: AppStyle.mainFont,
   },
   textContainer: {
     flex: 1,
