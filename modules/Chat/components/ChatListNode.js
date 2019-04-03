@@ -97,6 +97,22 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: AppStyle.mainFont,
   },
+  imageFloat: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  unreadNumber: {
+    fontSize: 10,
+    color: 'white',
+    fontFamily: AppStyle.mainFont,
+  },
   textContainer: {
     flex: 1,
     flexDirection: 'column',
