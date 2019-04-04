@@ -11,7 +11,7 @@ import { screensList } from '../../../navigation/screensList';
 import TinodeAPI from '../TinodeAPI';
 import { popupAction } from '../../../actions/popupAction';
 import { contractInfo } from '../../../config';
-import { createGroup } from '../../../utils/contractUtils';
+import { createTopic } from '../../../utils/contractUtils';
 
 class ActionList extends React.Component {
   static propTypes = {
@@ -48,7 +48,7 @@ class ActionList extends React.Component {
           if (_.isEmpty(walletAddress)) {
             showPopup(t.NO_WALLET);
           } else {
-            createGroup(topic, walletAddress, userId);
+            createTopic(topic, walletAddress, userId);
           }
         },
       },

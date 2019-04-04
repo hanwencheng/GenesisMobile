@@ -24,7 +24,7 @@ import DappsList from './components/DappList';
 import { generatePublicInfo } from '../utils/chatUtils';
 import { store } from '../reducers/store';
 import { resetNavigation, resetNavigationToTopic } from '../utils/navigationUtils';
-import { createGroup } from '../utils/contractUtils';
+import { createTopic } from '../utils/contractUtils';
 import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import VoteSession from '../modules/Chat/components/VoteSession';
 import { signTransaction } from '../utils/ethereumUtils';
@@ -222,42 +222,7 @@ class TopicInnerScreen extends React.Component {
     if (paramError) return showPopup(paramError);
     this.prepareTransaction(privateKey => {
       showPopup(t.SEND_TRANSACTION);
-      createGroup(walletAddress, userId).then((tx)=> {
-        console.log('tx is', tx)
-        const txRaw = {
-          nonce: tx.nonce,
-          gasLimit: tx.gaslimit,
-          gasPrice: tx.gasprice,
-          data: tx.data,
-          value: contractInfo.defaultValue,
-          chainId: 3,
-        };
-        signTransaction(
-          txRaw,
-          privateKey
-        ).then(signature => {
-          console.log('signature is ', signature);
-          const topicId = topic ? topic.topic : null;
-          console.log('receive response', tx);
-          resetNavigation(navigation, screensList.ChatList.label);
-          const txParams = _.assign(txRaw, {
-            signedtx: signature,
-            what: 'send',
-            type: 'depcon',
-            fn: tx.fn,
-            inputs: ['kingdom', 'this is a new country', '100', '200'],
-          })
-          TinodeAPI.createAndSubscribeNewTopic(voteCached, txParams).then(ctrl => {
-            resetNavigationToTopic(navigation, {
-              topicId: ctrl.topic,
-              title: voteCached.countryName,
-            });
-          });
-          // TinodeAPI.sendTransaction(topicId, _.assign(txRaw, txParams));
-        });
-       
-      });
-
+      createTopic(walletAddress, userId, privateKey, voteCached, navigation)
     });
   }
 
