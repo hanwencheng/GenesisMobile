@@ -1,18 +1,6 @@
 import TinodeAPI from '../modules/Chat/TinodeAPI';
 import { contractInfo } from '../config';
 
-export const countryProps = ['lastmsg', 'countrydesc'];
-
-export const contractProps = [
-  'VoteName',
-  'conaddr',
-  'entrycost',
-  'exitcost',
-  'tax',
-  'voteduration',
-  'votepassrate',
-];
-
 export const joinGroup = (topic, walletAddress, userId) => {
   return TinodeAPI.initTransaction(topic.topic, {
     type: 'setcon',

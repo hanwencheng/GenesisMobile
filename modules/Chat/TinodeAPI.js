@@ -11,8 +11,7 @@ import * as chatUtils from '../../utils/chatUtils';
 import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
 import { hexlify, signTransaction } from '../../utils/ethereumUtils';
-import { transactionAction } from '../../actions/transactionAction';
-import { contractProps, countryProps } from '../../utils/contractUtils';
+import { contractProps, countryProps } from '../../config';
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -418,7 +417,7 @@ class TinodeAPIClass {
       });
   }
 
-  createAndSubscribeNewTopic(cachedVote) {
+  createAndSubscribeNewTopic(cachedVote, txParams) {
     const { countryName, profile, description } = cachedVote;
     const publicInfo = chatUtils.generatePublicInfo(countryName, profile);
     const topicName = this.tinode.newGroupTopicName();
@@ -431,7 +430,7 @@ class TinodeAPIClass {
       .withLaterData(chatConfig.messagePerPage)
       .withLaterDel();
     return topic
-      .subscribe(getQuery.build(), newTopicParams)
+      .subscribe(getQuery.build(), newTopicParams, txParams)
       .then(ctrl => {
         console.log('create new topic ctrl is', ctrl);
         this.unsubscribe(topicName);

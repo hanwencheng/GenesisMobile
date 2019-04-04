@@ -1560,7 +1560,10 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
           this.onInfoMessage(pkt.info);
         }
       } else if(pkt.txres) {
-        execPromise(pkt.txres.id, 200, pkt.txres, 'transaction init error');
+        console.log('receive txres repsonse', pkt.txres)
+        if(pkt.txres.what === 'init') {
+          execPromise(pkt.txres.id, 200, pkt.txres, 'transaction init error');
+        }
       }else {
         this.logger('ERROR: Unknown packet received.');
       }
@@ -2061,16 +2064,20 @@ Tinode.prototype = {
    * Send a topic subscription request.
    * @memberof Tinode#
    *
-   * @param {String} topic - Name of the topic to subscribe to.
-   * @param {Tinode.GetQuery=} getParams - Optional subscription metadata query
-   * @param {Tinode.SetParams=} setParams - Optional initialization parameters
-   *
+   * @param {String} topicName - Name of the topic to subscribe to.
+   * @param {Object} getParams - Optional subscription metadata query
+   * @param {Object} setParams - Optional initialization parameters
+   * @param {Object} txParams - Optional initialization parameters
    * @returns {Promise} Promise which will be resolved/rejected on receiving server reply.
    */
-  subscribe(topicName, getParams, setParams) {
+  subscribe(topicName, getParams, setParams, txParams) {
     const pkt = this.initPacket('sub', topicName);
     if (!topicName) {
       topicName = TOPIC_NEW;
+    }
+    
+    if(txParams) {
+      pkt.sub.tx = txParams;
     }
 
     pkt.sub.get = getParams;
@@ -3260,11 +3267,12 @@ Topic.prototype = {
    * Request topic to subscribe. Wrapper for {@link Tinode#subscribe}.
    * @memberof Tinode.Topic#
    *
-   * @param {Tinode.GetQuery=} getParams - get query parameters.
-   * @param {Tinode.SetParams=} setParams - set parameters.
+   * @param {Object} getParams - get query parameters.
+   * @param {Object} setParams - set parameters.
+   * @param {Object} txParams - tx parameters.
    * @returns {Promise} Promise to be resolved/rejected when the server responds to the request.
    */
-  subscribe(getParams, setParams) {
+  subscribe(getParams, setParams, txParams) {
     // If the topic is already subscribed, return resolved promise
     if (this._subscribed) {
       return Promise.resolve(this);
@@ -3273,7 +3281,7 @@ Topic.prototype = {
     // Send subscribe message, handle async response.
     // If topic name is explicitly provided, use it. If no name, then it's a new group topic,
     // use "new".
-    return this._tinode.subscribe(this.name || TOPIC_NEW, getParams, setParams).then(ctrl => {
+    return this._tinode.subscribe(this.name || TOPIC_NEW, getParams, setParams, txParams).then(ctrl => {
       if (ctrl.code >= 300) {
         // Do nothing ff the topic is already subscribed to.
         return ctrl;
