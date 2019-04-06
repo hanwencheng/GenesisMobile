@@ -19,7 +19,7 @@ export default class ChatListNode extends React.Component {
     const { chatNode } = this.props;
     const { unread } = chatNode;
     if (!chatNode.public) {
-      console.log('topic with null publis is', chatNode);
+      console.log('topic with null public is', chatNode);
       return null;
     }
 
@@ -80,22 +80,6 @@ const styles = StyleSheet.create({
     fontFamily: AppStyle.mainFontBold,
     fontSize: AppStyle.fontMiddleBig,
     color: AppStyle.backgroundGreen,
-  },
-  imageFloat: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  unreadNumber: {
-    fontSize: 10,
-    color: 'white',
-    fontFamily: AppStyle.mainFont,
   },
   imageFloat: {
     position: 'absolute',

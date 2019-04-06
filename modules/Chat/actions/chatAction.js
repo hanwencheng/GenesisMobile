@@ -3,6 +3,7 @@ export const chatActionType = {
   CONNECTED: 'CHAT_CONNECTED',
   DISCONNECTED: 'CHAT_DISCONNECTED',
   UPDATE_CHAT_MAP: 'CHAT_UPDATE_CHAT_MAP',
+  UPDATE_CHAT_DESC: 'CHAT_UPDATE_CHAT_DESC',
   SET_ID: 'CHAT_SET_ID',
   SET_AVATAR: 'CHAT_SET_AVATAR',
   SET_USER_INFO: 'CHAT_SET_USER_INFO',
@@ -14,6 +15,7 @@ export const chatAction = {
   connected: () => ({ type: chatActionType.CONNECTED }),
   disconnected: () => ({ type: chatActionType.DISCONNECTED }),
   updateChatMap: data => ({ type: chatActionType.UPDATE_CHAT_MAP, data }),
+  updateChatDesc: (topicId, data) => ({type: chatActionType.UPDATE_CHAT_DESC, topicId, data}),
   login: (username, password) => ({ type: chatActionType.LOGIN, username, password }),
   setId: userId => ({ type: chatActionType.SET_ID, userId }),
   setUserInfo: (userInfo, rawPublicData) => ({

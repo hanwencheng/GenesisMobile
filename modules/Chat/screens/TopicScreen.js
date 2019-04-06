@@ -72,7 +72,7 @@ class TopicScreen extends React.Component {
   componentDidMount() {
     const { navigation, userId, subscribedChatId, connected } = this.props;
     const topicId = navigation.getParam('topicId', null);
-    if (connected /* && subscribedChatId !== topicId */) {
+    if (connected && subscribedChatId !== topicId ) {
       if (subscribedChatId !== null) TinodeAPI.unsubscribe(subscribedChatId);
       TinodeAPI.subscribe(topicId, userId);
     }

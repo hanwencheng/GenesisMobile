@@ -1376,7 +1376,6 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
             hard: false,
           },
         };
-
       case 'note':
         return {
           note: {
@@ -1519,6 +1518,10 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
         // Secondary API: callback
         if (this.onMetaMessage) {
           this.onMetaMessage(pkt.meta);
+        }
+  
+        if(pkt.meta.desc){
+          execPromise(pkt.meta.id, 200, pkt.meta.desc, 'get description error')
         }
       } else if (pkt.data) {
         // Handling {data} message
@@ -2214,6 +2217,11 @@ Tinode.prototype = {
    * @returns {Promise} Promise which will be resolved/rejected on receiving server reply.
    */
 
+  getDescription(topic, params) {
+    const pkt = this.initPacket('desc', topic = '');
+    pkt.desc = mergeObj(pkt.desc, params)
+    return this.send(pkt, pkt.desc.id);
+  },
 
   initTxRequest(topic, params) {
     const pkt = this.initPacket('initTxRequest', topic = '');

@@ -50,6 +50,12 @@ class TinodeAPIClass {
   initTransaction(topic, params) {
     return this.tinode.initTxRequest(topic, params).catch(err => console.log('err is', err));
   }
+  
+  getDescription(topic) {
+    return this.tinode.getMeta(topic, {
+      what: 'desc'
+    }).catch(err => console.log('get description err is', err));
+  }
 
   sendTransaction(topic, params) {
     return this.tinode.sendTx(topic, params).catch(err => console.log('err is', err));
@@ -214,6 +220,11 @@ class TinodeAPIClass {
     //
     //   chatList.push(c);
     // });
+  }
+  
+  lightSubscribe(topicId, txParams) {
+    let topic = this.tinode.getTopic(topicId);
+    return topic.subscribe(undefined, undefined, txParams)
   }
 
   subscribe(topicId, userId) {
