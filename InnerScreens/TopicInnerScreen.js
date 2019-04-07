@@ -24,7 +24,7 @@ import DappsList from './components/DappList';
 import { generatePublicInfo } from '../utils/chatUtils';
 import { store } from '../reducers/store';
 import { resetNavigation, resetNavigationToTopic } from '../utils/navigationUtils';
-import {createTopic, joinGroup} from '../utils/contractUtils';
+import {createTopic, joinTopic, leaveTopic} from '../utils/contractUtils';
 import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import VoteSession from '../modules/Chat/components/VoteSession';
 import { signTransaction } from '../utils/ethereumUtils';
@@ -97,45 +97,50 @@ class TopicInnerScreen extends React.Component {
   }
 
   onJoin() {
-    const { voteCached, navigation, topic, showPopup, walletAddress, userId, subscribedChatId, chatMap } = this.props;
-    Alert.alert(
-      'Payment',
-      `${voteCached.entryCost} NES`,
-      [
-        {
-          text: 'Pay now (test version no fee)',
-          onPress: () => {
-            this.prepareTransaction(privateKey => {
-              showPopup(t.SEND_TRANSACTION);
-              console.log('countryName is', topic.public.fn)
-              console.log('chatMap is', chatMap)
-              const countryName = topic.public.fn
-              joinGroup(topic.topic, walletAddress, userId, subscribedChatId, privateKey, topic.conaddr, countryName)
-            });
-          },
-        },
-      ],
-      { cancelable: false }
-    );
+    const { topic, walletAddress, userId, subscribedChatId } = this.props;
+    this.prepareTransaction('Payment', contractInfo.joinDefaultValue, privateKey => {
+        const countryName = topic.public.fn
+        joinTopic(topic.topic, walletAddress, userId, subscribedChatId, privateKey, topic.conaddr, countryName)
+    });
   }
-
+  
+  onCreate() {
+    const { voteCached, walletAddress, userId, showPopup, navigation } = this.props;
+    const paramError = _.get(this.validateTopicParams(), 'error', null);
+    if (paramError) return showPopup(paramError);
+    this.prepareTransaction('Payment', contractInfo.createDefaultValue, privateKey => {
+      createTopic(walletAddress, userId, privateKey, voteCached, navigation)
+    });
+  }
+  
   onLeave() {
-    const { navigation, topic, voteCached, showPopup } = this.props;
-    if (_.isEmpty(_.get(topic, 'topic', null))) return;
+    const { topic, walletAddress, userId, navigation } = this.props;
+    this.prepareTransaction('Payment', contractInfo.leaveDefaultValue, privateKey => {
+      leaveTopic(walletAddress, userId, privateKey, topic.topic, navigation, topic.conaddr)
+    });
+  }
+  
+  prepareTransaction (title, value, callback) {
+    const { walletAddress, navigation, showPopup } = this.props;
+    const valueText = Number.parseFloat(value/ contractInfo.ethBaseValue).toPrecision(3);
+    const message = `${valueText} Eth`
     Alert.alert(
-      'Payment',
-      `${voteCached.exitCost} NES`,
+      title,
+      message,
       [
         {
-          text: 'Pay now (test version no fee)',
+          text: 'Pay now',
           onPress: () => {
-            this.prepareTransaction(() => {
-              showPopup(t.SEND_TRANSACTION);
-              resetNavigation(navigation, screensList.ChatList.label);
-              return TinodeAPI.leaveTopic(topic.topic).then(ctrl => {
-                console.log('leave ctrl is', ctrl);
-              });
-            });
+            if (_.isEmpty(walletAddress)) {
+              showPopup(t.NO_WALLET);
+            } else {
+              lockScreen(navigation)
+                .then(() => new Promise(getPrivateKeyAsync))
+                .then(privateKey => {
+                  showPopup(t.SEND_TRANSACTION);
+                  callback(privateKey);
+                });
+            }
           },
         },
       ],
@@ -211,27 +216,6 @@ class TopicInnerScreen extends React.Component {
     if (_.isEmpty(voteCached.description)) return { error: t.CREATE_DESCRIPTION_ERROR };
     // if (_.isEmpty(voteCached.profile)) return { error: t.CREATE_PHOTO_ERROR };
     return { error: null };
-  }
-
-  prepareTransaction(callback) {
-    const { walletAddress, navigation, showPopup } = this.props;
-    if (_.isEmpty(walletAddress)) {
-      showPopup(t.NO_WALLET);
-    } else {
-      lockScreen(navigation)
-        .then(() => new Promise(getPrivateKeyAsync))
-        .then(callback);
-    }
-  }
-
-  onCreate() {
-    const { voteCached, walletAddress, topic, userId, showPopup, navigation } = this.props;
-    const paramError = _.get(this.validateTopicParams(), 'error', null);
-    if (paramError) return showPopup(paramError);
-    this.prepareTransaction(privateKey => {
-      showPopup(t.SEND_TRANSACTION);
-      createTopic(walletAddress, userId, privateKey, voteCached, navigation)
-    });
   }
 
   renderIntroOrMemberList() {

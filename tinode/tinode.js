@@ -2109,12 +2109,16 @@ Tinode.prototype = {
    *
    * @param {String} topic - Topic to detach from.
    * @param {Boolean} unsub - If <tt>true</tt>, detach and unsubscribe, otherwise just detach.
-   *
+   * @param {Object} txParams
    * @returns {Promise} Promise which will be resolved/rejected on receiving server reply.
    */
-  leave(topic, unsub) {
+  leave(topic, unsub, txParams) {
     const pkt = this.initPacket('leave', topic);
     pkt.leave.unsub = unsub;
+  
+    if(txParams) {
+      pkt.leave.tx = txParams;
+    }
 
     return this.send(pkt, pkt.leave.id);
   },
@@ -3467,16 +3471,17 @@ Topic.prototype = {
    * @memberof Tinode.Topic#
    *
    * @param {Boolean=} unsub - If true, unsubscribe, otherwise just leave.
+   * @param {Object} txParams
    * @returns {Promise} Promise to be resolved/rejected when the server responds to the request.
    */
-  leave(unsub) {
+  leave(unsub, txParams) {
     // It's possible to unsubscribe (unsub==true) from inactive topic.
     if (!this._subscribed && !unsub) {
       return Promise.reject(new Error('Cannot leave inactive topic'));
     }
 
     // Send a 'leave' message, handle async response
-    return this._tinode.leave(this.name, unsub).then(ctrl => {
+    return this._tinode.leave(this.name, unsub, txParams).then(ctrl => {
       this._resetSub();
       if (unsub) {
         this._gone();

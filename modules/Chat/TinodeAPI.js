@@ -12,6 +12,7 @@ import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
 import { hexlify, signTransaction } from '../../utils/ethereumUtils';
 import { contractProps, countryProps } from '../../config';
+import {confirmStatus} from "../../utils/contractUtils";
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -153,13 +154,13 @@ class TinodeAPIClass {
     console.log('data is', data);
   }
 
-  leaveTopic(topicId) {
+  leaveTopic(topicId, txParams) {
     if (!topicId) {
       return;
     }
     let topic = this.tinode.getTopic(topicId);
     if (topic && topic.isSubscribed()) {
-      return topic.leave(true).catch(err => this.handleError(err));
+      return topic.leave(true, txParams).catch(err => this.handleError(err));
     }
     return Promise.resolve();
   }
@@ -320,8 +321,15 @@ class TinodeAPIClass {
       topic = null;
     }
     console.log('topic is', topic, 'receive response', tx);
-    if (tx.hasOwnProperty('confirmed') && tx.confirmed) {
-      store.dispatch(popupAction.showPopup('transaction successfully deployed'));
+    if (tx.hasOwnProperty('confirmed')) {
+      switch (tx.confirmed) {
+        case confirmStatus.OK:
+          return store.dispatch(popupAction.showPopup('transaction successfully deployed'));
+        case confirmStatus.NOK:
+          return store.dispatch(popupAction.showPopup('transaction deployment failed'));
+        case confirmStatus.SENT:
+          return store.dispatch(popupAction.showPopup('transaction sent to the blockchain network'));
+      }
     }
     const txRaw = {
       nonce: tx.nonce,
@@ -331,21 +339,6 @@ class TinodeAPIClass {
       value: contractInfo.defaultValue,
     };
     let txRawWithTo;
-    switch (tx.fn) {
-      case 'constructor': {
-        txRawWithTo = _.merge(txRaw, {
-          // to: contractInfo.testAddress,
-        });
-        signTransaction(
-          txRaw,
-          '0x6df173482eae86af187f51e637c5c33cd50d26f965392478d1145c8d35c41379'
-        ).then(signature => {
-          console.log('signature is ', signature);
-          const topicId = topic ? topic.topic : null;
-          TinodeAPI.sendTransaction(topicId, _.assign(tx, { signedtx: signature }));
-        });
-      }
-    }
   }
 
   handleInfoReceipt(topic, topicId, info) {

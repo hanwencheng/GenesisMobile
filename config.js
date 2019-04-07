@@ -7,6 +7,8 @@ export const contractInfo = {
   testAddress: '0xD4ad64EC942bA176c1f55BE98cfBec69C898De17',
   joinDefaultValue: 500000000000000,
   createDefaultValue: 1000000000000000,
+  leaveDefaultValue: 100000000000000,
+  ethBaseValue: 1000000000000000000,
 };
 
 export const countryProps = ['lastmsg', 'countrydesc'];

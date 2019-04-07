@@ -3,9 +3,16 @@ import { contractInfo } from '../config';
 import {signTransaction} from "./ethereumUtils";
 import {resetNavigation, resetNavigationToTopic} from "./navigationUtils";
 import {screensList} from "../navigation/screensList";
-import _ from "../InnerScreens/TopicInnerScreen";
+import _ from "lodash";
 
-export const joinGroup = (topicId, walletAddress, userId, subscribedChatId, privateKey, contractAddress, countryName) => {
+export const confirmStatus = {
+  UNKNOWN: 'unknown',
+  SENT: 'sent',
+  OK: 'ok',
+  NOK: 'nok',
+}
+
+export const joinTopic = (topicId, walletAddress, userId, subscribedChatId, privateKey, contractAddress, countryName) => {
   return TinodeAPI.initTransaction(topicId, {
     type: 'setcon',
     pubaddr: walletAddress,
@@ -15,13 +22,13 @@ export const joinGroup = (topicId, walletAddress, userId, subscribedChatId, priv
     fn: 'join',
     inputs: [],
   }).then(tx => {
-    console.log('tx is', tx)
+    console.log('receive response tx', tx)
     const txRaw = {
       nonce: tx.nonce,
       gasLimit: tx.gaslimit,
       gasPrice: tx.gasprice,
       data: tx.data,
-      value: contractInfo.defaultValue,
+      value: contractInfo.joinDefaultValue,
       chainId: 3,
       to: contractAddress,
     };
@@ -30,7 +37,6 @@ export const joinGroup = (topicId, walletAddress, userId, subscribedChatId, priv
       privateKey
     ).then(signature => {
       console.log('signature is ', signature);
-      console.log('receive response', tx);
       const txParams = {
         signedtx: signature,
         what: 'send',
@@ -45,6 +51,7 @@ export const joinGroup = (topicId, walletAddress, userId, subscribedChatId, priv
             topicId: ctrl.topic,
             title: countryName,
           });
+        }
       });
     })
   });
@@ -57,19 +64,17 @@ export const createTopic = (walletAddress, userId, privateKey, topicParams, navi
     type: 'depcon',
     pubaddr: walletAddress,
     chainid: 3,
-    // signedtx: '',
-    // conaddr: '',
     user: userId,
     fn: 'constructor',
     inputs,
   }).then((tx)=> {
-    console.log('tx is', tx)
+    console.log('receive response tx', tx)
     const txRaw = {
       nonce: tx.nonce,
       gasLimit: tx.gaslimit,
       gasPrice: tx.gasprice,
       data: tx.data,
-      value: contractInfo.defaultValue,
+      value: contractInfo.createDefaultValue,
       chainId: 3,
     };
     signTransaction(
@@ -77,7 +82,6 @@ export const createTopic = (walletAddress, userId, privateKey, topicParams, navi
       privateKey
     ).then(signature => {
       console.log('signature is ', signature);
-      console.log('receive response', tx);
       resetNavigation(navigation, screensList.ChatList.label);
       const txParams = {
         signedtx: signature,
@@ -94,6 +98,48 @@ export const createTopic = (walletAddress, userId, privateKey, topicParams, navi
       });
       // TinodeAPI.sendTransaction(topicId, _.assign(txRaw, txParams));
     });
-  
   });
 };
+
+export const leaveTopic = (walletAddress, userId, privateKey, topicId, navigation, contractAddress) => {
+  return TinodeAPI.initTransaction(null, {
+    type: 'setcon',
+    pubaddr: walletAddress,
+    chainid: 3,
+    conaddr: contractAddress,
+    user: userId,
+    fn: 'leave',
+    inputs: [],
+  }).then((tx)=> {
+    console.log('receive response tx', tx)
+    const txRaw = {
+      nonce: tx.nonce,
+      gasLimit: tx.gaslimit,
+      gasPrice: tx.gasprice,
+      data: tx.data,
+      value: contractInfo.leaveDefaultValue,
+      chainId: 3,
+      to: contractAddress,
+    };
+    signTransaction(
+      txRaw,
+      privateKey
+    ).then(signature => {
+      console.log('signature is ', signature);
+      resetNavigation(navigation, screensList.ChatList.label);
+      const txParams = {
+        signedtx: signature,
+        what: 'send',
+        type: 'setcon',
+        fn: tx.fn,
+        inputs: [],
+      }
+      TinodeAPI.leaveTopic(topicId, txParams).then(ctrl => {
+        if(ctrl.code === '200') {
+          resetNavigation(navigation, screensList.ChatList.label);
+        }
+      });
+      // TinodeAPI.sendTransaction(topicId, _.assign(txRaw, txParams));
+    });
+  });
+}
