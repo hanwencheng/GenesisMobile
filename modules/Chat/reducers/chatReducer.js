@@ -14,6 +14,15 @@ const INITIAL_STATE = {
   subscribedChatId: null,
 };
 
+const reformDate = data => {
+  return _.mapValues(data, (value, key) => {
+    if(key === 'created' || key === 'updated') {
+      return new Date(value);
+    }
+    return value;
+  })
+}
+
 export const chatReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case chatActionType.LOGIN: {
@@ -38,6 +47,16 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
         };
       }
     }
+    case chatActionType.UPDATE_CHAT_DESC: {
+      const newData = _.merge(
+        _.get(state.chatMap, action.topicId, {}),
+        action.data
+      )
+      return {
+        ...state,
+        chatMap: set(action.topicId, reformDate(newData), state.chatMap)
+      }
+    }
     case chatActionType.SET_ID:
       return {
         ...state,
@@ -49,11 +68,18 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
         userInfo: action.userInfo,
         rawPublicData: action.rawPublicData,
       };
-    case chatActionType.SUBSCRIBE_CHAT:
+    case chatActionType.SUBSCRIBE_CHAT: {
+      let newChatMap = state.chatMap
+      // ignore if it is new chat and light subscribe
+      if (action.chatId && state.chatMap.hasOwnProperty(action.chatId)) {
+        newChatMap = set(`${action.chatId}.isSubscribed`, true, state.chatMap)
+      }
       return {
         ...state,
+        chatMap: newChatMap,
         subscribedChatId: action.chatId,
       };
+    }
     case chatActionType.UNSUBSCRIBE_CHAT:
       return {
         ...state,

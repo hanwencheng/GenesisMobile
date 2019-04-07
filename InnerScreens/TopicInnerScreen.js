@@ -24,10 +24,11 @@ import DappsList from './components/DappList';
 import { generatePublicInfo } from '../utils/chatUtils';
 import { store } from '../reducers/store';
 import { resetNavigation, resetNavigationToTopic } from '../utils/navigationUtils';
-import { createTopic } from '../utils/contractUtils';
+import {createTopic, joinGroup} from '../utils/contractUtils';
 import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import VoteSession from '../modules/Chat/components/VoteSession';
 import { signTransaction } from '../utils/ethereumUtils';
+import {chatAction} from "../modules/Chat/actions/chatAction";
 
 class TopicInnerScreen extends React.Component {
   static propTypes = {
@@ -40,6 +41,9 @@ class TopicInnerScreen extends React.Component {
     userId: PropTypes.string.isRequired,
     showPopup: PropTypes.func.isRequired,
     rawPublicData: PropTypes.object.isRequired,
+    subscribedChatId: PropTypes.string,
+    chatMap: PropTypes.object.isRequired,
+    updateChatDesc: PropTypes.func.isRequired,
 
     topic: PropTypes.object.isRequired,
     description: PropTypes.string.isRequired,
@@ -50,13 +54,17 @@ class TopicInnerScreen extends React.Component {
   };
 
   componentDidMount() {
-    const { initVote, topic, voteOrigin } = this.props;
+    const { initVote, topic, voteOrigin, userId, updateChatDesc } = this.props;
+    const topicId = topic.topic || topic.name
     const voteData = _.merge({}, voteOrigin, {
       countryName: _.get(topic, 'public.fn', voteOrigin.countryName),
       description: _.get(topic, 'private.comment', 'Country Description'),
       profile: _.get(topic, 'public.photo', voteOrigin.profile),
     });
     initVote(voteData);
+    TinodeAPI.getDescription(topicId).then( data => {
+      updateChatDesc(topicId, data)
+    })
   }
 
   onVotePayment() {
@@ -89,7 +97,7 @@ class TopicInnerScreen extends React.Component {
   }
 
   onJoin() {
-    const { voteCached, navigation, topic, showPopup } = this.props;
+    const { voteCached, navigation, topic, showPopup, walletAddress, userId, subscribedChatId, chatMap } = this.props;
     Alert.alert(
       'Payment',
       `${voteCached.entryCost} NES`,
@@ -97,12 +105,12 @@ class TopicInnerScreen extends React.Component {
         {
           text: 'Pay now (test version no fee)',
           onPress: () => {
-            this.prepareTransaction(() => {
+            this.prepareTransaction(privateKey => {
               showPopup(t.SEND_TRANSACTION);
-              return resetNavigationToTopic(navigation, {
-                topicId: topic.topic || topic.name,
-                title: voteCached.countryName,
-              });
+              console.log('countryName is', topic.public.fn)
+              console.log('chatMap is', chatMap)
+              const countryName = topic.public.fn
+              joinGroup(topic.topic, walletAddress, userId, subscribedChatId, privateKey, topic.conaddr, countryName)
             });
           },
         },
@@ -312,12 +320,18 @@ const mapStateToProps = state => ({
   userId: state.appState.userId,
   rawPublicData: state.chat.rawPublicData,
   walletAddress: state.appState.walletAddress,
+  
+  //only used for test
+  chatMap: state.chat.chatMap,
+  
+  subscribedChatId: state.chat.subscribedChatId,
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({
   initVote: voteAction.initVote,
   resetVote: voteAction.resetVote,
   showPopup: popupAction.showPopup,
+  updateChatDesc: chatAction.updateChatDesc,
 });
 
 export default connect(

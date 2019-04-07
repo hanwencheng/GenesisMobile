@@ -2099,7 +2099,7 @@ Tinode.prototype = {
         pkt.sub.set.tags = setParams.tags;
       }
     }
-
+    
     return this.send(pkt, pkt.sub.id);
   },
 
