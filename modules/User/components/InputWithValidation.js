@@ -35,7 +35,7 @@ export default class InputWithValidation extends React.Component {
           <Ionicons
             name="ios-checkmark-circle-outline"
             size={AppStyle.fontMiddle}
-            color={AppStyle.userCorrect}
+            color={AppStyle.mainBlue}
           />
         </View>
       );
@@ -55,7 +55,7 @@ export default class InputWithValidation extends React.Component {
     const isValidated = validator(value);
     let fontColor;
     if (this.state.shouldValidate) {
-      fontColor = isValidated ? AppStyle.userCorrect : AppStyle.userIncorrect;
+      fontColor = isValidated ? AppStyle.mainBlue : AppStyle.userIncorrect;
     } else {
       fontColor = AppStyle.lightGrey;
     }

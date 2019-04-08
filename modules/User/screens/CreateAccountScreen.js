@@ -16,9 +16,9 @@ class CreateAccountScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     // headerTitle: <NavigationHeader title={''} />,
     headerTransparent: true,
-    headerTintColor: AppStyle.userCancelGreen,
+    headerTintColor: AppStyle.colorBlack,
     headerStyle: {
-      backgroundColor: AppStyle.userHeaderBackgroundColor,
+      backgroundColor: AppStyle.mainBackgroundGrey,
     },
   });
 
@@ -95,12 +95,15 @@ const styles = StyleSheet.create({
   },
   title: {
     padding: 30,
-    fontSize: AppStyle.fontMiddleBig,
-    fontFamily: AppStyle.mainFont,
-    color: AppStyle.lightGrey,
+    fontSize: AppStyle.fontSizeRegularTitle,
+    fontFamily: AppStyle.fontRegularTitle,
+    color: AppStyle.mainBlackColor,
   },
   inputContainer: {
     flex: 2,
+    fontSize: AppStyle.fontSizeBodyText,
+    fontFamily: AppStyle.fontBodyText,
+    color: AppStyle.bodyTextGrey,
   },
   hint: {
     flex: 2,
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
 
 const t = {
   CREATE_ACCOUNT_TITLE: 'Create your account',
-  USERNAME_PLACEHOLDER: 'Name',
+  USERNAME_PLACEHOLDER: 'Username',
   EMAIL_PLACEHOLDER: 'Email',
   HINT_TEXT:
     'By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use. Others will be able to find you by email when provided. ',

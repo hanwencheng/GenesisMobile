@@ -25,7 +25,7 @@ const getBackgroundColor = (variant, disabled) => {
     case VariantList.CREATE:
       return AppStyle.variantCreate;
     default:
-      return AppStyle.variantConfirm;
+      return AppStyle.mainBlue;
   }
 };
 

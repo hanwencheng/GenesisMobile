@@ -60,6 +60,9 @@ export default class App extends React.Component {
         'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
         'OpenSans-Bold': require('./assets/fonts/OpenSans-Bold.ttf'),
         'OpenSans-SemiBold': require('./assets/fonts/OpenSans-SemiBold.ttf'),
+        'SFProDisplay-Bold': require('./assets/fonts/SFProDisplay-Bold.ttf'),
+        'SF-Pro-Text-Semibold': require('./assets/fonts/SF-Pro-Text-Semibold.otf'),
+        'SFProText-Regular': require('./assets/fonts/SF-Pro-Text-Regular.otf'),
       }),
     ]);
   };

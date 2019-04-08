@@ -80,7 +80,7 @@ export default {
   userBackgroundColor: 'white',
   coverTextBlack: '#4B4B4B',
   userCancelGreen: '#30D126',
-  userCorrect: '#4A90E2',
+  userCorrect: '#30D126',
   userIncorrect: '#DF4F52',
   inputPlaceholder: '#A1A1A1',
   chatBackGroundColor: '#EBEBEB',
@@ -90,4 +90,26 @@ export default {
   headerBackGroundColor: '#2D2C33',
 
   chatBorder: '#DDD',
+
+  mainBlue:'#2F8DF4',
+  mainIcon:'#323136',
+  bodyTextGrey:'#999A9B',
+  mainRed:'#999A9B',
+  conversationBackgroundColor: '#DFE9F5',
+  mainBackgroundGrey: '#EAEAEA',
+  mainBlackColor: '#000000',
+
+  fontSizeLargeTitle: 33,
+  fontLargeTitle: 'Impact',
+  fontSizeRegularTitle: 24,
+  fontRegularTitle: 'SFProDisplay-Bold',
+  fontSizeButtonSize:20,
+  fontButtonText: 'SFProText-Semibold',
+  fontSizeBodyText: 18,
+  fontBodyText: 'SFProText-Regular',
+  fontSizeBodyBold: 18,
+  fontBodyBold:'SFProText-Bold',
+  fontSize: 13,
+
+
 };
