@@ -147,6 +147,11 @@ class TopicInnerScreen extends React.Component {
             }
           },
         },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
       ],
       { cancelable: false }
     );

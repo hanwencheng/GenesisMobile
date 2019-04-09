@@ -74,7 +74,7 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
       if (action.chatId && state.chatMap.hasOwnProperty(action.chatId)) {
         const newTopic = _.assign({}, state.chatMap[action.chatId], {
           isSubscribed: true,
-          seq: 1,
+          seq: 0, //TODO do not use seq to indicate subscribed status.
         })
         newChatMap = set(action.chatId, newTopic, state.chatMap)
       }
