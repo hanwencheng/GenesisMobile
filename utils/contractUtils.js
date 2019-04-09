@@ -5,14 +5,7 @@ import {resetNavigation, resetNavigationToTopic} from "./navigationUtils";
 import {screensList} from "../navigation/screensList";
 import _ from "lodash";
 
-export const confirmStatus = {
-  UNKNOWN: 'unknown',
-  SENT: 'sent',
-  OK: 'ok',
-  NOK: 'nok',
-}
-
-export const joinTopic = (topicId, walletAddress, userId, subscribedChatId, privateKey, contractAddress, countryName) => {
+export const joinTopic = (topicId, walletAddress, userId, subscribedChatId, privateKey, navigation, contractAddress, countryName) => {
   return TinodeAPI.initTransaction(topicId, {
     type: 'setcon',
     pubaddr: walletAddress,
@@ -37,6 +30,7 @@ export const joinTopic = (topicId, walletAddress, userId, subscribedChatId, priv
       privateKey
     ).then(signature => {
       console.log('signature is ', signature);
+      resetNavigation(navigation, screensList.ChatList.label);
       const txParams = {
         signedtx: signature,
         what: 'send',
@@ -46,7 +40,7 @@ export const joinTopic = (topicId, walletAddress, userId, subscribedChatId, priv
       }
       TinodeAPI.unsubscribe(subscribedChatId)
       TinodeAPI.lightSubscribe(topicId, txParams).then(ctrl=>{
-        if(ctrl.code === '200') {
+        if(ctrl.code === 200) {
           resetNavigationToTopic(navigation, {
             topicId: ctrl.topic,
             title: countryName,
@@ -135,11 +129,21 @@ export const leaveTopic = (walletAddress, userId, privateKey, topicId, navigatio
         inputs: [],
       }
       TinodeAPI.leaveTopic(topicId, txParams).then(ctrl => {
-        if(ctrl.code === '200') {
-          resetNavigation(navigation, screensList.ChatList.label);
-        }
+        console.log('successful leave with ctrl', ctrl)
       });
       // TinodeAPI.sendTransaction(topicId, _.assign(txRaw, txParams));
     });
   });
+}
+
+const voteParamsConstractor = (contractAddress, ) => {
+  return {
+    pubaddr: contractAddress,
+    ballot: 1,
+    newvote: {},
+  }
+}
+
+export const vote = () => {
+
 }

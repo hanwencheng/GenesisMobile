@@ -10,9 +10,9 @@ import { topicsAction } from './actions/topicsAction';
 import * as chatUtils from '../../utils/chatUtils';
 import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
-import { hexlify, signTransaction } from '../../utils/ethereumUtils';
+import { hexlify } from '../../utils/ethereumUtils';
 import { contractProps, countryProps } from '../../config';
-import {confirmStatus} from "../../utils/contractUtils";
+import {confirmStatus} from "../../constants/ContractParams";
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -160,7 +160,12 @@ class TinodeAPIClass {
     }
     let topic = this.tinode.getTopic(topicId);
     if (topic && topic.isSubscribed()) {
-      return topic.leave(true, txParams).catch(err => this.handleError(err));
+      return topic.leave(true, txParams).catch(err => this.handleError(err)).then(ctrl => {
+        if(ctrl.code === 200) {
+          store.dispatch(chatAction.unsubscribeChat(topicId))
+        }
+        return Promise.resolve(ctrl)
+      });
     }
     return Promise.resolve();
   }
