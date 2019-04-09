@@ -69,6 +69,10 @@ class TopicInnerScreen extends React.Component {
 
   onVotePayment() {
     const { voteCached, navigation, showPopup, walletAddress, topic, voteOrigin } = this.props;
+    this.prepareTransaction('Payment', contractInfo.voteDefaultValue, privateKey => {
+      const countryName = topic.public.fn
+      joinTopic(topic.topic, walletAddress, userId, subscribedChatId, privateKey, topic.conaddr, countryName)
+    });
     Alert.alert(
       'Payment',
       `${voteCached.voteCost} NES`,
@@ -97,10 +101,10 @@ class TopicInnerScreen extends React.Component {
   }
 
   onJoin() {
-    const { topic, walletAddress, userId, subscribedChatId } = this.props;
+    const { topic, walletAddress, userId, subscribedChatId, navigation } = this.props;
     this.prepareTransaction('Payment', contractInfo.joinDefaultValue, privateKey => {
         const countryName = topic.public.fn
-        joinTopic(topic.topic, walletAddress, userId, subscribedChatId, privateKey, topic.conaddr, countryName)
+        joinTopic(topic.topic, walletAddress, userId, subscribedChatId, privateKey, navigation, topic.conaddr, countryName)
     });
   }
   

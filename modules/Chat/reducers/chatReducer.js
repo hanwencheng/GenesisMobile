@@ -81,14 +81,15 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
       };
     }
     case chatActionType.UNSUBSCRIBE_CHAT:
+      const newTopic = _.assign({}, state.chatMap, {
+        isSubscribed: false,
+        seq: -1,
+      })
       return {
         ...state,
         chatMap: set(
           action.chatId,
-          {
-            isSubscribed: false,
-            seq: -1,
-          },
+          newTopic,
           state.chatMap
         ),
       };
