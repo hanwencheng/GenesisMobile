@@ -94,15 +94,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    ...AppStyle.fontRegularTitle,
     padding: 30,
-    fontSize: AppStyle.fontSizeRegularTitle,
-    fontFamily: AppStyle.fontRegularTitle,
-    color: AppStyle.mainBlackColor,
   },
   inputContainer: {
     flex: 2,
     fontSize: AppStyle.fontSizeBodyText,
-    fontFamily: AppStyle.fontBodyText,
+    fontFamily: AppStyle.fontFamilyBodyText,
     color: AppStyle.bodyTextGrey,
   },
   hint: {
