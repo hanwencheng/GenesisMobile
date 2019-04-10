@@ -11,7 +11,7 @@ export const mockHistoryRules = [
     requiredHour: 168,
     groupWebsitePrefix: 'Https://www.bacaoke.com/',
     entryCost: 100,
-    exitCost: 50,
+    tax: 50,
     voteCost: 1000,
     memberRules: {
       default: [150, 150, 10, 1, 1],
@@ -32,7 +32,7 @@ export const mockHistoryRules = [
     requiredHour: 168,
     groupWebsitePrefix: 'Https://www.bacaoke.com/',
     entryCost: 100,
-    exitCost: 50,
+    tax: 50,
     voteCost: 1000,
     memberRules: {
       default: [150, 150, 10, 1, 1],
@@ -53,7 +53,7 @@ export const mockHistoryRules = [
     requiredHour: 168,
     groupWebsitePrefix: 'Https://www.bacaoke.com/',
     entryCost: 100,
-    exitCost: 50,
+    tax: 50,
     voteCost: 1000,
     memberRules: {
       default: [180, 150, 10, 1, 1],

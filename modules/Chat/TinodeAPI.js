@@ -12,7 +12,7 @@ import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
 import { hexlify } from '../../utils/ethereumUtils';
 import { contractProps, countryProps } from '../../config';
-import {confirmStatus} from "../../constants/ContractParams";
+import {confirmStatus, VoteParams, VoteTypes} from "../../constants/ContractParams";
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -57,7 +57,35 @@ class TinodeAPIClass {
       what: 'desc'
     }).catch(err => console.log('get description err is', err));
   }
-
+  
+  getVoteInfo = (topic, walletAddress) =>
+    this.tinode.vote(topic, {
+      what: VoteTypes.STATUS,
+      [VoteParams.WALLET_ADDRESS]: walletAddress,
+    })
+  
+  createNewVote = (topic, walletAddress, voteParams) =>
+    this.tinode.vote(topic, {
+      what: VoteTypes.NEW,
+      [VoteParams.WALLET_ADDRESS]: walletAddress,
+      [VoteParams.NEW_VOTE]: voteParams,
+    })
+  
+  submitVoteBallot = (topic, walletAddress, ballot) =>
+    this.tinode.vote(topic, {
+      what: VoteTypes.VOTE,
+      [VoteParams.WALLET_ADDRESS]: walletAddress,
+      [VoteParams.BALLOT]: ballot,
+    })
+  
+  
+  getVoteParams = (topic, walletAddress) =>
+    this.tinode.vote(topic, {
+      what: VoteTypes.PARAMS,
+      [VoteParams.WALLET_ADDRESS]: walletAddress
+    })
+  
+  
   sendTransaction(topic, params) {
     return this.tinode.sendTx(topic, params).catch(err => console.log('err is', err));
   }
@@ -168,10 +196,6 @@ class TinodeAPIClass {
       });
     }
     return Promise.resolve();
-  }
-
-  createNewVote(topicId) {
-    return this.tinode.note(topicId, 'vote', 1);
   }
 
   fetchMoreTopics(topicId) {
@@ -426,12 +450,12 @@ class TinodeAPIClass {
       });
   }
 
-  createAndSubscribeNewTopic(cachedVote, txParams) {
+  createAndSubscribeNewTopic(cachedVote, txParams, constructorParams) {
     const { countryName, profile, description } = cachedVote;
     const publicInfo = chatUtils.generatePublicInfo(countryName, profile);
     const topicName = this.tinode.newGroupTopicName();
     let topic = this.tinode.getTopic(topicName);
-    const newTopicParams = { desc: { public: publicInfo, private: { comment: description } } };
+    const newTopicParams = { desc: { ...constructorParams, public: publicInfo, private: { comment: description } } };
     let getQuery = topic
       .startMetaQuery()
       .withLaterDesc()

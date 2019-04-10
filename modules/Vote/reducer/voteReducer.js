@@ -15,7 +15,7 @@ export const INIT_VALUE = {
     requiredHour: 168,
     groupWebsitePrefix: 'Https://www.bacaoke.com/',
     entryCost: 100,
-    exitCost: 50,
+    tax: 50,
     voteCost: 1000,
     seq: 1,
     memberRules: {

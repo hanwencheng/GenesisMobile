@@ -42,17 +42,6 @@ class ActionList extends React.Component {
       //   },
       // },
       {
-        name: 'initTransaction',
-        imageSource: Images.appStore,
-        action: () => {
-          if (_.isEmpty(walletAddress)) {
-            showPopup(t.NO_WALLET);
-          } else {
-            createTopic(topic, walletAddress, userId);
-          }
-        },
-      },
-      {
         name: 'sendTransaction',
         imageSource: Images.appStore,
         action: () => {

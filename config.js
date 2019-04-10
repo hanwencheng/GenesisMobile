@@ -2,13 +2,16 @@ export const environment = {
   disableQRScan: false,
 };
 
+const baseValue = 100000000000000;
+
 export const contractInfo = {
   address: '0xa74ae2d3a4c3f6d9454634fee91dc7aab6724cf9',
   testAddress: '0xD4ad64EC942bA176c1f55BE98cfBec69C898De17',
-  joinDefaultValue: 500000000000000,
-  createDefaultValue: 1000000000000000,
-  leaveDefaultValue: 100000000000000,
-  ethBaseValue: 1000000000000000000,
+  joinDefaultValue: baseValue * 5,
+  createDefaultValue: baseValue * 10,
+  leaveDefaultValue: 0,
+  voteDefaultValue: baseValue,
+  ethBaseValue: baseValue * 10000,
 };
 
 export const countryProps = ['lastmsg', 'countrydesc'];
@@ -17,7 +20,6 @@ export const contractProps = [
   'VoteName',
   'conaddr',
   'entrycost',
-  'exitcost',
   'tax',
   'voteduration',
   'votepassrate',
