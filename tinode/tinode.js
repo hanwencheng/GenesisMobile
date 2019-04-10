@@ -1237,7 +1237,7 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
           callbacks.resolve(onOK);
         }
       } else if (callbacks.reject) {
-        callbacks.reject(new Error('Error: ' + errorText + ' (' + code + ')'));
+        callbacks.reject(new Error(errorText + ' (' + code + ')'));
       }
     }
   };
@@ -1404,7 +1404,14 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
             id: getNextUniqueId(),
           }
         }
-
+      case 'vote':
+        return {
+          vote: {
+            what: 'vote',
+            id: getNextUniqueId(),
+            topic,
+          }
+        }
       default:
         throw new Error('Unknown packet type requested: ' + type);
     }
@@ -1414,7 +1421,7 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
   this.send = (pkt, id) => {
     let promise;
     if (id) {
-      promise = makePromise(id);
+      promise = makePromise(id)
     }
     pkt = simplify(pkt);
     let msg = JSON.stringify(pkt);
@@ -1564,10 +1571,12 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
         }
       } else if(pkt.txres) {
         console.log('receive txres repsonse', pkt.txres)
-        if(pkt.txres.what === 'init') {
+        if (pkt.txres.what === 'init') {
           execPromise(pkt.txres.id, 200, pkt.txres, 'transaction init error');
         }
-      }else {
+      } else if(pkt.voteres) {
+        execPromise(pkt.voteres.id, 200, pkt.voteres, 'vote error');
+      } else {
         this.logger('ERROR: Unknown packet received.');
       }
     }
@@ -2121,6 +2130,13 @@ Tinode.prototype = {
     }
 
     return this.send(pkt, pkt.leave.id);
+  },
+  
+  vote(topic, params) {
+    const pkt = this.initPacket('vote', topic);
+    pkt.vote = _.merge(pkt.vote, params);
+    
+    return this.send(pkt, pkt.vote.id)
   },
 
   /**

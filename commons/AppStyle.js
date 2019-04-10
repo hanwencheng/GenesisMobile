@@ -66,9 +66,7 @@ export default {
   superLightGrey: '#D9D9D9',
   variantCreate: '#10AEFF',
   headerBlack: '#2D2C33',
-
-  fontTitle: 80,
-  fontSubtitle: 50,
+  
   fontSmall: 12,
   fontMiddleSmall: 16,
   fontMiddle: 18,
@@ -88,7 +86,7 @@ export default {
   blueIcon: '#10AEFF',
   blueButton: '#2F8DF4',
   headerBackGroundColor: '#2D2C33',
-
+  
   chatBorder: '#DDD',
 
   mainBlue:'#2F8DF4',
@@ -98,18 +96,46 @@ export default {
   conversationBackgroundColor: '#DFE9F5',
   mainBackgroundGrey: '#EAEAEA',
   mainBlackColor: '#000000',
-
+  
   fontSizeLargeTitle: 33,
-  fontLargeTitle: 'Impact',
+  fontFamilyLargeTitle: 'Impact',
   fontSizeRegularTitle: 24,
-  fontRegularTitle: 'SFProDisplay-Bold',
+  fontFamilyRegularTitle: 'SFProDisplay-Bold',
   fontSizeButtonSize:20,
-  fontButtonText: 'SFProText-Semibold',
+  fontFamilyButtonText: 'SFProText-Semibold',
   fontSizeBodyText: 18,
-  fontBodyText: 'SFProText-Regular',
+  fontFamilyBodyText: 'SFProText-Regular',
   fontSizeBodyBold: 18,
-  fontBodyBold:'SFProText-Bold',
+  fontFamilyBodyBold:'SFProText-Bold',
   fontSize: 13,
-
-
+  
+  fontLargeTitle: {
+    fontSize: this.fontSizeLargeTitle,
+    fontFamily: this.fontFamilyLargeTitle,
+    color: this.mainBlackColor,
+  },
+  
+  fontRegularTitle: {
+    fontSize: this.fontSizeRegularTitle,
+    fontFamily: this.fontFamilyRegularTitle,
+    color: this.mainBlackColor,
+  },
+  
+  fontButtonText: {
+    fontSize: this.fontSizeButtonSize,
+    fontFamily: this.fontFamilyButtonText,
+    color: this.mainBlackColor,
+  },
+  
+  fontBodyText: {
+    fontSize: this.fontSizeBodyText,
+    fontFamily: this.fontFamilyBodyText,
+    color: this.mainBlackColor,
+  },
+  
+  fontBodyBold: {
+    fontSize: this.fontSizeBodyBold,
+    fontFamily: this.fontFamilyBodyBold,
+    color: this.mainBlackColor,
+  }
 };

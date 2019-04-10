@@ -24,7 +24,7 @@ import DappsList from './components/DappList';
 import { generatePublicInfo } from '../utils/chatUtils';
 import { store } from '../reducers/store';
 import { resetNavigation, resetNavigationToTopic } from '../utils/navigationUtils';
-import {createTopic, joinTopic, leaveTopic} from '../utils/contractUtils';
+import {createTopic, createVote, joinTopic, leaveTopic} from '../utils/contractUtils';
 import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import VoteSession from '../modules/Chat/components/VoteSession';
 import { signTransaction } from '../utils/ethereumUtils';
@@ -62,42 +62,24 @@ class TopicInnerScreen extends React.Component {
       profile: _.get(topic, 'public.photo', voteOrigin.profile),
     });
     initVote(voteData);
-    TinodeAPI.getDescription(topicId).then( data => {
-      updateChatDesc(topicId, data)
-    })
+    if (!this.isCreatingNewTopic){
+      TinodeAPI.getDescription(topicId).then( data => {
+        updateChatDesc(topicId, data)
+      })
+      // TinodeAPI.getVoteInfo(topicId).then( data => {
+      //   console.log('vote info is', data)
+      // }).catch(error => {
+      //   console.warn('vote not showed:', error)
+      // })
+    }
   }
 
   onVotePayment() {
     const { voteCached, navigation, showPopup, walletAddress, topic, voteOrigin } = this.props;
-    this.prepareTransaction('Payment', contractInfo.voteDefaultValue, privateKey => {
+    this.prepareTransaction('Payment', contractInfo.joinDefaultValue, privateKey => {
       const countryName = topic.public.fn
-      joinTopic(topic.topic, walletAddress, userId, subscribedChatId, privateKey, topic.conaddr, countryName)
+      createVote(topic.topic, walletAddress, userId, subscribedChatId, privateKey, navigation, topic.conaddr, countryName)
     });
-    Alert.alert(
-      'Payment',
-      `${voteCached.voteCost} NES`,
-      [
-        {
-          text: 'Pay now',
-          onPress: () => {
-            //Test case
-            if (_.isEmpty(walletAddress)) {
-              showPopup(t.NO_WALLET);
-            } else {
-              this.prepareTransaction(() => {
-                TinodeAPI.createNewVote(topic.topic);
-                showPopup(t.SEND_TRANSACTION);
-                resetNavigationToTopic(navigation, {
-                  topicId: topic.topic || topic.name,
-                  title: _.get(topic, 'public.fn', voteOrigin.countryName),
-                });
-              });
-            }
-          },
-        },
-      ],
-      { cancelable: false }
-    );
   }
 
   onJoin() {
