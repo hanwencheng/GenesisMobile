@@ -72,7 +72,7 @@ class TopicScreen extends React.Component {
   componentDidMount() {
     const { navigation, userId, subscribedChatId, connected } = this.props;
     const topicId = navigation.getParam('topicId', null);
-    if (connected && subscribedChatId !== topicId) {
+    if (connected && subscribedChatId !== topicId ) {
       if (subscribedChatId !== null) TinodeAPI.unsubscribe(subscribedChatId);
       TinodeAPI.subscribe(topicId, userId);
     }
@@ -138,6 +138,7 @@ class TopicScreen extends React.Component {
       <TouchableOpacity
         onPress={() =>
           TinodeAPI.handleSendMessage(topicId, userId, topic.userInput).then(() =>
+            //TODO error in join the meeting.
             updateUserInput(topicId, '')
           )
         }>
@@ -193,7 +194,7 @@ class TopicScreen extends React.Component {
             />
             {this.renderActionButton(topic)}
           </View>
-          <ActionList show={this.state.showAction} />
+          <ActionList show={this.state.showAction} topic={topic} />
         </View>
       </View>
     );
@@ -225,7 +226,7 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppStyle.chatBackGroundColor,
+    backgroundColor: AppStyle.mainBackgroundColor,
     position: 'relative',
   },
   scrollContainer: {

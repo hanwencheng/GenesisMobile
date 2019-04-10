@@ -1,10 +1,27 @@
 export const environment = {
-  disableQRScan: true,
+  disableQRScan: false,
 };
 
 export const contractInfo = {
   address: '0xa74ae2d3a4c3f6d9454634fee91dc7aab6724cf9',
+  testAddress: '0xD4ad64EC942bA176c1f55BE98cfBec69C898De17',
+  joinDefaultValue: 500000000000000,
+  createDefaultValue: 1000000000000000,
+  leaveDefaultValue: 100000000000000,
+  ethBaseValue: 1000000000000000000,
 };
+
+export const countryProps = ['lastmsg', 'countrydesc'];
+
+export const contractProps = [
+  'VoteName',
+  'conaddr',
+  'entrycost',
+  'exitcost',
+  'tax',
+  'voteduration',
+  'votepassrate',
+];
 
 export const aboutInfo = {
   appName: 'Genesis Space Mobile',
@@ -29,6 +46,10 @@ export const wsInfo = {
 
 export const voteInfo = {
   rulesDescription: '(Join/Quit/Tax/Vote/Status)',
+};
+
+export const ethereumConfig = {
+  network: 'ropsten',
 };
 
 export const imageConfig = {

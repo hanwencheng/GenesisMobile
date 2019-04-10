@@ -117,6 +117,7 @@ const HomeStack = createStackNavigator(
   }
 );
 
+
 const UserStackIcon = ({ focused }) => (
   <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'} />
 );
@@ -125,11 +126,11 @@ UserStackIcon.propTypes = iconPropTypes;
 const UserStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    Wallet: WalletScreen,
     About: AboutScreen,
     PasswordSetting: PasswordSettingScreen,
     AccountSetting: AccountSettingScreen,
     UploadUserProfile: UploadUserProfileScreen,
-    Wallet: WalletScreen,
     WalletImport: WalletImportScreen,
     WalletCreate: WalletCreateScreen,
     ImportViaPrivate: ImportViaPrivateScreen,

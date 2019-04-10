@@ -10,10 +10,12 @@ export default class MemberList extends React.Component {
   static propTypes = {
     list: PropTypes.array.isRequired,
     limit: PropTypes.number,
+    withFutureMember: PropTypes.bool,
   };
 
   static defaultProps = {
     limit: 500,
+    withFutureMember: true,
   };
 
   //TODO could use dynamic scroll to fetch the list, now set 500 as limit.
@@ -56,11 +58,11 @@ export default class MemberList extends React.Component {
   }
 
   render() {
-    const { list } = this.props;
+    const { list, withFutureMember } = this.props;
     return (
       <View style={styles.container}>
         {this.renderMemberList(list)}
-        {this.renderFutureMember()}
+        {withFutureMember && this.renderFutureMember()}
       </View>
     );
   }

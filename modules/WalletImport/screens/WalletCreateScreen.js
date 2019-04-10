@@ -14,6 +14,7 @@ import { saveMnemonicAsync, savePrivateKeyAsync } from '../../../utils/secureSto
 import { lockScreen } from '../../Unlock/lockScreenUtils';
 import { loaderAction } from '../../../actions/loaderAction';
 import Container from '../../../components/Container';
+import { resetNavigationToWallet } from '../../../utils/navigationUtils';
 
 class WalletCreateScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -69,15 +70,11 @@ class WalletCreateScreen extends React.Component {
           })
       )
       .then(wallet => {
-        console.log('all save successfully, wallet is', wallet);
-        return lockScreen(navigation);
+        console.log('all save successfully, created wallet is', wallet);
+        return lockScreen(navigation)
       })
       .then(() => {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: screensList.Wallet.label })],
-        });
-        navigation.dispatch(resetAction);
+        resetNavigationToWallet(navigation);
       })
       .catch(e => {
         console.log(e);
@@ -106,7 +103,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: AppStyle.chatBackGroundColor,
+    backgroundColor: AppStyle.mainBackgroundColor,
     alignItems: 'center',
     justifyContent: 'center',
   },

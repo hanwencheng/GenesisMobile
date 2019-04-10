@@ -2,20 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { withNavigation } from 'react-navigation';
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+import _ from 'lodash';
 import AppStyle from '../../../commons/AppStyle';
 import Images from '../../../commons/Images';
 import { screensList } from '../../../navigation/screensList';
+import TinodeAPI from '../TinodeAPI';
+import { popupAction } from '../../../actions/popupAction';
+import { contractInfo } from '../../../config';
+import { createTopic } from '../../../utils/contractUtils';
 
 class ActionList extends React.Component {
   static propTypes = {
     show: PropTypes.bool.isRequired,
     navigation: PropTypes.object.isRequired,
+    topic: PropTypes.object.isRequired,
+    walletAddress: PropTypes.string,
+    showPopup: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {};
 
   renderList() {
-    const { navigation } = this.props;
+    const { navigation, topic, walletAddress, showPopup, userId } = this.props;
     const dappList = [
       {
         name: 'vote',
@@ -30,6 +41,32 @@ class ActionList extends React.Component {
       //     navigation.navigate(screensList.AppStore.label);
       //   },
       // },
+      {
+        name: 'initTransaction',
+        imageSource: Images.appStore,
+        action: () => {
+          if (_.isEmpty(walletAddress)) {
+            showPopup(t.NO_WALLET);
+          } else {
+            createTopic(topic, walletAddress, userId);
+          }
+        },
+      },
+      {
+        name: 'sendTransaction',
+        imageSource: Images.appStore,
+        action: () => {
+          TinodeAPI.sendTransaction(topic.topic, {
+            pubaddr: walletAddress,
+            chainid: 3,
+            type: 'depcon',
+            signedtx: '',
+            user: userId,
+            fn: '',
+            inputs: ['kingdom', 'this is a new country', '100', '200'],
+          });
+        },
+      },
     ];
 
     return dappList.map(item => (
@@ -48,7 +85,23 @@ class ActionList extends React.Component {
   }
 }
 
-export default withNavigation(ActionList);
+const mapStateToProps = state => ({
+  walletAddress: state.appState.walletAddress,
+  userId: state.chat.userId,
+});
+
+const mapDispatchToProps = _.curry(bindActionCreators)({
+  showPopup: popupAction.showPopup,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(ActionList));
+
+const t = {
+  NO_WALLET: 'please first set up the wallet',
+}
 
 const styles = StyleSheet.create({
   container: {

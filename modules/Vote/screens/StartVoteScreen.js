@@ -79,13 +79,13 @@ const t = {
   GROUP_TOPIC_TITLE: 'Country Name',
   TOPIC_DESCRIPTION_TITLE: 'Description',
   TOPIC_RULES: 'Rules',
-  BUTTON_TEXT: 'Confirm and starting Voting',
+  BUTTON_TEXT: 'Confirm and start Voting',
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppStyle.chatBackGroundColor,
+    backgroundColor: AppStyle.mainBackgroundColor,
   },
   introContainer: {
     padding: 20,

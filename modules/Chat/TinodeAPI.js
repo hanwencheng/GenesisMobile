@@ -1,8 +1,8 @@
 import { Platform } from 'react-native';
-import Tinode from 'tinode-sdk';
 import { NavigationActions, StackActions } from 'react-navigation';
 import _ from 'lodash';
-import { chatConfig, wsInfo } from '../../config';
+import Tinode from '../../tinode/tinode';
+import { chatConfig, contractInfo, wsInfo } from '../../config';
 import { store } from '../../reducers/store';
 import { chatAction } from './actions/chatAction';
 import { screensList } from '../../navigation/screensList';
@@ -10,6 +10,9 @@ import { topicsAction } from './actions/topicsAction';
 import * as chatUtils from '../../utils/chatUtils';
 import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
+import { hexlify } from '../../utils/ethereumUtils';
+import { contractProps, countryProps } from '../../config';
+import {confirmStatus} from "../../constants/ContractParams";
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -43,6 +46,20 @@ class TinodeAPIClass {
   handleError(err) {
     console.log('error is', err);
     store.dispatch(popupAction.showPopup(err.toString()));
+  }
+
+  initTransaction(topic, params) {
+    return this.tinode.initTxRequest(topic, params).catch(err => console.log('err is', err));
+  }
+  
+  getDescription(topic) {
+    return this.tinode.getMeta(topic, {
+      what: 'desc'
+    }).catch(err => console.log('get description err is', err));
+  }
+
+  sendTransaction(topic, params) {
+    return this.tinode.sendTx(topic, params).catch(err => console.log('err is', err));
   }
 
   connect() {
@@ -128,7 +145,6 @@ class TinodeAPIClass {
       // this.handleLoginSuccessful();
     }
   }
-  M;
 
   tnMeMetaSub(meTopic, topicData) {
     store.dispatch(chatAction.updateChatMap(topicData));
@@ -138,14 +154,24 @@ class TinodeAPIClass {
     console.log('data is', data);
   }
 
-  leaveTopic(topicId) {
+  leaveTopic(topicId, txParams) {
     if (!topicId) {
       return;
     }
     let topic = this.tinode.getTopic(topicId);
     if (topic && topic.isSubscribed()) {
-      return topic.leave(true).catch(err => this.handleError(err));
+      return topic.leave(true, txParams).catch(err => this.handleError(err)).then(ctrl => {
+        if(ctrl.code === 200) {
+          store.dispatch(chatAction.unsubscribeChat(topicId))
+        }
+        return Promise.resolve(ctrl)
+      });
     }
+    return Promise.resolve();
+  }
+
+  createNewVote(topicId) {
+    return this.tinode.note(topicId, 'vote', 1);
   }
 
   fetchMoreTopics(topicId) {
@@ -201,6 +227,11 @@ class TinodeAPIClass {
     //   chatList.push(c);
     // });
   }
+  
+  lightSubscribe(topicId, txParams) {
+    let topic = this.tinode.getTopic(topicId);
+    return topic.subscribe(undefined, undefined, txParams)
+  }
 
   subscribe(topicId, userId) {
     let topic = this.tinode.getTopic(topicId);
@@ -210,7 +241,9 @@ class TinodeAPIClass {
     // topic.onAllMessagesReceived = this.handleAllMessagesReceived;
     topic.onInfo = this.handleInfoReceipt.bind(this, topic, topicId);
     topic.onMetaDesc = this.handleDescChange.bind(this, topic, topicId);
+    // topic.onMetaSub = this.handleMetaSubChange.bind(this, topic, topicId);
     topic.onSubsUpdated = this.handleSubsUpdated.bind(this, topic, topicId, userId);
+
     // topic.onPres = this.handleSubsUpdated.bind(this, topic, topicId, userId);
 
     //TODO why? add title and avatar?
@@ -287,6 +320,32 @@ class TinodeAPIClass {
     store.dispatch(topicsAction.updateTopicMessages(topicId, messages));
   }
 
+  handleServerResponse(topic, tx) {
+    if (!tx) {
+      tx = topic;
+      topic = null;
+    }
+    console.log('topic is', topic, 'receive response', tx);
+    if (tx.hasOwnProperty('confirmed')) {
+      switch (tx.confirmed) {
+        case confirmStatus.OK:
+          return store.dispatch(popupAction.showPopup('transaction successfully deployed'));
+        case confirmStatus.NOK:
+          return store.dispatch(popupAction.showPopup('transaction deployment failed'));
+        case confirmStatus.SENT:
+          return store.dispatch(popupAction.showPopup('transaction sent to the blockchain network'));
+      }
+    }
+    const txRaw = {
+      nonce: tx.nonce,
+      gasLimit: tx.gaslimit,
+      gasPrice: tx.gasprice,
+      data: tx.data,
+      value: contractInfo.defaultValue,
+    };
+    let txRawWithTo;
+  }
+
   handleInfoReceipt(topic, topicId, info) {
     console.log('in handleInfoReceipt, info are:', info);
     switch (info.what) {
@@ -304,18 +363,25 @@ class TinodeAPIClass {
       store.dispatch(
         topicsAction.updateTopicMeta(
           topicId,
-          _.pick(topic, [
-            'private',
-            'public',
-            'topic',
-            'created',
-            'touched',
-            'updated',
-            '_tags',
-            'online',
-            'acs',
-            'name',
-          ])
+          _.pick(
+            topic,
+            _.concat(
+              [
+                'private',
+                'public',
+                'topic',
+                'created',
+                'touched',
+                'updated',
+                '_tags',
+                'online',
+                'acs',
+                'name',
+              ],
+              countryProps,
+              contractProps
+            )
+          )
         )
       );
     } else {
@@ -360,7 +426,7 @@ class TinodeAPIClass {
       });
   }
 
-  createAndSubscribeNewTopic(cachedVote, userId) {
+  createAndSubscribeNewTopic(cachedVote, txParams) {
     const { countryName, profile, description } = cachedVote;
     const publicInfo = chatUtils.generatePublicInfo(countryName, profile);
     const topicName = this.tinode.newGroupTopicName();
@@ -373,7 +439,7 @@ class TinodeAPIClass {
       .withLaterData(chatConfig.messagePerPage)
       .withLaterDel();
     return topic
-      .subscribe(getQuery.build(), newTopicParams)
+      .subscribe(getQuery.build(), newTopicParams, txParams)
       .then(ctrl => {
         console.log('create new topic ctrl is', ctrl);
         this.unsubscribe(topicName);

@@ -23,6 +23,7 @@ import Spinner from '../../../components/Spinner';
 import KeyboardView from '../../../components/KeyboardView';
 import TouchOutSideDismissKeyboard from '../../../components/TouchOutSideDismissKeyboard';
 import { saveMnemonicAsync, savePrivateKeyAsync } from '../../../utils/secureStoreUtils';
+import {resetNavigationToWallet} from "../../../utils/navigationUtils";
 
 const { width } = Dimensions.get('window');
 
@@ -102,11 +103,7 @@ class TextWithQRInput extends React.Component {
       })
       .then(() => {
         this.setState(initState);
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: screensList.Wallet.label })],
-        });
-        navigation.dispatch(resetAction);
+        resetNavigationToWallet(navigation)
       })
       .catch(e => {
         console.log(e);
@@ -181,7 +178,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: AppStyle.chatBackGroundColor,
+    backgroundColor: AppStyle.mainBackgroundColor,
   },
   textInput: {
     height: 182,
