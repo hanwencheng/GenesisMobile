@@ -148,14 +148,35 @@ const voteParamsConstractor = (contractAddress, ) => {
   return {
     pubaddr: contractAddress,
     ballot: 1,
-    newvote: {},
   }
 }
 
-export const createVote = () => {
-  const {countryName, description, entryCost = 100, tax = 0} = topicParams
+const getVoteDifference = (voteCached, voteOrigin) =>
+  _.reduce(voteCached, (acc, value, key) => {
+    if (value === voteOrigin[key])
+      return acc;
+    return _.set(acc, key, value)
+  }, {})
+
+const isVoteWithContract = voteDifference => _.isEmpty(_.omit(voteDifference, ['requiredApproved', 'requiredHour']))
+
+
+export const createVote = (walletAddress, userId, privateKey, topicParams, ) => {
+  const {countryName, description, entryCost = 100, tax = 0, subs, conaddr} = topicParams
+  const voters = _.map(subs, 'user');
   const votePassRate = voteParams.requiredApproved || 50
   const voteDuration = topicParams.requiredHour * 3600 || 3600
+  
+  const newVote = {
+    owner: userId,
+    duration: voteDuration,
+    passrate: votePassRate,
+    voters,
+    isContract: true,
+    conaddr,
+    fn: '',
+    inputs: [],
+  }
   //Contract inputs need all be strings
   const inputs = [countryName, description, entryCost.toString(), tax.toString()]
   return TinodeAPI.initTransaction(null, {

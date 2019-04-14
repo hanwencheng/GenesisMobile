@@ -5,11 +5,11 @@ import _ from 'lodash';
 import { screensList } from '../../../navigation/screensList';
 import AmendInput from '../components/AmendInput';
 import { groupMetaRules } from '../../../config';
-import { generateNavigationOptions } from '../components/navigationOptions';
+import { generateAmendRulesNavigationOptions } from '../components/navigationOptions';
 import Container from '../../../components/Container';
 
 class AmendDurationScreen extends React.Component {
-  static navigationOptions = generateNavigationOptions(screensList.AmendDuration.title);
+  static navigationOptions = generateAmendRulesNavigationOptions(screensList.AmendDuration.title);
 
   render() {
     return (
