@@ -5,11 +5,11 @@ import { bindActionCreators } from 'redux';
 import { screensList } from '../../../navigation/screensList';
 import AmendInput from '../components/AmendInput';
 import { groupMetaRules } from '../../../config';
-import { generateNavigationOptions } from '../components/navigationOptions';
+import { generateAmendRulesNavigationOptions } from '../components/navigationOptions';
 import Container from '../../../components/Container';
 
 class AmendCostScreen extends React.Component {
-  static navigationOptions = generateNavigationOptions(screensList.AmendCost.title);
+  static navigationOptions = generateAmendRulesNavigationOptions(screensList.AmendCost.title);
 
   render() {
     return (

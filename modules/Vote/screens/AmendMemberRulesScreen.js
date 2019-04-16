@@ -7,11 +7,11 @@ import { screensList } from '../../../navigation/screensList';
 import AmendInput from '../components/AmendInput';
 import { groupMetaRules } from '../../../config';
 import { INIT_VALUE } from '../reducer/voteReducer';
-import { generateNavigationOptions } from '../components/navigationOptions';
+import { generateAmendRulesNavigationOptions } from '../components/navigationOptions';
 import Container from '../../../components/Container';
 
 class AmendMemberRulesScreen extends React.Component {
-  static navigationOptions = generateNavigationOptions(screensList.AmendMemberRules.title);
+  static navigationOptions = generateAmendRulesNavigationOptions(screensList.AmendMemberRules.title);
 
   static propTypes = {
     navigation: PropTypes.object,
