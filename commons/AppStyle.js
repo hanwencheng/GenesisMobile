@@ -1,4 +1,4 @@
-export default {
+const AppStyle = {
   mainColor: '#E4BF43',
   grayColor: '#C5C1C1',
   greenColor: '#2ED573',
@@ -108,34 +108,37 @@ export default {
   fontSizeBodyBold: 18,
   fontFamilyBodyBold:'SFProText-Bold',
   fontSize: 13,
-  
-  fontLargeTitle: {
-    fontSize: this.fontSizeLargeTitle,
-    fontFamily: this.fontFamilyLargeTitle,
-    color: this.mainBlackColor,
-  },
-  
-  fontRegularTitle: {
-    fontSize: this.fontSizeRegularTitle,
-    fontFamily: this.fontFamilyRegularTitle,
-    color: this.mainBlackColor,
-  },
-  
-  fontButtonText: {
-    fontSize: this.fontSizeButtonSize,
-    fontFamily: this.fontFamilyButtonText,
-    color: this.mainBlackColor,
-  },
-  
-  fontBodyText: {
-    fontSize: this.fontSizeBodyText,
-    fontFamily: this.fontFamilyBodyText,
-    color: this.mainBlackColor,
-  },
-  
-  fontBodyBold: {
-    fontSize: this.fontSizeBodyBold,
-    fontFamily: this.fontFamilyBodyBold,
-    color: this.mainBlackColor,
-  }
 };
+
+AppStyle.fontLargeTitle = {
+  fontSize: AppStyle.fontSizeLargeTitle,
+  fontFamily: AppStyle.fontFamilyLargeTitle,
+  color: AppStyle.mainBlackColor,
+}
+
+AppStyle.fontRegularTitle = {
+  fontSize: AppStyle.fontSizeRegularTitle,
+  fontFamily: AppStyle.fontFamilyRegularTitle,
+  color: AppStyle.mainBlackColor,
+}
+
+AppStyle.fontButtonText = {
+  fontSize: AppStyle.fontSizeButtonSize,
+  fontFamily: AppStyle.fontFamilyButtonText,
+  color: AppStyle.mainBlackColor,
+}
+
+AppStyle.fontBodyText = {
+  fontSize: AppStyle.fontSizeBodyText,
+  fontFamily: AppStyle.fontFamilyBodyText,
+  color: AppStyle.mainBlackColor,
+}
+
+AppStyle.fontBodyBold = {
+  fontSize: AppStyle.fontSizeBodyBold,
+  fontFamily: AppStyle.fontFamilyBodyBold,
+  color: AppStyle.mainBlackColor,
+}
+
+
+export default AppStyle
