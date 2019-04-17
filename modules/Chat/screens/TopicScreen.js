@@ -155,6 +155,13 @@ class TopicScreen extends React.Component {
       this.setState({ refreshing: false })
     );
   }
+  
+  conditionalReverse(list) {
+    if(list.length >= 2 && list[0].seq < list[1].seq) {
+      list.reverse()
+    }
+    return list
+  }
 
   render() {
     const { topicsMap, navigation, updateUserInput } = this.props;
@@ -162,24 +169,18 @@ class TopicScreen extends React.Component {
     const topicId = navigation.getParam('topicId', null);
     const topic = _.get(topicsMap, topicId);
     if (!topic) return null;
-    const { messages } = topic;
+    const renderedData = this.conditionalReverse(topic.messages)
     //Todo this height need to be recalculated for precise number with different text length
-    const HEIGHT = 66;
     return (
       <View style={styles.container}>
         <KeyboardAwareFlatList
+          inverted
           onRefresh={() => this.onRefresh(topic)}
           refreshing={refreshing}
-          // initialScrollIndex={messages.length - 5}
-          // getItemLayout={(data, index) => (
-          //   {length: HEIGHT, offset: HEIGHT * index, index}
-          // )}
           onScrollToIndexFailed={console.log}
           ref={ref => (this.flatList = ref)}
-          onContentSizeChange={() => this.flatList.scrollToEnd({ animated: true })}
-          onLayout={() => this.flatList.scrollToEnd({ animated: true })}
           style={styles.scrollContainer}
-          data={messages}
+          data={renderedData}
           keyExtractor={message => message.seq.toString()}
           renderItem={({ item }) => this.renderMessageNode(item, topic)}
         />
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   sendButton: {
-    margin: 10,
+    margin: 14,
     borderRadius: 5,
     backgroundColor: AppStyle.userCancelGreen,
     justifyContent: 'center',
