@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const VoteTypes = {
   NEW: 'new',
   VOTE: 'vote',
@@ -9,6 +11,7 @@ export const VoteParams = {
   WALLET_ADDRESS: 'pubaddr',
   NEW_VOTE: 'newvote',
   BALLOT: 'ballot',
+  USER: 'user',
 }
 
 export const confirmStatus = {
@@ -28,5 +31,28 @@ export const ConstructorParams = {
   PROGRAM_ADDRESS: 'programaddr',
   VOTE_PASS_RATE: 'votepassrate',
   VOTE_DURATION: 'voteduration',
+}
+
+export const ContractFnMap = {
+  description: {
+    name: 'setDescription',
+    value: v => [v],
+    isContract: true,
+  },
+  requiredApproved: {
+    name: 'setVotePassrate',
+    value: v => [v.toString()],
+    isContract: false,
+  },
+  requiredHour: {
+    name: 'setVoteDuration',
+    value: v => [(v * 3600).toString()],
+    isContract: false,
+  },
+  entryCost: {
+    name: 'setCost',
+    value: v => [v.toString(), '100'],
+    isContract: true,
+  },
 }
 
