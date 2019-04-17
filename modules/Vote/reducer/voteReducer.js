@@ -23,6 +23,7 @@ export const INIT_VALUE = {
     },
   },
   cached: {},
+  currentNewVote: {},
 };
 
 export const voteReducer = (state = INIT_VALUE, action) => {
@@ -33,24 +34,31 @@ export const voteReducer = (state = INIT_VALUE, action) => {
         ...state,
         origin: initData,
         cached: initData,
+        currentNewVote: {},
       };
     }
     case voteActionType.SET: {
       return {
         ...state,
         cached: _.merge({}, state.cached, action.data),
+        currentNewVote: {
+          name: Object.keys(action.data)[0],
+          value: Object.values(action.data)[0]
+        },
       };
     }
     case voteActionType.RESET: {
       return {
         ...state,
         cached: state.origin,
+        currentNewVote: {},
       };
     }
     case voteActionType.SUBMITED: {
       return {
         ...state,
         origin: state.cached,
+        currentNewVote: {},
       };
     }
     default:
