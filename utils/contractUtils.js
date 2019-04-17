@@ -1,10 +1,10 @@
 import TinodeAPI from '../modules/Chat/TinodeAPI';
-import { contractInfo } from '../config';
+import {contractInfo, environment} from '../config';
 import {signTransaction} from "./ethereumUtils";
 import {resetNavigation, resetNavigationToTopic} from "./navigationUtils";
 import {screensList} from "../navigation/screensList";
 import _ from "lodash";
-import {ConstructorParams} from "../constants/ContractParams";
+import {ConstructorParams, ContractFnMap} from "../constants/ContractParams";
 
 export const joinTopic = (topicId, walletAddress, userId, subscribedChatId, privateKey, navigation, contractAddress, countryName) => {
   return TinodeAPI.initTransaction(topicId, {
@@ -90,7 +90,7 @@ export const createTopic = (walletAddress, userId, privateKey, topicParams, navi
       }
       const constructorParams = {
         [ConstructorParams.VOTE_PASS_RATE]: votePassRate,
-        [ConstructorParams.VOTE_DURATION]: voteDuration,
+        [ConstructorParams.VOTE_DURATION]: environment.disableVoteDuration ? environment.mockDurationSecond : voteDuration,
       }
       TinodeAPI.createAndSubscribeNewTopic(topicParams, txParams, constructorParams).then(ctrl => {
         resetNavigationToTopic(navigation, {
@@ -161,65 +161,36 @@ const getVoteDifference = (voteCached, voteOrigin) =>
 const isVoteWithContract = voteDifference => _.isEmpty(_.omit(voteDifference, ['requiredApproved', 'requiredHour']))
 
 
-export const createVote = (walletAddress, userId, privateKey, topicParams, ) => {
+export const createVote = (walletAddress, userId, privateKey, topicParams, navigation, currentNewVote) => {
   const {countryName, description, entryCost = 100, tax = 0, subs, conaddr} = topicParams
   const voters = _.map(subs, 'user');
-  const votePassRate = voteParams.requiredApproved || 50
-  const voteDuration = topicParams.requiredHour * 3600 || 3600
+  const votePassRate = topicParams.requiredApproved || 50
+  const voteDuration = environment.disableVoteDuration ? environment.mockDurationSecond : (topicParams.requiredHour * 3600 || 3600)
+  
+  const paramsConstructor = _.get(ContractFnMap, `${currentNewVote.name}`, {
+    name: '',
+    value: () => [],
+    isContract: false,
+  })
   
   const newVote = {
-    owner: userId,
+    owner: userId,/**/
     duration: voteDuration,
     passrate: votePassRate,
     voters,
-    isContract: true,
+    isContract: paramsConstructor.isContract,
     conaddr,
-    fn: '',
-    inputs: [],
+    fn: paramsConstructor.name,
+    inputs: paramsConstructor.value(currentNewVote.value),
   }
   //Contract inputs need all be strings
-  const inputs = [countryName, description, entryCost.toString(), tax.toString()]
-  return TinodeAPI.initTransaction(null, {
-    type: 'depcon',
-    pubaddr: walletAddress,
-    chainid: 3,
-    user: userId,
-    fn: 'constructor',
-    inputs,
-  }).then((tx)=> {
+  TinodeAPI.createNewVote(topicParams.topic, walletAddress, newVote, userId).then((tx)=> {
     console.log('receive response tx', tx)
-    const txRaw = {
-      nonce: tx.nonce,
-      gasLimit: tx.gaslimit,
-      gasPrice: tx.gasprice,
-      data: tx.data,
-      value: contractInfo.createDefaultValue,
-      chainId: 3,
-    };
-    signTransaction(
-      txRaw,
-      privateKey
-    ).then(signature => {
-      console.log('signature is ', signature);
-      resetNavigation(navigation, screensList.ChatList.label);
-      const txParams = {
-        signedtx: signature,
-        what: 'send',
-        type: 'depcon',
-        fn: tx.fn,
-        inputs,
-      }
-      const constructorParams = {
-        [ConstructorParams.VOTE_PASS_RATE]: votePassRate,
-        [ConstructorParams.VOTE_DURATION]: voteDuration,
-      }
-      TinodeAPI.createAndSubscribeNewTopic(topicParams, txParams, constructorParams).then(ctrl => {
-        resetNavigationToTopic(navigation, {
-          topicId: ctrl.topic,
-          title: topicParams.countryName,
-        });
-      });
-      // TinodeAPI.sendTransaction(topicId, _.assign(txRaw, txParams));
-    });
+    TinodeAPI.getVoteInfo(topicParams.topic, walletAddress)
+  });
+  
+  return resetNavigationToTopic(navigation, {
+    topicId: topicParams.topic,
+    title: topicParams.countryName,
   });
 }
