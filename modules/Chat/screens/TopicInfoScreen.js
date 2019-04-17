@@ -29,7 +29,7 @@ class TopicInfoScreen extends React.Component {
     return (
       <TopicInnerScreen
         description={t.TOPIC_DESCRIPTION_TITLE}
-        topic={topic}
+        topicId={topic.topic}
         isJoined={isJoined}
         allowEdit={allowEdit}
         iconName="addfile"

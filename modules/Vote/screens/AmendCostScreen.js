@@ -7,6 +7,7 @@ import AmendInput from '../components/AmendInput';
 import { groupMetaRules } from '../../../config';
 import { generateAmendRulesNavigationOptions } from '../components/navigationOptions';
 import Container from '../../../components/Container';
+import PropTypes from "prop-types";
 
 class AmendCostScreen extends React.Component {
   static navigationOptions = generateAmendRulesNavigationOptions(screensList.AmendCost.title);
