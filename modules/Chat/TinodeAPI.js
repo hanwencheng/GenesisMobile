@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import _ from 'lodash';
 import Tinode from '../../tinode/tinode';
-import { chatConfig, contractInfo, wsInfo } from '../../config';
+import { chatConfig, contractInfo, wsInfo, contractProps, countryProps } from '../../config';
 import { store } from '../../reducers/store';
 import { chatAction } from './actions/chatAction';
 import { screensList } from '../../navigation/screensList';
@@ -10,9 +10,7 @@ import { topicsAction } from './actions/topicsAction';
 import * as chatUtils from '../../utils/chatUtils';
 import { popupAction } from '../../actions/popupAction';
 import { loaderAction } from '../../actions/loaderAction';
-import { hexlify } from '../../utils/ethereumUtils';
-import { contractProps, countryProps } from '../../config';
-import {confirmStatus, VoteParams, VoteTypes} from "../../constants/ContractParams";
+import { confirmStatus, VoteParams, VoteTypes } from '../../constants/ContractParams';
 
 const newGroupTopicParams = { desc: { public: {}, private: { comment: {} } }, tags: {} };
 
@@ -51,43 +49,43 @@ class TinodeAPIClass {
   initTransaction(topic, params) {
     return this.tinode.initTxRequest(topic, params).catch(err => console.log('err is', err));
   }
-  
+
   getDescription(topic) {
-    return this.tinode.getMeta(topic, {
-      what: 'desc'
-    }).catch(err => console.log('get description err is', err));
+    return this.tinode
+      .getMeta(topic, {
+        what: 'desc',
+      })
+      .catch(err => console.log('get description err is', err));
   }
-  
+
   getVoteInfo = (topic, walletAddress, userId) =>
     this.tinode.vote(topic, {
       what: VoteTypes.STATUS,
       // [VoteParams.WALLET_ADDRESS]: walletAddress,
       [VoteParams.USER]: userId,
-    })
-  
+    });
+
   createNewVote = (topic, walletAddress, voteParams, userId) =>
     this.tinode.vote(topic, {
       what: VoteTypes.NEW,
       [VoteParams.WALLET_ADDRESS]: walletAddress,
       [VoteParams.NEW_VOTE]: voteParams,
-      [VoteParams.USER]: userId
-    })
-  
+      [VoteParams.USER]: userId,
+    });
+
   submitVoteBallot = (topic, walletAddress, ballot) =>
     this.tinode.vote(topic, {
       what: VoteTypes.VOTE,
       [VoteParams.WALLET_ADDRESS]: walletAddress,
       [VoteParams.BALLOT]: ballot,
-    })
-  
-  
+    });
+
   getVoteParams = (topic, walletAddress) =>
     this.tinode.vote(topic, {
       what: VoteTypes.PARAMS,
-      [VoteParams.WALLET_ADDRESS]: walletAddress
-    })
-  
-  
+      [VoteParams.WALLET_ADDRESS]: walletAddress,
+    });
+
   sendTransaction(topic, params) {
     return this.tinode.sendTx(topic, params).catch(err => console.log('err is', err));
   }
@@ -190,12 +188,15 @@ class TinodeAPIClass {
     }
     let topic = this.tinode.getTopic(topicId);
     if (topic && topic.isSubscribed()) {
-      return topic.leave(true, txParams).catch(err => this.handleError(err)).then(ctrl => {
-        if(ctrl.code === 200) {
-          store.dispatch(chatAction.unsubscribeChat(topicId))
-        }
-        return Promise.resolve(ctrl)
-      });
+      return topic
+        .leave(true, txParams)
+        .catch(err => this.handleError(err))
+        .then(ctrl => {
+          if (ctrl.code === 200) {
+            store.dispatch(chatAction.unsubscribeChat(topicId));
+          }
+          return Promise.resolve(ctrl);
+        });
     }
     return Promise.resolve();
   }
@@ -253,10 +254,10 @@ class TinodeAPIClass {
     //   chatList.push(c);
     // });
   }
-  
+
   lightSubscribe(topicId, txParams) {
     let topic = this.tinode.getTopic(topicId);
-    return topic.subscribe(undefined, undefined, txParams)
+    return topic.subscribe(undefined, undefined, txParams);
   }
 
   subscribe(topicId, userId) {
@@ -359,7 +360,9 @@ class TinodeAPIClass {
         case confirmStatus.NOK:
           return store.dispatch(popupAction.showPopup('transaction deployment failed'));
         case confirmStatus.SENT:
-          return store.dispatch(popupAction.showPopup('transaction sent to the blockchain network'));
+          return store.dispatch(
+            popupAction.showPopup('transaction sent to the blockchain network')
+          );
       }
     }
     const txRaw = {
@@ -457,7 +460,9 @@ class TinodeAPIClass {
     const publicInfo = chatUtils.generatePublicInfo(countryName, profile);
     const topicName = this.tinode.newGroupTopicName();
     let topic = this.tinode.getTopic(topicName);
-    const newTopicParams = { desc: { ...constructorParams, public: publicInfo, private: { comment: description } } };
+    const newTopicParams = {
+      desc: { ...constructorParams, public: publicInfo, private: { comment: description } },
+    };
     let getQuery = topic
       .startMetaQuery()
       .withLaterDesc()

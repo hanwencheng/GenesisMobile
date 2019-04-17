@@ -117,7 +117,6 @@ const HomeStack = createStackNavigator(
   }
 );
 
-
 const UserStackIcon = ({ focused }) => (
   <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'} />
 );

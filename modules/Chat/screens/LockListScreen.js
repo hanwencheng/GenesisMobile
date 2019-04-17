@@ -51,12 +51,9 @@ class LockListScreen extends React.Component {
     };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
-  onRefresh = () => {
-  
-  };
+  onRefresh = () => {};
 
   render() {
     const { locksMap, navigation } = this.props;

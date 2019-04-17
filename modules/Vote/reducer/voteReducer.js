@@ -43,7 +43,7 @@ export const voteReducer = (state = INIT_VALUE, action) => {
         cached: _.merge({}, state.cached, action.data),
         currentNewVote: {
           name: Object.keys(action.data)[0],
-          value: Object.values(action.data)[0]
+          value: Object.values(action.data)[0],
         },
       };
     }

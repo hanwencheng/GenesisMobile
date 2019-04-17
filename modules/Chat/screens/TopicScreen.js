@@ -72,7 +72,7 @@ class TopicScreen extends React.Component {
   componentDidMount() {
     const { navigation, userId, subscribedChatId, connected } = this.props;
     const topicId = navigation.getParam('topicId', null);
-    if (connected && subscribedChatId !== topicId ) {
+    if (connected && subscribedChatId !== topicId) {
       if (subscribedChatId !== null) TinodeAPI.unsubscribe(subscribedChatId);
       TinodeAPI.subscribe(topicId, userId);
     }
@@ -155,12 +155,12 @@ class TopicScreen extends React.Component {
       this.setState({ refreshing: false })
     );
   }
-  
+
   conditionalReverse(list) {
-    if(list.length >= 2 && list[0].seq < list[1].seq) {
-      list.reverse()
+    if (list.length >= 2 && list[0].seq < list[1].seq) {
+      list.reverse();
     }
-    return list
+    return list;
   }
 
   render() {
@@ -169,7 +169,7 @@ class TopicScreen extends React.Component {
     const topicId = navigation.getParam('topicId', null);
     const topic = _.get(topicsMap, topicId);
     if (!topic) return null;
-    const renderedData = this.conditionalReverse(topic.messages)
+    const renderedData = this.conditionalReverse(topic.messages);
     //Todo this height need to be recalculated for precise number with different text length
     return (
       <View style={styles.container}>

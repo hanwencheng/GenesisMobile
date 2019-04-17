@@ -8,12 +8,12 @@ const INITIAL_STATE = {
 
 const reformDate = data => {
   return _.mapValues(data, (value, key) => {
-    if(key === 'created' || key === 'updated') {
+    if (key === 'created' || key === 'updated') {
       return new Date(value);
     }
     return value;
-  })
-}
+  });
+};
 
 export const topicsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -43,14 +43,11 @@ export const topicsReducer = (state = INITIAL_STATE, action) => {
       };
     }
     case topicsActionType.UPDATE_TOPIC: {
-      const newData = _.merge(
-        _.get(state.topicsMap, action.topicId, {}),
-        action.data
-      )
+      const newData = _.merge(_.get(state.topicsMap, action.topicId, {}), action.data);
       return {
         ...state,
-        topicsMap: set(action.topicsMap, reformDate(newData), state.topicsMap)
-      }
+        topicsMap: set(action.topicsMap, reformDate(newData), state.topicsMap),
+      };
     }
     case topicsActionType.UPDATE_TOPIC_SUBS: {
       const topicsMap = set(`${action.topicName}.subs`, action.topicSubs, state.topicsMap);

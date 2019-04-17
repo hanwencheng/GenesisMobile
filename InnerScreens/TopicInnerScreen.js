@@ -17,11 +17,11 @@ import { MemberListContainer, IntroContainer } from './components';
 import { popupAction } from '../actions/popupAction';
 import { lockScreen } from '../modules/Unlock/lockScreenUtils';
 import { aboutInfo, contractInfo } from '../config';
-import {createTopic, createVote, joinTopic, leaveTopic} from '../utils/contractUtils';
+import { createTopic, createVote, joinTopic, leaveTopic } from '../utils/contractUtils';
 import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import VoteSession from '../modules/Chat/components/VoteSession';
-import TopicRules from "../modules/Rules/components/TopicRules";
-import {topicsAction} from "../modules/Chat/actions/topicsAction";
+import TopicRules from '../modules/Rules/components/TopicRules';
+import { topicsAction } from '../modules/Chat/actions/topicsAction';
 
 class TopicInnerScreen extends React.Component {
   static propTypes = {
@@ -38,7 +38,7 @@ class TopicInnerScreen extends React.Component {
     chatMap: PropTypes.object.isRequired,
     topicsMap: PropTypes.object.isRequired,
     updateTopic: PropTypes.func.isRequired,
-  
+
     currentNewVote: PropTypes.object.isRequired,
     topicId: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -47,10 +47,10 @@ class TopicInnerScreen extends React.Component {
     isJoined: PropTypes.bool.isRequired,
     walletAddress: PropTypes.string,
   };
-  
+
   get topicData() {
     const { topicId, topicsMap } = this.props;
-    return _.get(topicsMap, topicId, {})
+    return _.get(topicsMap, topicId, {});
   }
 
   componentDidMount() {
@@ -62,59 +62,68 @@ class TopicInnerScreen extends React.Component {
       profile: _.get(topic, 'public.photo', voteOrigin.profile),
     });
     initVote(voteData);
-    if (!this.isCreatingNewTopic){
+    if (!this.isCreatingNewTopic) {
       TinodeAPI.getDescription(topicId).then(data => {
-        updateTopic(topicId, data)
-      })
-      TinodeAPI.getVoteInfo(topicId, walletAddress, userId).then( data => {
-        updateTopic(topicId, {vote: data})
-      }).catch(error => {
-        console.log('no vote at the moment')
-      })
+        updateTopic(topicId, data);
+      });
+      TinodeAPI.getVoteInfo(topicId, walletAddress, userId)
+        .then(data => {
+          updateTopic(topicId, { vote: data });
+        })
+        .catch(error => {
+          console.log('no vote at the moment');
+        });
     }
-    
   }
 
   onNewVote() {
     const { navigation, userId, walletAddress, topicId, currentNewVote } = this.props;
-    if(_.isEmpty(currentNewVote) || this.isCreatingNewTopic)
-      return;
-    
+    if (_.isEmpty(currentNewVote) || this.isCreatingNewTopic) return;
+
     this.prepareTransaction('Payment', contractInfo.joinDefaultValue, privateKey => {
-      const countryName = this.topicData.public.fn
-      createVote(walletAddress, userId, privateKey, this.topicData, navigation, currentNewVote)
+      const countryName = this.topicData.public.fn;
+      createVote(walletAddress, userId, privateKey, this.topicData, navigation, currentNewVote);
     });
   }
 
   onJoin() {
     const { topicId, walletAddress, userId, subscribedChatId, navigation } = this.props;
-    const topic = this.topicData
+    const topic = this.topicData;
     this.prepareTransaction('Payment', contractInfo.joinDefaultValue, privateKey => {
-        const countryName = topic.public.fn
-        joinTopic(topicId, walletAddress, userId, subscribedChatId, privateKey, navigation, topic.conaddr, countryName)
+      const countryName = topic.public.fn;
+      joinTopic(
+        topicId,
+        walletAddress,
+        userId,
+        subscribedChatId,
+        privateKey,
+        navigation,
+        topic.conaddr,
+        countryName
+      );
     });
   }
-  
+
   onCreate() {
     const { voteCached, walletAddress, userId, showPopup, navigation } = this.props;
     const paramError = _.get(this.validateTopicParams(), 'error', null);
     if (paramError) return showPopup(paramError);
     this.prepareTransaction('Payment', contractInfo.createDefaultValue, privateKey => {
-      createTopic(walletAddress, userId, privateKey, voteCached, navigation)
+      createTopic(walletAddress, userId, privateKey, voteCached, navigation);
     });
   }
-  
+
   onLeave() {
     const { topicId, walletAddress, userId, navigation } = this.props;
     this.prepareTransaction('Payment', contractInfo.leaveDefaultValue, privateKey => {
-      leaveTopic(walletAddress, userId, privateKey, topicId, navigation, this.topicData.conaddr)
+      leaveTopic(walletAddress, userId, privateKey, topicId, navigation, this.topicData.conaddr);
     });
   }
-  
-  prepareTransaction (title, value, callback) {
+
+  prepareTransaction(title, value, callback) {
     const { walletAddress, navigation, showPopup } = this.props;
-    const valueText = Number.parseFloat(value/ contractInfo.ethBaseValue).toPrecision(3);
-    const message = `${valueText} Eth`
+    const valueText = Number.parseFloat(value / contractInfo.ethBaseValue).toPrecision(3);
+    const message = `${valueText} Eth`;
     Alert.alert(
       title,
       message,
@@ -162,9 +171,9 @@ class TopicInnerScreen extends React.Component {
     const { isJoined, allowEdit } = this.props;
     return !isJoined && !allowEdit;
   }
-  
-  get hasVote () {
-    return !_.isEmpty(this.topicData.vote)
+
+  get hasVote() {
+    return !_.isEmpty(this.topicData.vote);
   }
 
   renderButton() {
@@ -236,18 +245,18 @@ class TopicInnerScreen extends React.Component {
       );
     return null;
   }
-  
+
   conditionalOpen(screenLabel) {
     const { navigation, allowEdit, currentNewVote } = this.props;
     const that = this;
     if (allowEdit && !this.hasVote) {
       navigation.navigate(screenLabel, {
         onGoBack: () => {
-            that.onNewVote()
-        }
+          that.onNewVote();
+        },
       });
     } else {
-      this.showVoteNeededAlert()
+      this.showVoteNeededAlert();
     }
   }
 
@@ -261,7 +270,7 @@ class TopicInnerScreen extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
-        {isJoined && allowEdit && this.hasVote && <VoteSession/>}
+        {isJoined && allowEdit && this.hasVote && <VoteSession />}
         {this.renderIntroOrMemberList()}
         <Text style={styles.rulesTitle}>{t.META_INFO_TITLE}</Text>
 
@@ -269,7 +278,11 @@ class TopicInnerScreen extends React.Component {
           <SingleLineDisplay
             title={t.GROUP_TOPIC_TITLE}
             value={topicTitle}
-            onClick={this.isCreatingNewTopic ? () => this.conditionalOpen(screensList.AmendCountryName.label) : null}
+            onClick={
+              this.isCreatingNewTopic
+                ? () => this.conditionalOpen(screensList.AmendCountryName.label)
+                : null
+            }
           />
           <SingleSectionDisplay
             title={t.TOPIC_DESCRIPTION_TITLE}
@@ -292,12 +305,12 @@ class TopicInnerScreen extends React.Component {
           conditionalOpen={this.conditionalOpen.bind(this)}
         />
         {/*<RulesList*/}
-          {/*voteOrigin={voteOrigin}*/}
-          {/*voteCached={voteCached}*/}
-          {/*isJoined={isJoined}*/}
-          {/*hasVoting={false}*/}
-          {/*isEdited={edited}*/}
-          {/*allowEdit={allowEdit && !hasVote}*/}
+        {/*voteOrigin={voteOrigin}*/}
+        {/*voteCached={voteCached}*/}
+        {/*isJoined={isJoined}*/}
+        {/*hasVoting={false}*/}
+        {/*isEdited={edited}*/}
+        {/*allowEdit={allowEdit && !hasVote}*/}
         {/*/>*/}
         {/* TODO disable Dapp Store Now <Text style={styles.rulesTitle}>{t.MINI_DAPPS}</Text>*/}
         {/* TODO disable Dapp Store Now <DappsList />*/}
@@ -314,7 +327,7 @@ const mapStateToProps = state => ({
   userId: state.appState.userId,
   rawPublicData: state.chat.rawPublicData,
   walletAddress: state.appState.walletAddress,
-  
+
   //only used for test
   topicsMap: state.topics.topicsMap,
   chatMap: state.chat.chatMap,

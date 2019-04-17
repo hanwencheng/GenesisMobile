@@ -33,7 +33,10 @@ class VoteInfoScreen extends React.Component {
     showPopup: PropTypes.func.isRequired,
   };
 
-  buildSupportTitle = (supportList, allMemberList) => `${supportList.length} (${Number(supportList.length/allMemberList.length * 100).toFixed(2)}%)`;
+  buildSupportTitle = (supportList, allMemberList) =>
+    `${supportList.length} (${Number((supportList.length / allMemberList.length) * 100).toFixed(
+      2
+    )}%)`;
 
   onPayment() {
     const { navigation, showPopup, walletAddress } = this.props;
@@ -57,32 +60,35 @@ class VoteInfoScreen extends React.Component {
       { cancelable: false }
     );
   }
-  
+
   getSupportList(list, subs) {
-    return _.reduce(list, (acc, value)=> {
-      const findResult = _.find(subs, {user: value})
-      if(!findResult)
-        return acc
-      return _.concat(acc, findResult)
-    }, [])
+    return _.reduce(
+      list,
+      (acc, value) => {
+        const findResult = _.find(subs, { user: value });
+        if (!findResult) return acc;
+        return _.concat(acc, findResult);
+      },
+      []
+    );
   }
 
   render() {
     const { topicsMap, navigation, subscribedChatId, userName } = this.props;
     const topic = _.get(topicsMap, subscribedChatId, null);
     if (!topic) return null;
-    
-    const voteData = topic.vote
-    console.log('user list is', topic.subs)
+
+    const voteData = topic.vote;
+    console.log('user list is', topic.subs);
     const renderList = [
       { title: t.VOTE_ID_TITLE, value: voteData.id },
       { title: t.OWNER_TITLE, value: voteData.user },
-      { title: t.EXPIRES_TITLE, value: voteData.end},
+      { title: t.EXPIRES_TITLE, value: voteData.end },
     ];
 
     //TODO only in test that yes + no = 1
-    const yesList = this.getSupportList(voteData.forlist, topic.subs)
-    const noList = this.getSupportList(voteData.againstlist, topic.subs)
+    const yesList = this.getSupportList(voteData.forlist, topic.subs);
+    const noList = this.getSupportList(voteData.againstlist, topic.subs);
 
     const SupportList = props => (
       <View style={styles.supportListContainer}>
@@ -91,7 +97,7 @@ class VoteInfoScreen extends React.Component {
           <Text style={styles.listSubtitleText}>{props.supportRateText}</Text>
         </View>
         <View style={styles.supportList}>
-          <MemberList list={props.list} limit={12} withFutureMember={false}/>
+          <MemberList list={props.list} limit={12} withFutureMember={false} />
           {props.list.length > 12 && (
             <LightButton
               onPress={() =>

@@ -1,25 +1,25 @@
-import _ from 'lodash'
+import _ from 'lodash';
 
 export const VoteTypes = {
   NEW: 'new',
   VOTE: 'vote',
   STATUS: 'status',
   PARAMS: 'param',
-}
+};
 
 export const VoteParams = {
   WALLET_ADDRESS: 'pubaddr',
   NEW_VOTE: 'newvote',
   BALLOT: 'ballot',
   USER: 'user',
-}
+};
 
 export const confirmStatus = {
   UNKNOWN: 'unknown',
   SENT: 'sent',
   OK: 'ok',
   NOK: 'nok',
-}
+};
 
 export const ConstructorParams = {
   CONTRACT_ADDRESS: 'conaddr',
@@ -31,7 +31,7 @@ export const ConstructorParams = {
   PROGRAM_ADDRESS: 'programaddr',
   VOTE_PASS_RATE: 'votepassrate',
   VOTE_DURATION: 'voteduration',
-}
+};
 
 export const ContractFnMap = {
   description: {
@@ -54,5 +54,4 @@ export const ContractFnMap = {
     value: v => [v.toString(), '100'],
     isContract: true,
   },
-}
-
+};

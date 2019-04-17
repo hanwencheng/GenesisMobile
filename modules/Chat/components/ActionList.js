@@ -90,7 +90,7 @@ export default connect(
 
 const t = {
   NO_WALLET: 'please first set up the wallet',
-}
+};
 
 const styles = StyleSheet.create({
   container: {

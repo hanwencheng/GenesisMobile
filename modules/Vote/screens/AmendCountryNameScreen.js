@@ -9,7 +9,9 @@ import { generateAmendRulesNavigationOptions } from '../components/navigationOpt
 import Container from '../../../components/Container';
 
 class AmendCountryNameScreen extends React.Component {
-  static navigationOptions = generateAmendRulesNavigationOptions(screensList.AmendCountryName.title);
+  static navigationOptions = generateAmendRulesNavigationOptions(
+    screensList.AmendCountryName.title
+  );
 
   render() {
     return (
