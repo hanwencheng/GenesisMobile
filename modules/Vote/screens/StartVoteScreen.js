@@ -50,7 +50,7 @@ class StartVoteScreen extends React.Component {
         iconName="addfile"
         allowEdit
         isJoined
-        topic={topic}
+        topicId={topic.topic}
       />
     );
   }

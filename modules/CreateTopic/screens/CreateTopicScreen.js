@@ -30,7 +30,7 @@ class CreateTopicScreen extends React.Component {
     return (
       <TopicInnerScreen
         description={t.DESCRIPTION}
-        topic={{}}
+        topicId={''}
         allowEdit
         isJoined={false}
         iconName="addfile"

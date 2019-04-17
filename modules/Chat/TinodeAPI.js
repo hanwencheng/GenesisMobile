@@ -58,17 +58,19 @@ class TinodeAPIClass {
     }).catch(err => console.log('get description err is', err));
   }
   
-  getVoteInfo = (topic, walletAddress) =>
+  getVoteInfo = (topic, walletAddress, userId) =>
     this.tinode.vote(topic, {
       what: VoteTypes.STATUS,
-      [VoteParams.WALLET_ADDRESS]: walletAddress,
+      // [VoteParams.WALLET_ADDRESS]: walletAddress,
+      [VoteParams.USER]: userId,
     })
   
-  createNewVote = (topic, walletAddress, voteParams) =>
+  createNewVote = (topic, walletAddress, voteParams, userId) =>
     this.tinode.vote(topic, {
       what: VoteTypes.NEW,
       [VoteParams.WALLET_ADDRESS]: walletAddress,
       [VoteParams.NEW_VOTE]: voteParams,
+      [VoteParams.USER]: userId
     })
   
   submitVoteBallot = (topic, walletAddress, ballot) =>
