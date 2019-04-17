@@ -14,15 +14,6 @@ const INITIAL_STATE = {
   subscribedChatId: null,
 };
 
-const reformDate = data => {
-  return _.mapValues(data, (value, key) => {
-    if(key === 'created' || key === 'updated') {
-      return new Date(value);
-    }
-    return value;
-  })
-}
-
 export const chatReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case chatActionType.LOGIN: {
@@ -45,16 +36,6 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
           ...state,
           chatMap: set(topicId, action.data, state.chatMap),
         };
-      }
-    }
-    case chatActionType.UPDATE_CHAT_DESC: {
-      const newData = _.merge(
-        _.get(state.chatMap, action.topicId, {}),
-        action.data
-      )
-      return {
-        ...state,
-        chatMap: set(action.topicId, reformDate(newData), state.chatMap)
       }
     }
     case chatActionType.SET_ID:
