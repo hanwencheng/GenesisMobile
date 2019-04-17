@@ -13,8 +13,7 @@ export default class Connector extends React.Component {
     TinodeAPI.connect();
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     return null;

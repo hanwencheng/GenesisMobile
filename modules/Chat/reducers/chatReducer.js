@@ -50,14 +50,14 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
         rawPublicData: action.rawPublicData,
       };
     case chatActionType.SUBSCRIBE_CHAT: {
-      let newChatMap = state.chatMap
+      let newChatMap = state.chatMap;
       // ignore if it is new chat and light subscribe
       if (action.chatId && state.chatMap.hasOwnProperty(action.chatId)) {
         const newTopic = _.assign({}, state.chatMap[action.chatId], {
           isSubscribed: true,
           seq: 0, //TODO do not use seq to indicate subscribed status.
-        })
-        newChatMap = set(action.chatId, newTopic, state.chatMap)
+        });
+        newChatMap = set(action.chatId, newTopic, state.chatMap);
       }
       return {
         ...state,
@@ -66,20 +66,20 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
       };
     }
     case chatActionType.UNSUBSCRIBE_CHAT:
-      let newChatMap = state.chatMap
+      let newChatMap = state.chatMap;
       if (action.chatId && state.chatMap.hasOwnProperty(action.chatId)) {
         const newTopic = _.assign({}, state.chatMap[action.chatId], {
           isSubscribed: false,
           seq: -1,
-        })
-        newChatMap = set(action.chatId, newTopic, state.chatMap)
+        });
+        newChatMap = set(action.chatId, newTopic, state.chatMap);
       }
       return {
         ...state,
         chatMap: newChatMap,
         subscribedChatId: null,
       };
-    
+
     default:
       return state;
   }

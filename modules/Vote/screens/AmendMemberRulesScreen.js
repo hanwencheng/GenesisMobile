@@ -11,7 +11,9 @@ import { generateAmendRulesNavigationOptions } from '../components/navigationOpt
 import Container from '../../../components/Container';
 
 class AmendMemberRulesScreen extends React.Component {
-  static navigationOptions = generateAmendRulesNavigationOptions(screensList.AmendMemberRules.title);
+  static navigationOptions = generateAmendRulesNavigationOptions(
+    screensList.AmendMemberRules.title
+  );
 
   static propTypes = {
     navigation: PropTypes.object,

@@ -5,6 +5,7 @@ import connect from 'react-redux/es/connect/connect';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { Entypo } from '@expo/vector-icons';
+import { withNavigation } from 'react-navigation';
 import AppStyle from '../../../commons/AppStyle';
 import { screensList } from '../../../navigation/screensList';
 import { voteInfo } from '../../../config';
@@ -12,30 +13,28 @@ import SingleLineDisplay from '../../../components/SingleLineDisplay';
 import SingleLineSingleValueDisplay from '../../../components/SingleLineSingleValueDisplay';
 import { alertNormal } from '../../../utils/alertUtils';
 import Container from '../../../components/Container';
-import { withNavigation } from 'react-navigation';
 
 class TopicRules extends React.Component {
-  
   static propTypes = {
     navigation: PropTypes.object,
     voteCached: PropTypes.object.isRequired,
     editEnabled: PropTypes.bool.isRequired,
     conditionalOpen: PropTypes.func.isRequired,
   };
-  
+
   render() {
     const { navigation, voteCached, editEnabled, conditionalOpen } = this.props;
-    const rules = voteCached ;
+    const rules = voteCached;
     return (
       <Container style={styles.container}>
         {/*<View style={styles.introContainer}>*/}
-          {/*<Entypo*/}
-            {/*name="users"*/}
-            {/*size={AppStyle.fontBig}*/}
-            {/*color={AppStyle.blueIcon}*/}
-            {/*style={styles.introIcon}*/}
-          {/*/>*/}
-          {/*<Text style={styles.introText}>{t.RULES_INTRO}</Text>*/}
+        {/*<Entypo*/}
+        {/*name="users"*/}
+        {/*size={AppStyle.fontBig}*/}
+        {/*color={AppStyle.blueIcon}*/}
+        {/*style={styles.introIcon}*/}
+        {/*/>*/}
+        {/*<Text style={styles.introText}>{t.RULES_INTRO}</Text>*/}
         {/*</View>*/}
         <Text style={styles.rulesTitle}>{t.PEOPLE_RULES_TITLE}</Text>
         <SingleLineSingleValueDisplay

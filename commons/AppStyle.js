@@ -66,7 +66,7 @@ const AppStyle = {
   superLightGrey: '#D9D9D9',
   variantCreate: '#10AEFF',
   headerBlack: '#2D2C33',
-  
+
   fontSmall: 12,
   fontMiddleSmall: 16,
   fontMiddle: 18,
@@ -86,27 +86,27 @@ const AppStyle = {
   blueIcon: '#10AEFF',
   blueButton: '#2F8DF4',
   headerBackGroundColor: '#2D2C33',
-  
+
   chatBorder: '#DDD',
 
-  mainBlue:'#2F8DF4',
-  mainIcon:'#323136',
-  bodyTextGrey:'#999A9B',
-  mainRed:'#999A9B',
+  mainBlue: '#2F8DF4',
+  mainIcon: '#323136',
+  bodyTextGrey: '#999A9B',
+  mainRed: '#999A9B',
   conversationBackgroundColor: '#DFE9F5',
   mainBackgroundGrey: '#EAEAEA',
   mainBlackColor: '#000000',
-  
+
   fontSizeLargeTitle: 33,
   fontFamilyLargeTitle: 'Impact',
   fontSizeRegularTitle: 24,
   fontFamilyRegularTitle: 'SFProDisplay-Bold',
-  fontSizeButtonSize:20,
+  fontSizeButtonSize: 20,
   fontFamilyButtonText: 'SFProText-Semibold',
   fontSizeBodyText: 18,
   fontFamilyBodyText: 'SFProText-Regular',
   fontSizeBodyBold: 18,
-  fontFamilyBodyBold:'SFProText-Bold',
+  fontFamilyBodyBold: 'SFProText-Bold',
   fontSize: 13,
 };
 
@@ -114,31 +114,30 @@ AppStyle.fontLargeTitle = {
   fontSize: AppStyle.fontSizeLargeTitle,
   fontFamily: AppStyle.fontFamilyLargeTitle,
   color: AppStyle.mainBlackColor,
-}
+};
 
 AppStyle.fontRegularTitle = {
   fontSize: AppStyle.fontSizeRegularTitle,
   fontFamily: AppStyle.fontFamilyRegularTitle,
   color: AppStyle.mainBlackColor,
-}
+};
 
 AppStyle.fontButtonText = {
   fontSize: AppStyle.fontSizeButtonSize,
   fontFamily: AppStyle.fontFamilyButtonText,
   color: AppStyle.mainBlackColor,
-}
+};
 
 AppStyle.fontBodyText = {
   fontSize: AppStyle.fontSizeBodyText,
   fontFamily: AppStyle.fontFamilyBodyText,
   color: AppStyle.mainBlackColor,
-}
+};
 
 AppStyle.fontBodyBold = {
   fontSize: AppStyle.fontSizeBodyBold,
   fontFamily: AppStyle.fontFamilyBodyBold,
   color: AppStyle.mainBlackColor,
-}
+};
 
-
-export default AppStyle
+export default AppStyle;

@@ -9,7 +9,9 @@ import { generateAmendRulesNavigationOptions } from '../components/navigationOpt
 import Container from '../../../components/Container';
 
 class AmendDescriptionScreen extends React.Component {
-  static navigationOptions = generateAmendRulesNavigationOptions(screensList.AmendDescription.title);
+  static navigationOptions = generateAmendRulesNavigationOptions(
+    screensList.AmendDescription.title
+  );
 
   render() {
     return (
