@@ -17,16 +17,6 @@ import { aboutInfo } from '../../../config';
 import { INIT_VALUE } from '../reducer/voteReducer';
 import { popupAction } from '../../../actions/popupAction';
 
-const locale = window.navigator.language;
-const mock = {
-  id: '100012',
-  expires: new Date().toLocaleTimeString(locale, {
-    hour12: false,
-    hour: '2-digit',
-    minute: '2-digit',
-  }),
-};
-
 class VoteInfoScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: <NavigationHeader title={screensList.VoteInfo.title} />,
@@ -43,7 +33,7 @@ class VoteInfoScreen extends React.Component {
     showPopup: PropTypes.func.isRequired,
   };
 
-  buildSupportTitle = (number, rate) => `${number} (${Number(rate * 100).toFixed(2)}%)`;
+  buildSupportTitle = (supportList, allMemberList) => `${supportList.length} (${Number(supportList.length/allMemberList.length * 100).toFixed(2)}%)`;
 
   onPayment() {
     const { navigation, showPopup, walletAddress } = this.props;
@@ -67,24 +57,32 @@ class VoteInfoScreen extends React.Component {
       { cancelable: false }
     );
   }
+  
+  getSupportList(list, subs) {
+    return _.reduce(list, (acc, value)=> {
+      const findResult = _.find(subs, {user: value})
+      if(!findResult)
+        return acc
+      return _.concat(acc, findResult)
+    }, [])
+  }
 
   render() {
     const { topicsMap, navigation, subscribedChatId, userName } = this.props;
-    const topic = _.get(topicsMap, subscribedChatId);
+    const topic = _.get(topicsMap, subscribedChatId, null);
     if (!topic) return null;
+    
+    const voteData = topic.vote
+    console.log('user list is', topic.subs)
     const renderList = [
-      { title: t.VOTE_ID_TITLE, value: mock.id },
-      { title: t.OWNER_TITLE, value: userName },
-      { title: t.EXPIRES_TITLE, value: mock.expires },
+      { title: t.VOTE_ID_TITLE, value: voteData.id },
+      { title: t.OWNER_TITLE, value: voteData.user },
+      { title: t.EXPIRES_TITLE, value: voteData.end},
     ];
 
     //TODO only in test that yes + no = 1
-    const mockYesRate = 0.66666;
-    const supportNumber = Math.round(topic.subs.length * mockYesRate);
-    const mockNoRate = 0.33333;
-    const denyNumber = Math.round(topic.subs.length * mockNoRate);
-    const mockYesList = _.take(topic.subs, supportNumber);
-    const mockNoList = _.drop(topic.subs, supportNumber);
+    const yesList = this.getSupportList(voteData.forlist, topic.subs)
+    const noList = this.getSupportList(voteData.againstlist, topic.subs)
 
     const SupportList = props => (
       <View style={styles.supportListContainer}>
@@ -115,13 +113,13 @@ class VoteInfoScreen extends React.Component {
         </View>
         <SupportList
           titleText={t.YES}
-          supportRateText={this.buildSupportTitle(supportNumber, mockYesRate)}
-          list={mockYesList}
+          supportRateText={this.buildSupportTitle(yesList, topic.subs)}
+          list={yesList}
         />
         <SupportList
           titleText={t.NO}
-          supportRateText={this.buildSupportTitle(denyNumber, mockNoRate)}
-          list={mockNoList}
+          supportRateText={this.buildSupportTitle(noList, topic.subs)}
+          list={noList}
         />
         <GenesisButton
           action={() => this.onPayment()}
