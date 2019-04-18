@@ -37,8 +37,8 @@ class VoteInfoScreen extends React.Component {
   };
   
   get topicData() {
-    const { topicId, topicsMap } = this.props;
-    return _.get(topicsMap, topicId, {});
+    const { subscribedChatId, topicsMap } = this.props;
+    return _.get(topicsMap, subscribedChatId, {});
   }
 
   buildSupportTitle = (supportList, allMemberList) =>
@@ -48,6 +48,7 @@ class VoteInfoScreen extends React.Component {
 
   onPayment(isSupport) {
     const { navigation, showPopup, walletAddress, userId } = this.props;
+    const that = this;
     Alert.alert(
       'Payment',
       `${INIT_VALUE.origin.voteCost} NES`,
@@ -61,7 +62,7 @@ class VoteInfoScreen extends React.Component {
               lockScreen(navigation)
                 .then(() => new Promise(getPrivateKeyAsync))
                 .then(privateKey => {
-                  submitVote(walletAddress, userId, privateKey, this.topicData, navigation, isSupport);
+                  submitVote(walletAddress, userId, privateKey, that.topicData, navigation, isSupport);
                 });
             }
           },
