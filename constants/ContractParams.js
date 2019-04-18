@@ -34,7 +34,7 @@ export const ConstructorParams = {
 };
 
 export const ContractFnMap = {
-  description: {
+  countrydesc: {
     name: 'setDescription',
     value: v => [v],
     isContract: true,

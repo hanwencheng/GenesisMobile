@@ -59,11 +59,11 @@ export const joinTopic = (
 };
 
 export const createTopic = (walletAddress, userId, privateKey, topicParams, navigation) => {
-  const { countryName, description, entryCost = 100, tax = 0 } = topicParams;
+  const { countryName, countrydesc, entryCost = 100, tax = 0 } = topicParams;
   const votePassRate = topicParams.requiredApproved || 50;
   const voteDuration = topicParams.requiredHour * 3600 || 3600;
   //Contract inputs need all be strings
-  const inputs = [countryName, description, entryCost.toString(), tax.toString()];
+  const inputs = [countryName, countrydesc, entryCost.toString(), tax.toString()];
   return TinodeAPI.initTransaction(null, {
     type: 'depcon',
     pubaddr: walletAddress,
@@ -181,7 +181,7 @@ export const createVote = (
   navigation,
   currentNewVote
 ) => {
-  const { countryName, description, entryCost = 100, tax = 0, subs, conaddr } = topicParams;
+  const { subs, conaddr } = topicParams;
   const voters = _.map(subs, 'user');
   const votePassRate = topicParams.requiredApproved || 50;
   const voteDuration = environment.disableVoteDuration
@@ -215,3 +215,24 @@ export const createVote = (
     title: topicParams.countryName,
   });
 };
+
+export const submitVote = (
+  walletAddress,
+  userId,
+  privateKey,
+  topicParams,
+  navigation,
+  isSupport
+) => {
+  const ballot = isSupport ? 1 : 0;
+  //Contract inputs need all be strings
+  TinodeAPI.submitVoteBallot(topicParams.topic, walletAddress, userId, ballot).then(tx => {
+    console.log('receive response tx', tx);
+    TinodeAPI.getVoteInfo(topicParams.topic, walletAddress);
+  });
+  
+  // return resetNavigationToTopic(navigation, {
+  //   topicId: topicParams.topic,
+  //   title: topicParams.countryName,
+  // });
+}

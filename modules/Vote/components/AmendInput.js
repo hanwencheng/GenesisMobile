@@ -6,7 +6,6 @@ import connect from 'react-redux/es/connect/connect';
 import { bindActionCreators } from 'redux';
 import AppStyle from '../../../commons/AppStyle';
 import { voteAction } from '../voteAction';
-import { INIT_VALUE } from '../reducer/voteReducer';
 
 class AmendInput extends React.Component {
   static propTypes = {
@@ -22,6 +21,9 @@ class AmendInput extends React.Component {
     defaultValueNumber: PropTypes.number,
     reader: PropTypes.func,
     writer: PropTypes.func,
+  
+    subscribedChatId: PropTypes.string,
+    topicsMap: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -36,6 +38,11 @@ class AmendInput extends React.Component {
     // Object.entries(this.props).forEach(
     //   ([key, val]) => prevProps[key] !== val && console.log(`Prop '${key}' changed`)
     // );
+  }
+  
+  get topicData() {
+    const { subscribedChatId, topicsMap } = this.props;
+    return _.get(topicsMap, subscribedChatId, {});
   }
 
   render() {
@@ -53,7 +60,7 @@ class AmendInput extends React.Component {
     } = this.props;
     const numberWriter = v => (isNaN(v) || v === '' ? 0 : Number(Number.parseFloat(v).toFixed(1)));
     const numberReader = v => v.toString();
-    const defaultValue = _.get(INIT_VALUE.origin, propertyPath);
+    const defaultValue = _.get(this.topicData, propertyPath);
     const value = _.get(voteCached, propertyPath, defaultValue);
 
     return (
@@ -81,6 +88,8 @@ class AmendInput extends React.Component {
 
 const mapStateToProps = state => ({
   voteCached: state.vote.cached,
+  subscribedChatId: state.chat.subscribedChatId,
+  topicsMap: state.topics.topicsMap,
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({
