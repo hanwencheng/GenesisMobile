@@ -14,6 +14,7 @@ export const contractInfo = {
   leaveDefaultValue: 0,
   voteDefaultValue: baseValue,
   ethBaseValue: baseValue * 10000,
+  kickOutDefaultValue: baseValue,
 };
 
 export const countryProps = ['lastmsg', 'countrydesc'];
