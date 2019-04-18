@@ -5,7 +5,7 @@ export const INIT_VALUE = {
   origin: {
     // Information extracted from topic
     countryName: 'New Country',
-    description: 'A brand new country.',
+    countrydesc: 'A brand new country.',
     profile: {},
 
     // Information related to smart contract
@@ -17,6 +17,8 @@ export const INIT_VALUE = {
     entryCost: 100,
     tax: 50,
     voteCost: 1000,
+    votepassrate: 50,
+    voteduration: 60,
     seq: 1,
     memberRules: {
       default: [150, 150, 10, 1, 1],

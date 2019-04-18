@@ -58,9 +58,10 @@ export const topicsReducer = (state = INITIAL_STATE, action) => {
     }
     case topicsActionType.UPDATE_TOPIC: {
       const newData = _.merge(_.get(state.topicsMap, action.topicId, {}), action.data);
+      const newTopicsMap = set(action.topicId, reformDate(newData), state.topicsMap)
       return {
         ...state,
-        topicsMap: set(action.topicsMap, reformDate(newData), state.topicsMap),
+        topicsMap: newTopicsMap
       };
     }
     case topicsActionType.UPDATE_TOPIC_SUBS: {

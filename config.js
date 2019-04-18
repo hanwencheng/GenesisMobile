@@ -76,7 +76,7 @@ export const groupMetaRules = {
   REQUIRED_APPROVED: 'requiredApproved',
   REQUIRED_HOUR: 'requiredHour',
   COUNTRY_NAME: 'countryName',
-  DESCRIPTION: 'description',
+  DESCRIPTION: 'countrydesc',
   MEMBER_RULES: 'memberRules',
   PROFILE: 'profile',
 };

@@ -73,11 +73,12 @@ class TinodeAPIClass {
       [VoteParams.USER]: userId,
     });
 
-  submitVoteBallot = (topic, walletAddress, ballot) =>
+  submitVoteBallot = (topic, walletAddress, userId, ballot) =>
     this.tinode.vote(topic, {
       what: VoteTypes.VOTE,
       [VoteParams.WALLET_ADDRESS]: walletAddress,
       [VoteParams.BALLOT]: ballot,
+      [VoteParams.USER]: userId
     });
 
   getVoteParams = (topic, walletAddress) =>
@@ -344,6 +345,7 @@ class TinodeAPIClass {
     if (status >= Tinode.MESSAGE_STATUS_SENT) {
       topic.noteRead(msg.seq);
     }
+    store.dispatch(loaderAction.saveChatCache(topicId, messages))
     store.dispatch(topicsAction.updateTopicMessages(topicId, messages));
   }
 
