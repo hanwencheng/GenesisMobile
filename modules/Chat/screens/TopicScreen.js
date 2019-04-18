@@ -23,7 +23,7 @@ import Images from '../../../commons/Images';
 import { topicsAction } from '../actions/topicsAction';
 import ActionList from '../components/ActionList';
 import { renderImageSource } from '../../../utils/imageUtils';
-import {store} from "../../../reducers/store";
+import { store } from '../../../reducers/store';
 
 class TopicScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -73,9 +73,16 @@ class TopicScreen extends React.Component {
   }
 
   componentDidMount() {
-    const { navigation, userId, subscribedChatId, connected, cache, updateTopicMessages } = this.props;
+    const {
+      navigation,
+      userId,
+      subscribedChatId,
+      connected,
+      cache,
+      updateTopicMessages,
+    } = this.props;
     const topicId = navigation.getParam('topicId', null);
-    if(cache.hasOwnProperty(topicId)){
+    if (cache.hasOwnProperty(topicId)) {
       updateTopicMessages(topicId, cache[topicId]);
     }
     if (connected && subscribedChatId !== topicId) {
