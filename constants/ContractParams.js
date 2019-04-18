@@ -54,4 +54,9 @@ export const ContractFnMap = {
     value: v => [v.toString(), '100'],
     isContract: true,
   },
+  kickOut: {
+    name: 'kickOut',
+    value: v => [v],
+    isContract: false,
+  }
 };

@@ -80,11 +80,10 @@ class TopicInnerScreen extends React.Component {
   }
 
   onNewVote() {
-    const { navigation, userId, walletAddress, topicId, currentNewVote } = this.props;
+    const { navigation, userId, walletAddress, currentNewVote } = this.props;
     if (_.isEmpty(currentNewVote) || this.isCreatingNewTopic) return;
 
     this.prepareTransaction('Payment', contractInfo.joinDefaultValue, privateKey => {
-      const countryName = this.topicData.public.fn;
       createVote(walletAddress, userId, privateKey, this.topicData, navigation, currentNewVote);
     });
   }

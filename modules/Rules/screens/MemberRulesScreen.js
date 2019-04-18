@@ -7,12 +7,16 @@ import { bindActionCreators } from 'redux';
 import AppStyle from '../../../commons/AppStyle';
 import { screensList } from '../../../navigation/screensList';
 import NavigationHeader from '../../../components/NavigationHeader';
-import { voteInfo } from '../../../config';
+import {contractInfo, voteInfo} from '../../../config';
 import SingleProfile from '../components/SingleProfile';
 import Images from '../../../commons/Images';
 import { makeImageUrl } from '../../Chat/lib/blob-helpers';
 import HeaderButton from '../../../components/HeaderButton';
 import { alertNormal } from '../../../utils/alertUtils';
+import {createVote} from "../../../utils/contractUtils";
+import {lockScreen} from "../../Unlock/lockScreenUtils";
+import {getPrivateKeyAsync} from "../../../utils/secureStoreUtils";
+import {popupAction} from "../../../actions/popupAction";
 
 class MemberRulesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -32,7 +36,15 @@ class MemberRulesScreen extends React.Component {
     subscribedChatId: PropTypes.string,
     topicsMap: PropTypes.object.isRequired,
     voteCached: PropTypes.object.isRequired,
+    walletAddress: PropTypes.string.isRequired,
+    showPopup: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
   };
+  
+  get topicData() {
+    const { subscribedChatId, topicsMap } = this.props;
+    return _.get(topicsMap, subscribedChatId, {});
+  }
 
   renderItem = ({ item }) => {
     let imageSource;
@@ -52,15 +64,47 @@ class MemberRulesScreen extends React.Component {
     );
   };
 
-  conditionalOpen(userId) {
-    const { navigation } = this.props;
+  conditionalOpen(memberId) {
+    const { navigation, userId, walletAddress, showPopup } = this.props;
+    
     const editEnabled = navigation.getParam('editEnabled', false);
     if (editEnabled) {
-      navigation.navigate(screensList.AmendMemberRules.label, {
-        userId,
-      });
+      const valueText = Number.parseFloat(contractInfo.kickOutDefaultValue / contractInfo.ethBaseValue).toPrecision(3);
+      const message = `${valueText} Eth`;
+      Alert.alert(
+        t.KICK_OUT_MEMBER,
+        message,
+        [
+          {
+            text: 'Pay now',
+            onPress: () => {
+              if (_.isEmpty(walletAddress)) {
+                showPopup(t.NO_WALLET);
+              } else {
+                lockScreen(navigation)
+                  .then(() => new Promise(getPrivateKeyAsync))
+                  .then(privateKey => {
+                    showPopup(t.SUBMIT_VOTE);
+                    createVote(walletAddress, userId, privateKey, this.topicData, navigation, {name: 'kickOut', value: memberId});
+                  });
+              }
+            },
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ],
+        { cancelable: false }
+      );
+       /** //Origin opening function
+       navigation.navigate(screensList.AmendMemberRules.label, {
+         userId,
+       });
+       **/
     } else {
-      alertNormal('To make changes please start a vote from chat window');
+      alertNormal('Vote not available.');
     }
   }
 
@@ -105,11 +149,15 @@ class MemberRulesScreen extends React.Component {
 
 const mapStateToProps = state => ({
   subscribedChatId: state.chat.subscribedChatId,
+  walletAddress: state.appState.walletAddress,
+  userId: state.appState.userId,
   topicsMap: state.topics.topicsMap,
   voteCached: state.vote.cached,
 });
 
-const mapDispatchToProps = _.curry(bindActionCreators)({});
+const mapDispatchToProps = _.curry(bindActionCreators)({
+  showPopup: popupAction.showPopup,
+});
 
 export default connect(
   mapStateToProps,
@@ -118,6 +166,9 @@ export default connect(
 
 const t = {
   FUTURE_CITIZEN: 'Future Citizens',
+  KICK_OUT_MEMBER: 'Kick Out Member',
+  NO_WALLET: 'please first set up the wallet',
+  SUBMIT_VOTE: 'Vote has been submitted',
 };
 
 const styles = StyleSheet.create({

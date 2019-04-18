@@ -21,7 +21,7 @@ export const INIT_VALUE = {
     voteduration: 60,
     seq: 1,
     memberRules: {
-      default: [150, 150, 10, 1, 1],
+      default: ['-', '-', '-', '-', 1],
     },
   },
   cached: {},
