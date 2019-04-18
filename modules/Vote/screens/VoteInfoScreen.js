@@ -16,6 +16,8 @@ import { lockScreen } from '../../Unlock/lockScreenUtils';
 import { aboutInfo } from '../../../config';
 import { INIT_VALUE } from '../reducer/voteReducer';
 import { popupAction } from '../../../actions/popupAction';
+import {getPrivateKeyAsync} from "../../../utils/secureStoreUtils";
+import {createVote, submitVote} from "../../../utils/contractUtils";
 
 class VoteInfoScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -28,18 +30,24 @@ class VoteInfoScreen extends React.Component {
     userName: PropTypes.string,
     topicsMap: PropTypes.object.isRequired,
     subscribedChatId: PropTypes.string,
+    userId: PropTypes.string.isRequired,
 
     walletAddress: PropTypes.string,
     showPopup: PropTypes.func.isRequired,
   };
+  
+  get topicData() {
+    const { topicId, topicsMap } = this.props;
+    return _.get(topicsMap, topicId, {});
+  }
 
   buildSupportTitle = (supportList, allMemberList) =>
     `${supportList.length} (${Number((supportList.length / allMemberList.length) * 100).toFixed(
       2
     )}%)`;
 
-  onPayment() {
-    const { navigation, showPopup, walletAddress } = this.props;
+  onPayment(isSupport) {
+    const { navigation, showPopup, walletAddress, userId } = this.props;
     Alert.alert(
       'Payment',
       `${INIT_VALUE.origin.voteCost} NES`,
@@ -50,9 +58,11 @@ class VoteInfoScreen extends React.Component {
             if (_.isEmpty(walletAddress)) {
               showPopup(t.NO_WALLET);
             } else {
-              lockScreen(navigation).then(() => {
-                showPopup(aboutInfo.todo);
-              });
+              lockScreen(navigation)
+                .then(() => new Promise(getPrivateKeyAsync))
+                .then(privateKey => {
+                  submitVote(walletAddress, userId, privateKey, this.topicData, navigation, isSupport);
+                });
             }
           },
         },
@@ -128,12 +138,12 @@ class VoteInfoScreen extends React.Component {
           list={noList}
         />
         <GenesisButton
-          action={() => this.onPayment()}
+          action={() => this.onPayment(true)}
           text={t.YES_BUTTON}
           variant={VariantList.CONFIRM}
         />
         <GenesisButton
-          action={() => this.onPayment()}
+          action={() => this.onPayment(false)}
           text={t.NO_BUTTON}
           variant={VariantList.CANCEL}
         />
@@ -146,6 +156,7 @@ const mapStateToProps = state => ({
   topicsMap: state.topics.topicsMap,
   userInfo: state.chat.userInfo,
   userName: state.chat.userInfo.name,
+  userId: state.chat.userId,
   subscribedChatId: state.chat.subscribedChatId,
   walletAddress: state.appState.walletAddress,
 });
