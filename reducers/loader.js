@@ -34,10 +34,17 @@ export const dataEntry = {
   },
   profileName: { label: 'PROFILE_NAME', stateName: 'profileName', initValue: '', type: 'string' },
   userId: { label: 'USER_ID', stateName: 'userId', initValue: '', type: 'string' },
+  cache: {label: 'CACHE', stateName: 'cache', initValue: {}, type: 'object'}
 };
 
 const INIT_STATE = set(isLoadedLabel, false, _.mapValues(dataEntry, v => v.initValue));
 const getLabel = stateName => _.find(dataEntry, { stateName }).label;
+const getType = stateName => _.find(dataEntry, {stateName}).type;
+const getLastSeq = (messages) => {
+  if(messages.length === 0)
+    return 0;
+  return _.last(messages).seq
+}
 
 // React Native 0.58 Async Storage only accept string value.
 const parseType = (value, type) => {
@@ -50,14 +57,24 @@ const parseType = (value, type) => {
   if (type === 'float') {
     return parseFloat(value);
   }
+  if (type === 'object') {
+    return JSON.parse(value)
+  }
   return value;
 };
+
+const toString = (value, type) => {
+  if (type === 'object'){
+    return JSON.stringify(value)
+  }
+  return value.toString();
+}
 
 const saveMultipleData = dataObject => {
   const dataSet = _.reduce(
     dataObject,
     (result, value, key) =>
-      value === null ? result : _.concat(result, [[getLabel(key), value.toString()]]),
+      value === null ? result : _.concat(result, [[getLabel(key), toString(value, getType(key))]]),
     []
   );
   AsyncStorage.multiSet(dataSet);
@@ -95,9 +112,21 @@ export const loaderReducer = (state = INIT_STATE, action) => {
         const stateName = Object.keys(action.data)[0];
         const key = getLabel(stateName);
         const value = Object.values(action.data)[0];
-        AsyncStorage.setItem(key, value.toString());
+        AsyncStorage.setItem(key, toString(value, getType(stateName)));
       }
       return { ...state, ...action.data };
+    }
+    case loaderActionType.SAVE_CHAT_CACHE: {
+      const oldMessages = _.get(state.cache, action.topicId, [])
+      if(getLastSeq(oldMessages) >= getLastSeq(action.messages)){
+        return state;
+      }
+      const newChatCache = _.assign({}, state.cache, {[action.topicId]: action.messages});
+      
+      AsyncStorage.setItem(dataEntry.cache.label, JSON.stringify(newChatCache));
+      return { ...state,
+        cache: newChatCache
+      }
     }
     case loaderActionType.CLEAR_APP_DATA: {
       const newData = _.merge(
@@ -118,7 +147,7 @@ export const loaderReducer = (state = INIT_STATE, action) => {
     }
     case loaderActionType.ADD_ERROR_COUNT: {
       const currentCount = state.wrongPincodeCount + 1;
-      AsyncStorage.setItem(dataEntry.wrongPincodeCount.label, currentCount);
+      AsyncStorage.setItem(dataEntry.wrongPincodeCount.label, currentCount.toString());
       return {
         ...state,
         wrongPincodeCount: currentCount,
