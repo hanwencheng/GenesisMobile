@@ -23,6 +23,7 @@ import Images from '../../../commons/Images';
 import { topicsAction } from '../actions/topicsAction';
 import ActionList from '../components/ActionList';
 import { renderImageSource } from '../../../utils/imageUtils';
+import {store} from "../../../reducers/store";
 
 class TopicScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -58,6 +59,8 @@ class TopicScreen extends React.Component {
     userInfo: PropTypes.object.isRequired,
     updateUserInput: PropTypes.func.isRequired,
     avatar: PropTypes.string,
+    cache: PropTypes.object.isRequired,
+    updateTopicMessages: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -70,8 +73,11 @@ class TopicScreen extends React.Component {
   }
 
   componentDidMount() {
-    const { navigation, userId, subscribedChatId, connected } = this.props;
+    const { navigation, userId, subscribedChatId, connected, cache, updateTopicMessages } = this.props;
     const topicId = navigation.getParam('topicId', null);
+    if(cache.hasOwnProperty(topicId)){
+      updateTopicMessages(topicId, cache[topicId]);
+    }
     if (connected && subscribedChatId !== topicId) {
       if (subscribedChatId !== null) TinodeAPI.unsubscribe(subscribedChatId);
       TinodeAPI.subscribe(topicId, userId);
@@ -213,10 +219,12 @@ const mapStateToProps = state => ({
   connected: state.chat.connected,
   userInfo: state.chat.userInfo,
   avatar: state.chat.userInfo.avatar,
+  cache: state.appState.cache,
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({
   updateUserInput: topicsAction.updateUserInput,
+  updateTopicMessages: topicsAction.updateTopicMessages,
 });
 
 export default connect(
