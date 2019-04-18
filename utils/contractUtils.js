@@ -231,8 +231,8 @@ export const submitVote = (
     TinodeAPI.getVoteInfo(topicParams.topic, walletAddress);
   });
   
-  return resetNavigationToTopic(navigation, {
-    topicId: topicParams.topic,
-    title: topicParams.countryName,
-  });
+  // return resetNavigationToTopic(navigation, {
+  //   topicId: topicParams.topic,
+  //   title: topicParams.countryName,
+  // });
 }
