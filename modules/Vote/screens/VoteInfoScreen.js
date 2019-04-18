@@ -16,8 +16,8 @@ import { lockScreen } from '../../Unlock/lockScreenUtils';
 import { aboutInfo } from '../../../config';
 import { INIT_VALUE } from '../reducer/voteReducer';
 import { popupAction } from '../../../actions/popupAction';
-import {getPrivateKeyAsync} from "../../../utils/secureStoreUtils";
-import {createVote, submitVote} from "../../../utils/contractUtils";
+import { getPrivateKeyAsync } from '../../../utils/secureStoreUtils';
+import { createVote, submitVote } from '../../../utils/contractUtils';
 
 class VoteInfoScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -35,7 +35,7 @@ class VoteInfoScreen extends React.Component {
     walletAddress: PropTypes.string,
     showPopup: PropTypes.func.isRequired,
   };
-  
+
   get topicData() {
     const { subscribedChatId, topicsMap } = this.props;
     return _.get(topicsMap, subscribedChatId, {});
@@ -62,7 +62,14 @@ class VoteInfoScreen extends React.Component {
               lockScreen(navigation)
                 .then(() => new Promise(getPrivateKeyAsync))
                 .then(privateKey => {
-                  submitVote(walletAddress, userId, privateKey, that.topicData, navigation, isSupport);
+                  submitVote(
+                    walletAddress,
+                    userId,
+                    privateKey,
+                    that.topicData,
+                    navigation,
+                    isSupport
+                  );
                 });
             }
           },

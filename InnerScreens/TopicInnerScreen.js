@@ -22,7 +22,7 @@ import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import VoteSession from '../modules/Chat/components/VoteSession';
 import TopicRules from '../modules/Rules/components/TopicRules';
 import { topicsAction } from '../modules/Chat/actions/topicsAction';
-import {INIT_VALUE} from "../modules/Vote/reducer/voteReducer";
+import { INIT_VALUE } from '../modules/Vote/reducer/voteReducer';
 
 class TopicInnerScreen extends React.Component {
   static propTypes = {
@@ -61,7 +61,9 @@ class TopicInnerScreen extends React.Component {
       countryName: _.get(topic, 'public.fn', voteOrigin.countryName),
       description: _.get(topic, 'private.comment', 'Country Description'),
       profile: _.get(topic, 'public.photo', voteOrigin.profile),
-      requiredHour: parseFloat((_.get(topic, 'voteduration', voteOrigin.voteduration)/3600).toFixed(2)),
+      requiredHour: parseFloat(
+        (_.get(topic, 'voteduration', voteOrigin.voteduration) / 3600).toFixed(2)
+      ),
       requiredApproved: _.get(topic, 'votepassrate', voteOrigin.votepassrate),
     });
     initVote(voteData);

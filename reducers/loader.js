@@ -34,17 +34,16 @@ export const dataEntry = {
   },
   profileName: { label: 'PROFILE_NAME', stateName: 'profileName', initValue: '', type: 'string' },
   userId: { label: 'USER_ID', stateName: 'userId', initValue: '', type: 'string' },
-  cache: {label: 'CACHE', stateName: 'cache', initValue: {}, type: 'object'}
+  cache: { label: 'CACHE', stateName: 'cache', initValue: {}, type: 'object' },
 };
 
 const INIT_STATE = set(isLoadedLabel, false, _.mapValues(dataEntry, v => v.initValue));
 const getLabel = stateName => _.find(dataEntry, { stateName }).label;
-const getType = stateName => _.find(dataEntry, {stateName}).type;
-const getLastSeq = (messages) => {
-  if(messages.length === 0)
-    return 0;
-  return _.last(messages).seq
-}
+const getType = stateName => _.find(dataEntry, { stateName }).type;
+const getLastSeq = messages => {
+  if (messages.length === 0) return 0;
+  return _.last(messages).seq;
+};
 
 // React Native 0.58 Async Storage only accept string value.
 const parseType = (value, type) => {
@@ -58,17 +57,17 @@ const parseType = (value, type) => {
     return parseFloat(value);
   }
   if (type === 'object') {
-    return JSON.parse(value)
+    return JSON.parse(value);
   }
   return value;
 };
 
 const toString = (value, type) => {
-  if (type === 'object'){
-    return JSON.stringify(value)
+  if (type === 'object') {
+    return JSON.stringify(value);
   }
   return value.toString();
-}
+};
 
 const saveMultipleData = dataObject => {
   const dataSet = _.reduce(
@@ -117,16 +116,14 @@ export const loaderReducer = (state = INIT_STATE, action) => {
       return { ...state, ...action.data };
     }
     case loaderActionType.SAVE_CHAT_CACHE: {
-      const oldMessages = _.get(state.cache, action.topicId, [])
-      if(getLastSeq(oldMessages) >= getLastSeq(action.messages)){
+      const oldMessages = _.get(state.cache, action.topicId, []);
+      if (getLastSeq(oldMessages) >= getLastSeq(action.messages)) {
         return state;
       }
-      const newChatCache = _.assign({}, state.cache, {[action.topicId]: action.messages});
-      
+      const newChatCache = _.assign({}, state.cache, { [action.topicId]: action.messages });
+
       AsyncStorage.setItem(dataEntry.cache.label, JSON.stringify(newChatCache));
-      return { ...state,
-        cache: newChatCache
-      }
+      return { ...state, cache: newChatCache };
     }
     case loaderActionType.CLEAR_APP_DATA: {
       const newData = _.merge(

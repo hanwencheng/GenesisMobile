@@ -11,5 +11,9 @@ export const loaderAction = {
   saveAppData: data => ({ type: loaderActionType.SAVE_APP_DATA, data }),
   addErrorCount: () => ({ type: loaderActionType.ADD_ERROR_COUNT }),
   clearAppData: data => ({ type: loaderActionType.CLEAR_APP_DATA, data }),
-  saveChatCache: (topicId, messages) => ({type:loaderActionType.SAVE_CHAT_CACHE, topicId, messages}),
+  saveChatCache: (topicId, messages) => ({
+    type: loaderActionType.SAVE_CHAT_CACHE,
+    topicId,
+    messages,
+  }),
 };

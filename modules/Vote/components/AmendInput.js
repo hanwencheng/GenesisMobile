@@ -21,7 +21,7 @@ class AmendInput extends React.Component {
     defaultValueNumber: PropTypes.number,
     reader: PropTypes.func,
     writer: PropTypes.func,
-  
+
     subscribedChatId: PropTypes.string,
     topicsMap: PropTypes.object.isRequired,
   };
@@ -39,7 +39,7 @@ class AmendInput extends React.Component {
     //   ([key, val]) => prevProps[key] !== val && console.log(`Prop '${key}' changed`)
     // );
   }
-  
+
   get topicData() {
     const { subscribedChatId, topicsMap } = this.props;
     return _.get(topicsMap, subscribedChatId, {});

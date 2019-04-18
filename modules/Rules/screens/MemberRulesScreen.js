@@ -7,16 +7,16 @@ import { bindActionCreators } from 'redux';
 import AppStyle from '../../../commons/AppStyle';
 import { screensList } from '../../../navigation/screensList';
 import NavigationHeader from '../../../components/NavigationHeader';
-import {contractInfo, voteInfo} from '../../../config';
+import { contractInfo, voteInfo } from '../../../config';
 import SingleProfile from '../components/SingleProfile';
 import Images from '../../../commons/Images';
 import { makeImageUrl } from '../../Chat/lib/blob-helpers';
 import HeaderButton from '../../../components/HeaderButton';
 import { alertNormal } from '../../../utils/alertUtils';
-import {createVote} from "../../../utils/contractUtils";
-import {lockScreen} from "../../Unlock/lockScreenUtils";
-import {getPrivateKeyAsync} from "../../../utils/secureStoreUtils";
-import {popupAction} from "../../../actions/popupAction";
+import { createVote } from '../../../utils/contractUtils';
+import { lockScreen } from '../../Unlock/lockScreenUtils';
+import { getPrivateKeyAsync } from '../../../utils/secureStoreUtils';
+import { popupAction } from '../../../actions/popupAction';
 
 class MemberRulesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -40,7 +40,7 @@ class MemberRulesScreen extends React.Component {
     showPopup: PropTypes.func.isRequired,
     userId: PropTypes.string.isRequired,
   };
-  
+
   get topicData() {
     const { subscribedChatId, topicsMap } = this.props;
     return _.get(topicsMap, subscribedChatId, {});
@@ -66,10 +66,12 @@ class MemberRulesScreen extends React.Component {
 
   conditionalOpen(memberId) {
     const { navigation, userId, walletAddress, showPopup } = this.props;
-    
+
     const editEnabled = navigation.getParam('editEnabled', false);
     if (editEnabled) {
-      const valueText = Number.parseFloat(contractInfo.kickOutDefaultValue / contractInfo.ethBaseValue).toPrecision(3);
+      const valueText = Number.parseFloat(
+        contractInfo.kickOutDefaultValue / contractInfo.ethBaseValue
+      ).toPrecision(3);
       const message = `${valueText} Eth`;
       Alert.alert(
         t.KICK_OUT_MEMBER,
@@ -85,7 +87,10 @@ class MemberRulesScreen extends React.Component {
                   .then(() => new Promise(getPrivateKeyAsync))
                   .then(privateKey => {
                     showPopup(t.SUBMIT_VOTE);
-                    createVote(walletAddress, userId, privateKey, this.topicData, navigation, {name: 'kickOut', value: memberId});
+                    createVote(walletAddress, userId, privateKey, this.topicData, navigation, {
+                      name: 'kickOut',
+                      value: memberId,
+                    });
                   });
               }
             },
@@ -98,7 +103,7 @@ class MemberRulesScreen extends React.Component {
         ],
         { cancelable: false }
       );
-       /** //Origin opening function
+      /** //Origin opening function
        navigation.navigate(screensList.AmendMemberRules.label, {
          userId,
        });
