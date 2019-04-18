@@ -71,7 +71,7 @@ class WalletCreateScreen extends React.Component {
       )
       .then(wallet => {
         console.log('all save successfully, created wallet is', wallet);
-        return lockScreen(navigation)
+        return lockScreen(navigation);
       })
       .then(() => {
         resetNavigationToWallet(navigation);

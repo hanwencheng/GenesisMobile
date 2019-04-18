@@ -1,5 +1,7 @@
 export const environment = {
   disableQRScan: false,
+  disableVoteDuration: true,
+  mockDurationSecond: 120,
 };
 
 const baseValue = 100000000000000;
@@ -12,6 +14,7 @@ export const contractInfo = {
   leaveDefaultValue: 0,
   voteDefaultValue: baseValue,
   ethBaseValue: baseValue * 10000,
+  kickOutDefaultValue: baseValue,
 };
 
 export const countryProps = ['lastmsg', 'countrydesc'];
@@ -74,7 +77,7 @@ export const groupMetaRules = {
   REQUIRED_APPROVED: 'requiredApproved',
   REQUIRED_HOUR: 'requiredHour',
   COUNTRY_NAME: 'countryName',
-  DESCRIPTION: 'description',
+  DESCRIPTION: 'countrydesc',
   MEMBER_RULES: 'memberRules',
   PROFILE: 'profile',
 };

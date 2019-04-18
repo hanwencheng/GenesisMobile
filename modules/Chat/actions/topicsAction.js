@@ -7,6 +7,11 @@ export const topicsActionType = {
 };
 
 export const topicsAction = {
+  updateTopic: (topicId, topicData) => ({
+    type: topicsActionType.UPDATE_TOPIC,
+    topicId,
+    data: topicData,
+  }),
   updateTopicMessages: (topicName, topicMessages) => ({
     type: topicsActionType.UPDATE_TOPIC_MESSAGES,
     topicName,

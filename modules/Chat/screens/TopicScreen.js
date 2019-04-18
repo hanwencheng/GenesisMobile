@@ -23,6 +23,7 @@ import Images from '../../../commons/Images';
 import { topicsAction } from '../actions/topicsAction';
 import ActionList from '../components/ActionList';
 import { renderImageSource } from '../../../utils/imageUtils';
+import { store } from '../../../reducers/store';
 
 class TopicScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -58,6 +59,8 @@ class TopicScreen extends React.Component {
     userInfo: PropTypes.object.isRequired,
     updateUserInput: PropTypes.func.isRequired,
     avatar: PropTypes.string,
+    cache: PropTypes.object.isRequired,
+    updateTopicMessages: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -70,9 +73,19 @@ class TopicScreen extends React.Component {
   }
 
   componentDidMount() {
-    const { navigation, userId, subscribedChatId, connected } = this.props;
+    const {
+      navigation,
+      userId,
+      subscribedChatId,
+      connected,
+      cache,
+      updateTopicMessages,
+    } = this.props;
     const topicId = navigation.getParam('topicId', null);
-    if (connected && subscribedChatId !== topicId ) {
+    if (cache.hasOwnProperty(topicId)) {
+      updateTopicMessages(topicId, cache[topicId]);
+    }
+    if (connected && subscribedChatId !== topicId) {
       if (subscribedChatId !== null) TinodeAPI.unsubscribe(subscribedChatId);
       TinodeAPI.subscribe(topicId, userId);
     }
@@ -156,30 +169,31 @@ class TopicScreen extends React.Component {
     );
   }
 
+  conditionalReverse(list) {
+    if (list.length >= 2 && list[0].seq < list[1].seq) {
+      list.reverse();
+    }
+    return list;
+  }
+
   render() {
     const { topicsMap, navigation, updateUserInput } = this.props;
     const { refreshing } = this.state;
     const topicId = navigation.getParam('topicId', null);
     const topic = _.get(topicsMap, topicId);
     if (!topic) return null;
-    const { messages } = topic;
+    const renderedData = this.conditionalReverse(topic.messages);
     //Todo this height need to be recalculated for precise number with different text length
-    const HEIGHT = 66;
     return (
       <View style={styles.container}>
         <KeyboardAwareFlatList
+          inverted
           onRefresh={() => this.onRefresh(topic)}
           refreshing={refreshing}
-          // initialScrollIndex={messages.length - 5}
-          // getItemLayout={(data, index) => (
-          //   {length: HEIGHT, offset: HEIGHT * index, index}
-          // )}
           onScrollToIndexFailed={console.log}
           ref={ref => (this.flatList = ref)}
-          onContentSizeChange={() => this.flatList.scrollToEnd({ animated: true })}
-          onLayout={() => this.flatList.scrollToEnd({ animated: true })}
           style={styles.scrollContainer}
-          data={messages}
+          data={renderedData}
           keyExtractor={message => message.seq.toString()}
           renderItem={({ item }) => this.renderMessageNode(item, topic)}
         />
@@ -212,10 +226,12 @@ const mapStateToProps = state => ({
   connected: state.chat.connected,
   userInfo: state.chat.userInfo,
   avatar: state.chat.userInfo.avatar,
+  cache: state.appState.cache,
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({
   updateUserInput: topicsAction.updateUserInput,
+  updateTopicMessages: topicsAction.updateTopicMessages,
 });
 
 export default connect(
@@ -279,7 +295,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   sendButton: {
-    margin: 10,
+    margin: 14,
     borderRadius: 5,
     backgroundColor: AppStyle.userCancelGreen,
     justifyContent: 'center',

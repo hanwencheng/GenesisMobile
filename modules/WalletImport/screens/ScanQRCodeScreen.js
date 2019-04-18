@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import PropsType from 'prop-types';
+import PropTypes from 'prop-types';
 import { Permissions, BarCodeScanner } from 'expo';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -14,10 +14,10 @@ import { environment } from '../../../config';
 
 class ScanQRCodeScreen extends Component {
   static propTypes = {
-    navigation: PropsType.object,
-    lockScreen: PropsType.func.isRequired,
-    showPopup: PropsType.func.isRequired,
-    setPrivateKey: PropsType.func.isRequired,
+    navigation: PropTypes.object,
+    lockScreen: PropTypes.func.isRequired,
+    showPopup: PropTypes.func.isRequired,
+    setPrivateKey: PropTypes.func.isRequired,
   };
 
   state = {

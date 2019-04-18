@@ -6,11 +6,31 @@ const INITIAL_STATE = {
   topicsMap: {},
 };
 
+const getLastSeq = messages => {
+  if (messages.length === 0) return 0;
+  return _.last(messages).seq;
+};
+
+const getFirstSeq = messages => {
+  if (messages.length === 0) return 0;
+  return _.head(messages).seq;
+};
+
+const reformDate = data => {
+  return _.mapValues(data, (value, key) => {
+    if (key === 'created' || key === 'updated') {
+      return new Date(value);
+    }
+    return value;
+  });
+};
+
 export const topicsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case topicsActionType.UPDATE_TOPIC_MESSAGES: {
       const topicMessages = action.topicMessages;
-      // const topicMessages = concat(action.topicMessages, existMessages)
+      const oldMessages = _.get(state.topicsMap, `${action.topicName}.messages`, []);
+      if (getFirstSeq(oldMessages) >= getLastSeq(topicMessages)) return state;
       const topicsMap = set(`${action.topicName}.messages`, topicMessages, state.topicsMap);
       return {
         ...state,
@@ -31,6 +51,14 @@ export const topicsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         topicsMap,
+      };
+    }
+    case topicsActionType.UPDATE_TOPIC: {
+      const newData = _.merge(_.get(state.topicsMap, action.topicId, {}), action.data);
+      const newTopicsMap = set(action.topicId, reformDate(newData), state.topicsMap);
+      return {
+        ...state,
+        topicsMap: newTopicsMap,
       };
     }
     case topicsActionType.UPDATE_TOPIC_SUBS: {

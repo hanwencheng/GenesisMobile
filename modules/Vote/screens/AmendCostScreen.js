@@ -2,6 +2,7 @@ import React from 'react';
 import connect from 'react-redux/es/connect/connect';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { screensList } from '../../../navigation/screensList';
 import AmendInput from '../components/AmendInput';
 import { groupMetaRules } from '../../../config';
