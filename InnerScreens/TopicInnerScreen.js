@@ -76,7 +76,7 @@ class TopicInnerScreen extends React.Component {
           updateTopic(topicId, { vote: data });
         })
         .catch(error => {
-          console.log('no vote at the moment');
+          updateTopic(topicId, { vote: null });
         });
     }
   }

@@ -92,16 +92,22 @@ class VoteInfoScreen extends React.Component {
   }
 
   render() {
-    const { topicsMap, navigation, subscribedChatId, userName } = this.props;
-    const topic = _.get(topicsMap, subscribedChatId, null);
-    if (!topic) return null;
-
+    const { navigation } = this.props;
+    const topic = this.topicData
+    if(!topic)
+      return;
     const voteData = topic.vote;
+    const voteUser = _.find(topic.subs, {user: voteData.user})
+    debugger;
+    const voteUserName = voteUser ? voteUser.public.fn : voteData.user;
+    
     console.log('user list is', topic.subs);
     const renderList = [
       { title: t.VOTE_ID_TITLE, value: voteData.id },
-      { title: t.OWNER_TITLE, value: voteData.user },
+      { title: t.OWNER_TITLE, value: voteUserName},
       { title: t.EXPIRES_TITLE, value: voteData.end },
+      { title: t.VOTE_FUNCTION, value: voteData.Fn},
+      { title: t.VOTE_PARAMS, value: voteData.Inputs.join()}
     ];
 
     //TODO only in test that yes + no = 1
@@ -133,7 +139,7 @@ class VoteInfoScreen extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.voteContainer}>
-          <MultiLineButton renderList={renderList} onPress={() => {}} />
+          <MultiLineButton renderList={renderList} />
         </View>
         <SupportList
           titleText={t.YES}
@@ -177,6 +183,8 @@ const t = {
   VOTE_ID_TITLE: 'Vote # ',
   OWNER_TITLE: 'By: ',
   EXPIRES_TITLE: 'Expires: ',
+  VOTE_FUNCTION: 'Content: ',
+  VOTE_PARAMS: 'Params: ',
   YES: 'Yes',
   NO: 'No',
   VIEW_MORE_MEMBERS: 'View more voters',
@@ -198,7 +206,7 @@ const styles = StyleSheet.create({
   voteContainer: {
     backgroundColor: 'white',
     marginVertical: 20,
-    height: 100,
+    height: 170,
   },
   supportListContainer: {
     backgroundColor: 'white',
