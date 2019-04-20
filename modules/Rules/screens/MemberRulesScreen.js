@@ -68,6 +68,9 @@ class MemberRulesScreen extends React.Component {
     const { navigation, userId, walletAddress, showPopup } = this.props;
 
     const editEnabled = navigation.getParam('editEnabled', false);
+    if(memberId === this.topicData.subs[0].user)
+      return showPopup(t.KICK_OWNER_ERROR);
+    
     if (editEnabled) {
       const valueText = Number.parseFloat(
         contractInfo.kickOutDefaultValue / contractInfo.ethBaseValue
@@ -133,12 +136,12 @@ class MemberRulesScreen extends React.Component {
         <View style={styles.titleContainer}>
           <Text style={styles.rulesTitleText}>{voteInfo.rulesDescription}</Text>
         </View>
-        <SingleProfile
-          imageSource={Images.blankProfile}
-          info={this.renderRulesValue()}
-          name={t.FUTURE_CITIZEN}
-          onPress={() => this.conditionalOpen('default')}
-        />
+        {/*<SingleProfile*/}
+          {/*imageSource={Images.blankProfile}*/}
+          {/*info={this.renderRulesValue()}*/}
+          {/*name={t.FUTURE_CITIZEN}*/}
+          {/*onPress={() => this.conditionalOpen('default')}*/}
+        {/*/>*/}
 
         <FlatList
           style={styles.memberList}
@@ -174,6 +177,7 @@ const t = {
   KICK_OUT_MEMBER: 'Kick Out Member',
   NO_WALLET: 'please first set up the wallet',
   SUBMIT_VOTE: 'Vote has been submitted',
+  KICK_OWNER_ERROR: 'Cannot kick out the owner',
 };
 
 const styles = StyleSheet.create({
@@ -193,6 +197,6 @@ const styles = StyleSheet.create({
     color: AppStyle.lightGrey,
   },
   memberList: {
-    marginTop: 30,
+    marginTop: 10,
   },
 });

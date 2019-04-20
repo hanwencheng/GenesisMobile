@@ -170,6 +170,8 @@ class TopicScreen extends React.Component {
   }
 
   conditionalReverse(list) {
+    if(_.isEmpty(list))
+      return;
     if (list.length >= 2 && list[0].seq < list[1].seq) {
       list.reverse();
     }
