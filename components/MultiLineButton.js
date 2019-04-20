@@ -7,7 +7,7 @@ import AppStyle from '../commons/AppStyle';
 export default class MultiLineButton extends React.Component {
   static propTypes = {
     renderList: PropTypes.array.isRequired,
-    onPress: PropTypes.func.isRequired,
+    onPress: PropTypes.func,
   };
 
   static defaultProps = {};
@@ -29,12 +29,14 @@ export default class MultiLineButton extends React.Component {
             <VoteRow title={item.title} value={item.value} key={index} />
           ))}
         </View>
-        <AntDesign
-          name="right"
-          size={AppStyle.fontMiddle}
-          style={styles.icon}
-          color={AppStyle.lightGrey}
-        />
+        { this.props.onPress &&
+          <AntDesign
+            name="right"
+            size={AppStyle.fontMiddle}
+            style={styles.icon}
+            color={AppStyle.lightGrey}
+          />
+        }
       </TouchableOpacity>
     );
   }
