@@ -11,6 +11,7 @@ import Checker from '../../../utils/Checker';
 import { walletImportAction } from '../walletImportAction';
 import { secret } from '../../../constants/testAddress';
 import { environment } from '../../../config';
+import AppStyle from '../../../commons/AppStyle';
 
 class ScanQRCodeScreen extends Component {
   static propTypes = {
@@ -18,6 +19,10 @@ class ScanQRCodeScreen extends Component {
     lockScreen: PropTypes.func.isRequired,
     showPopup: PropTypes.func.isRequired,
     setPrivateKey: PropTypes.func.isRequired,
+  };
+
+  static navigationOptions = { 
+    ...AppStyle.commonHeader,
   };
 
   state = {

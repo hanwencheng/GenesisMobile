@@ -1,5 +1,4 @@
 import React from 'react';
-import AppStyle from '../../../commons/AppStyle';
 import HeaderButton from '../../../components/HeaderButton';
 
 export const generateAmendRulesNavigationOptions = title => ({ navigation }) => ({

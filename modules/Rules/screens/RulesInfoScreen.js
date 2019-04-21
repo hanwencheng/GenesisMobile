@@ -17,8 +17,9 @@ class RulesInfoScreen extends React.Component {
     headerTitle: <NavigationHeader title={screensList.RulesInfo.title} />,
     headerBackTitle: '',
     headerRight: (
-      <HeaderButton title={'Done'} onPress={() => () => navigation.goBack()} color={'white'} />
+      <HeaderButton title={'Done'} onPress={() => () => navigation.goBack()} color={AppStyle.mainBlackColor} />
     ),
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {

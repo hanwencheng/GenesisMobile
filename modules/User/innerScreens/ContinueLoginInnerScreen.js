@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
   newLoginText: {
     textAlign: 'center',
     fontSize: AppStyle.fontMiddleSmall,
-    fontFamily: AppStyle.coverFont,
-    color: AppStyle.userCancelGreen,
+    fontFamily: AppStyle.fontFamilyBodyText,
+    color: AppStyle.mainBlue,
   },
 });
 

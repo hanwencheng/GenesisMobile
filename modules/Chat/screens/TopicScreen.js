@@ -48,6 +48,7 @@ class TopicScreen extends React.Component {
       </TouchableOpacity>
     ),
     headerBackTitle: ' ',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {

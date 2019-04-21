@@ -18,6 +18,7 @@ class SettingsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: <NavigationHeader title={screensList.Settings.title} />,
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {
@@ -93,7 +94,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   singleDisplay: {
-    marginTop: 20,
+    marginBottom: 10,
   },
   container: {
     flex: 1,

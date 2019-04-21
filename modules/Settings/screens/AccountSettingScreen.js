@@ -16,6 +16,7 @@ class AccountSettingScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: <NavigationHeader title={screensList.AccountSetting.title} />,
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {
@@ -69,7 +70,7 @@ const styles = {
     backgroundColor: AppStyle.mainBackgroundColor,
   },
   singleLineDisplay: {
-    marginTop: 20,
+    marginBottom: 20,
   },
   imageContainer: {
     height: 40,
