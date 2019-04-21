@@ -157,7 +157,6 @@ AppStyle.commonHeader = {
     borderBottomColor: AppStyle.bodyTextGrey,
     borderBottomWidth: 0.5,
     borderColor: AppStyle.chatBorder,
-
   },
 }
 

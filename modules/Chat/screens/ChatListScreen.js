@@ -91,7 +91,7 @@ class ChatListScreen extends React.Component {
             <TouchableOpacity
               style={[
                 styles.chatNode,
-                { backgroundColor: item.isSubscribed ? AppStyle.mainBackgroundColor : 'white' },
+                { backgroundColor: item.isSubscribed ? 'white' : AppStyle.mainBackgroundColor},
               ]}
               onPress={() =>
                 item.isSubscribed

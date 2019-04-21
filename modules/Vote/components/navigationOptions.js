@@ -1,5 +1,6 @@
 import React from 'react';
 import HeaderButton from '../../../components/HeaderButton';
+import AppStyle from "../../../commons/AppStyle";
 
 export const generateAmendRulesNavigationOptions = title => ({ navigation }) => ({
   headerTitle: title,
@@ -10,8 +11,8 @@ export const generateAmendRulesNavigationOptions = title => ({ navigation }) => 
         navigation.goBack();
         navigation.state.params.onGoBack();
       }}
-      color={'white'}
+      color={AppStyle.colorBlack}
     />
   ),
-  headerTintColor: 'white',
+  ...AppStyle.commonHeader,
 });
