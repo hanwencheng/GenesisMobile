@@ -20,6 +20,7 @@ class PasswordSettingScreen extends React.Component {
     title: screensList.PasswordSetting.title,
     headerRight: <HeaderButton title={t.DONE_BUTTON} onPress={() => {}} color={'#fff'} />,
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {

@@ -9,6 +9,7 @@ import { loaderAction } from '../../../actions/loaderAction';
 import { getAddressFromMnemonic, getAddressFromPrivateKey } from '../../../utils/ethereumUtils';
 import { dataEntry } from '../../../reducers/loader';
 import TextWithQRInput from '../components/TextWithQRInput';
+import AppStyle from '../../../commons/AppStyle';
 
 class ImportViaPrivateScreen extends Component {
   static propTypes = {
@@ -16,7 +17,9 @@ class ImportViaPrivateScreen extends Component {
     saveAppData: PropTypes.func.isRequired,
   };
 
-  static navigationOptions = {};
+  static navigationOptions = ({ navigation }) => ({
+    ...AppStyle.commonHeader,
+ });
 
   generateKey = privateKey =>
     new Promise((resolve, reject) => {
@@ -38,7 +41,7 @@ class ImportViaPrivateScreen extends Component {
 
   render() {
     return (
-      <TextWithQRInput
+      <TextWithQRInput 
         generateKey={this.generateKey}
         validate={this.validate}
         errorText={t.INVALID_PRIVATE_KEY}

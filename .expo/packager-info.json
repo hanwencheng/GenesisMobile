@@ -1,8 +1,10 @@
 {
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 628,
+  "expoServerNgrokUrl": "https://aj-fgs.anonymous.genesismobile.exp.direct",
+  "packagerNgrokUrl": "https://packager.aj-fgs.anonymous.genesismobile.exp.direct",
+  "ngrokPid": 640,
+  "webpackServerPort": null,
+  "devToolsPort": 19002
 }

@@ -11,15 +11,11 @@ import GenesisButton from '../../../components/GenesisButton';
 import { userRegisterAction } from '../actions/userRegiseterActions';
 import { usernameRegex, emailRegex } from '../../../utils/regexUtils';
 import Container from '../../../components/Container';
+import { AuthSession } from 'expo';
 
 class CreateAccountScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    // headerTitle: <NavigationHeader title={''} />,
-    headerTransparent: true,
-    headerTintColor: AppStyle.colorBlack,
-    headerStyle: {
-      backgroundColor: AppStyle.mainBackgroundGrey,
-    },
+     ...AppStyle.commonHeader,
   });
 
   static propTypes = {
@@ -92,10 +88,16 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
+    marginHorizontal: 50,
+    paddingVertical: 10,
+    textAlign: 'left',
   },
   title: {
+    flex: 1,
     ...AppStyle.fontRegularTitle,
-    padding: 30,
+    paddingVertical: 30,
+    textAlign: 'left',
   },
   inputContainer: {
     flex: 2,
@@ -104,11 +106,11 @@ const styles = StyleSheet.create({
     color: AppStyle.bodyTextGrey,
   },
   hint: {
+    position: 'relative',
+    bottom: -85,
     flex: 2,
-    padding: 30,
-    fontSize: AppStyle.fontMiddleSmall,
-    color: AppStyle.lightGrey,
-    fontFamily: AppStyle.coverFont,
+    padding: 45,
+    ...AppStyle.fontExplanation,
   },
   button: {
     flex: 2,
@@ -121,7 +123,7 @@ const t = {
   EMAIL_PLACEHOLDER: 'Email',
   HINT_TEXT:
     'By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use. Others will be able to find you by email when provided. ',
-  BUTTON_TEXT: 'Sign Up',
+  BUTTON_TEXT: 'Create account',
   USERNAME_ERROR: 'should only contain digits and letters',
   EMAIL_ERROR: 'Not a valid email address',
 };

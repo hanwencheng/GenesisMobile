@@ -8,6 +8,7 @@ import { loaderAction } from '../../../actions/loaderAction';
 import { getAddressFromMnemonic } from '../../../utils/ethereumUtils';
 import { dataEntry } from '../../../reducers/loader';
 import TextWithQRInput from '../components/TextWithQRInput';
+import AppStyle from '../../../commons/AppStyle';
 
 class ImportViaMnemonicScreen extends Component {
   static propTypes = {
@@ -15,7 +16,9 @@ class ImportViaMnemonicScreen extends Component {
     saveAppData: PropTypes.func.isRequired,
   };
 
-  static navigationOptions = {};
+  static navigationOptions = { 
+    ...AppStyle.commonHeader,
+  };
 
   generateKey = privateKey =>
     new Promise((resolve, reject) => {

@@ -276,7 +276,6 @@ class TopicInnerScreen extends React.Component {
       <ScrollView style={styles.container}>
         {isJoined && allowEdit && this.hasVote && <VoteSession />}
         {this.renderIntroOrMemberList()}
-        <Text style={styles.rulesTitle}>{t.META_INFO_TITLE}</Text>
 
         <View style={styles.infoContainer}>
           <SingleLineDisplay
@@ -316,6 +315,10 @@ class TopicInnerScreen extends React.Component {
         {/*isEdited={edited}*/}
         {/*allowEdit={allowEdit && !hasVote}*/}
         {/*/>*/}
+        <View style={styles.explanationContainer}>
+            <Text style={styles.explanation}>{t.PAYMENT_EXPLANATION}</Text>
+        </View>
+  
         {/* TODO disable Dapp Store Now <Text style={styles.rulesTitle}>{t.MINI_DAPPS}</Text>*/}
         {/* TODO disable Dapp Store Now <DappsList />*/}
         {this.renderButton()}
@@ -355,8 +358,6 @@ const t = {
   VOTE_INTRO:
     'To star a vote, simply provide new values. All changes must go through voting to take effect.' +
     ' These changes affect everyone in the country. Amend with caution! ',
-  META_INFO_TITLE: 'Information',
-  VOTE_RULES_TITLE: 'Rules',
   MINI_DAPPS: 'Dapps',
   GROUP_TOPIC_TITLE: 'Country Name',
   TOPIC_DESCRIPTION_TITLE: 'Description',
@@ -379,6 +380,7 @@ const t = {
 
   NO_WALLET: 'please set wallet first',
   SEND_TRANSACTION: 'Transaction sending to the blockchain network',
+  PAYMENT_EXPLANATION: 'Current cost to start a virtual country is 1000 NES, paid to cover ETH smart contract fees.',
 };
 
 const styles = StyleSheet.create({
@@ -398,5 +400,17 @@ const styles = StyleSheet.create({
   infoContainer: {
     marginTop: 20,
     backgroundColor: 'white',
+  },
+  explanationContainer: {
+    paddingTop: 260,
+    paddingBottom: 15,
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 50,
+    paddingVertical: 10,
+  },
+  explanation: {
+    ...AppStyle.fontExplanation,
   },
 });

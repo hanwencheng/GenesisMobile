@@ -34,7 +34,7 @@ export default class InputWithValidation extends React.Component {
         <View style={styles.iconContainer}>
           <Ionicons
             name="ios-checkmark-circle-outline"
-            size={AppStyle.fontMiddle}
+            size={AppStyle.fontMiddleBig}
             color={AppStyle.mainBlue}
           />
         </View>
@@ -103,6 +103,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flex: 1,
+    right: -26,
+    bottom: -5,
   },
   errorContainer: {
     position: 'absolute',

@@ -17,7 +17,7 @@ const getBackgroundColor = (variant, disabled) => {
   if (disabled) return AppStyle.variantDisable;
   switch (variant) {
     case VariantList.CONFIRM:
-      return AppStyle.variantConfirm;
+      return AppStyle.mainBlue;
     case VariantList.CANCEL:
       return AppStyle.variantCancel;
     case VariantList.PRIMARY:
@@ -65,16 +65,16 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 5,
     flexDirection: 'row',
-    height: 40,
+    height: 61,
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: width * 0.025,
-    marginHorizontal: width * 0.05,
-    paddingHorizontal: 25,
+    marginHorizontal: width * 0.15,
+    paddingHorizontal: 10,
   },
   buttonText: {
-    fontSize: AppStyle.fontMiddle,
-    // fontFamily: 'OpenSans-Regular',
+    fontSize: AppStyle.fontSizeButtonSize,
+    fontFamily: AppStyle.fontFamilyButtonText,
     color: 'white',
   },
 });

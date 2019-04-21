@@ -17,6 +17,7 @@ import DisableView from '../components/DisableView';
 import AppStyle from '../../../commons/AppStyle';
 import Keyboard from '../components/Keyboard';
 import Container from '../../../components/Container';
+import { screensList } from '../../../navigation/screensList';
 
 const { height } = Dimensions.get('window');
 const isSmallScreen = height < 569;
@@ -25,9 +26,15 @@ const t = {
   UNLOCK_SCREEN: 'Unlock to continue',
   CREATE_PINCODE: 'Create your pincode',
   REPEAT_PINCODE: 'Please repeat the pincode',
+  HEAD_TITLE: 'Passcode',
 };
 
 class UnlockScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: t.HEAD_TITLE,
+    ...AppStyle.commonHeader,
+  });
+
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     pincode: PropTypes.string.isRequired,
@@ -37,9 +44,9 @@ class UnlockScreen extends Component {
     unlockDescription: PropTypes.string.isRequired,
   };
 
-  static defaultProps = {
-    navigation: {},
-  };
+  // static defaultProps = {
+  //   navigation: {},
+  // };
 
   constructor(props) {
     super();
@@ -101,7 +108,7 @@ class UnlockScreen extends Component {
       useNativeDriver: true,
     });
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 100, }}>
         <Text style={styles.desText}>{unlockDescription}</Text>
         {renderWrongPincodeWarning()}
         <Animated.View
