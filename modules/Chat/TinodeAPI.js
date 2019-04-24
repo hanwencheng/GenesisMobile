@@ -174,6 +174,10 @@ class TinodeAPIClass {
       // this.handleLoginSuccessful();
     }
   }
+  
+  bindWallet(walletAddress) {
+    return this.tinode.setMeta("me", {desc: {pubaddr: walletAddress}})
+  }
 
   tnMeMetaSub(meTopic, topicData) {
     store.dispatch(chatAction.updateChatMap(topicData));

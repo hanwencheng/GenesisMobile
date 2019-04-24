@@ -1,3 +1,4 @@
+/** Here store the raw data of user. **/
 import _ from 'lodash';
 import set from 'lodash/fp/set';
 import { chatActionType } from '../actions/chatAction';
@@ -12,6 +13,7 @@ const INITIAL_STATE = {
   },
   rawPublicData: {},
   subscribedChatId: null,
+  bindWallet: '',
 };
 
 export const chatReducer = (state = INITIAL_STATE, action) => {

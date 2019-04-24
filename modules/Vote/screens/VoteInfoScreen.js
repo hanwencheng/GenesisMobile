@@ -51,7 +51,7 @@ class VoteInfoScreen extends React.Component {
     const that = this;
     Alert.alert(
       'Payment',
-      `${INIT_VALUE.origin.voteCost} NES`,
+      `${INIT_VALUE.origin.voteCost} ETH/NES (Alpha version no cost)`,
       [
         {
           text: 'Pay now',
