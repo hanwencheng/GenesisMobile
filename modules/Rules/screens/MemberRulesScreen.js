@@ -68,7 +68,8 @@ class MemberRulesScreen extends React.Component {
     const { navigation, userId, walletAddress, showPopup } = this.props;
 
     const editEnabled = navigation.getParam('editEnabled', false);
-    if(memberId === this.topicData.subs[0].user)
+    const userProfile = _.find(this.topicData.subs, {user: memberId})
+    if(_.isEmpty(userProfile) || userProfile.acs.mode === 255)
       return showPopup(t.KICK_OWNER_ERROR);
     
     if (editEnabled) {

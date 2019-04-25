@@ -57,28 +57,32 @@ class TopicInnerScreen extends React.Component {
   componentDidMount() {
     const { initVote, topicId, voteOrigin, userId, updateTopic, walletAddress } = this.props;
     const topic = this.topicData;
-    const voteData = _.merge({}, voteOrigin, {
-      countryName: _.get(topic, 'public.fn', voteOrigin.countryName),
-      description: _.get(topic, 'private.comment', 'Country Description'),
-      profile: _.get(topic, 'public.photo', voteOrigin.profile),
-      requiredHour: parseFloat(
-        (_.get(topic, 'voteduration', voteOrigin.voteduration) / 3600).toFixed(2)
-      ),
-      requiredApproved: _.get(topic, 'votepassrate', voteOrigin.votepassrate),
+  
+    initVote(voteOrigin);
+    if(this.isCreatingNewTopic)
+      return
+    
+    TinodeAPI.getDescription(topicId).then(data => {
+      updateTopic(topicId, data);
+      const newVote = _.assign({}, voteOrigin,{
+        countryName: _.get(data, 'public.fn', voteOrigin.countryName),
+        countrydesc: _.get(data, 'countrydesc', voteOrigin.countrydesc),
+        requiredHour: parseFloat(
+          (_.get(data, 'voteduration', voteOrigin.voteduration) / 3600).toFixed(2)
+        ),
+        requiredApproved: _.get(data, 'votepassrate', voteOrigin.votepassrate),
+      })
+      initVote(newVote);
     });
-    initVote(voteData);
-    if (!this.isCreatingNewTopic) {
-      TinodeAPI.getDescription(topicId).then(data => {
-        updateTopic(topicId, data);
+
+    TinodeAPI.getVoteInfo(topicId, walletAddress, userId)
+      .then(data => {
+        updateTopic(topicId, { vote: data });
+      })
+      .catch(error => {
+        updateTopic(topicId, { vote: null });
       });
-      TinodeAPI.getVoteInfo(topicId, walletAddress, userId)
-        .then(data => {
-          updateTopic(topicId, { vote: data });
-        })
-        .catch(error => {
-          updateTopic(topicId, { vote: null });
-        });
-    }
+    
   }
 
   onNewVote() {
@@ -304,6 +308,7 @@ class TopicInnerScreen extends React.Component {
 
         {/*<Text style={styles.rulesTitle}>{t.VOTE_RULES_TITLE}</Text>*/}
         <TopicRules
+          isJoined={isJoined}
           voteCached={voteCached}
           editEnabled={allowEdit && !this.hasVote}
           conditionalOpen={this.conditionalOpen.bind(this)}

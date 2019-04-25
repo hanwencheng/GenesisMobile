@@ -57,7 +57,7 @@ class NewWalletInnerScreen extends Component {
 }
 
 const mapStateToProps = state => ({
-  bindWallet: state.chat.bindWallet,
+  bindWallet: state.chat.userInfo.bindWallet,
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({});
@@ -88,7 +88,7 @@ const t = {
   createTitle: 'Create',
   createSubtitle: 'a new wallet',
   importTitle: 'Import',
-  importSubtitle: 'existing wallet',
+  importSubtitle: 'an existed wallet',
   recoverTitle: 'Recover',
   recoverSubtitle: 'your previous wallet',
 };

@@ -20,10 +20,11 @@ class TopicRules extends React.Component {
     voteCached: PropTypes.object.isRequired,
     editEnabled: PropTypes.bool.isRequired,
     conditionalOpen: PropTypes.func.isRequired,
+    isJoined: PropTypes.bool.isRequired,
   };
 
   render() {
-    const { navigation, voteCached, editEnabled, conditionalOpen } = this.props;
+    const { navigation, voteCached, editEnabled, conditionalOpen, isJoined } = this.props;
     const rules = voteCached;
     return (
       <Container style={styles.container}>
@@ -36,8 +37,8 @@ class TopicRules extends React.Component {
         {/*/>*/}
         {/*<Text style={styles.introText}>{t.RULES_INTRO}</Text>*/}
         {/*</View>*/}
-        <Text style={styles.rulesTitle}>{t.PEOPLE_RULES_TITLE}</Text>
-        <SingleLineSingleValueDisplay
+        {isJoined && <Text style={styles.rulesTitle}>{t.PEOPLE_RULES_TITLE}</Text>}
+        {isJoined && <SingleLineSingleValueDisplay
           title={voteInfo.rulesDescription}
           onClick={() => {
             navigation.navigate(screensList.MemberRules.label, {
@@ -45,7 +46,7 @@ class TopicRules extends React.Component {
               rulesData: rules,
             });
           }}
-        />
+        />}
         <Text style={styles.rulesTitle}>{t.VOTING_RULES_TITLE}</Text>
         <SingleLineDisplay
           title={t.SUPPORT_TITLE}
