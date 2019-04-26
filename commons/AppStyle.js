@@ -1,3 +1,4 @@
+
 const AppStyle = {
   mainColor: '#E4BF43',
   grayColor: '#C5C1C1',
@@ -64,7 +65,7 @@ const AppStyle = {
   lightGrey: '#929292',
   variantCancel: '#DF4F52',
   superLightGrey: '#D9D9D9',
-  variantCreate: '#10AEFF',
+  variantCreate: '#2F8DF4',
   headerBlack: '#2D2C33',
 
   fontSmall: 12,
@@ -106,8 +107,9 @@ const AppStyle = {
   fontSizeBodyText: 18,
   fontFamilyBodyText: 'SFProText-Regular',
   fontSizeBodyBold: 18,
-  fontFamilyBodyBold: 'SFProText-Bold',
-  fontSize: 13,
+  fontFamilyBodyBold:'SFProText-Bold',
+  fontSizeExplanation: 13,
+  fontFamilyExplanation: 'SFProText-Regular',
 };
 
 AppStyle.fontLargeTitle = {
@@ -138,6 +140,24 @@ AppStyle.fontBodyBold = {
   fontSize: AppStyle.fontSizeBodyBold,
   fontFamily: AppStyle.fontFamilyBodyBold,
   color: AppStyle.mainBlackColor,
-};
+
+}
+
+AppStyle.fontExplanation = {
+  fontSize: AppStyle.fontSizeExplanation,
+  fontFamily: AppStyle.fontFamilyExplanation,
+  color: AppStyle.bodyTextGrey,
+}
+
+AppStyle.commonHeader = {
+  // headerTransparent: true,
+  headerTintColor: AppStyle.colorBlack,
+  headerStyle: {
+    backgroundColor: AppStyle.mainBackgroundGrey,
+    borderBottomColor: AppStyle.bodyTextGrey,
+    borderBottomWidth: 0.5,
+    borderColor: AppStyle.chatBorder,
+  },
+}
 
 export default AppStyle;

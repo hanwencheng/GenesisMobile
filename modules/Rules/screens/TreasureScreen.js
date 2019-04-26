@@ -18,6 +18,8 @@ class TreasureScreen extends React.Component {
       </TouchableOpacity>
     ),
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
+
   });
 
   static propTypes = {
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
   headerButtonText: {
     fontSize: AppStyle.fontMiddleSmall,
     padding: 5,
-    fontFamily: AppStyle.mainFont,
-    color: 'white',
+    fontFamily: AppStyle.fontFamilyBodyText,
+    color: AppStyle.mainBlackColor,
   },
 });

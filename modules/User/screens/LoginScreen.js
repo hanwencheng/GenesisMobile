@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
   forgetText: {
     padding: 30,
     textAlign: 'right',
-    fontFamily: AppStyle.coverFont,
-    color: AppStyle.userCancelGreen,
+    fontFamily: AppStyle.fontFamilyBodyText,
+    color: AppStyle.mainBlue,
   },
   button: {
     flex: 2,

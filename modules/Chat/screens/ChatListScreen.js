@@ -23,6 +23,8 @@ class ChatListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: screensList.ChatList.title,
     headerBackTitle: ' ',
+    ...AppStyle.commonHeader,
+
     headerRight: (
       <TouchableOpacity
         onPress={() => {
@@ -33,7 +35,7 @@ class ChatListScreen extends React.Component {
           style={styles.createTopicIcon}
           size={AppStyle.fontMiddle}
           name="plus"
-          color="white"
+          color={AppStyle.mainBlackColor}
         />
       </TouchableOpacity>
     ),
@@ -89,7 +91,7 @@ class ChatListScreen extends React.Component {
             <TouchableOpacity
               style={[
                 styles.chatNode,
-                { backgroundColor: item.isSubscribed ? 'white' : AppStyle.mainBackgroundColor },
+                { backgroundColor: item.isSubscribed ? 'white' : AppStyle.mainBackgroundColor},
               ]}
               onPress={() =>
                 item.isSubscribed
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
   },
   chatNode: {
     padding: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderColor: AppStyle.chatBorder,
   },
 });

@@ -13,14 +13,17 @@ import TinodeAPI from '../../Chat/TinodeAPI';
 import Container from '../../../components/Container';
 
 class VerifyCredentialScreen extends React.Component {
+  // static navigationOptions = ({ navigation }) => ({
+  //   headerBackTitle: '',
+  //   headerTransparent: true,
+  //   headerTintColor: AppStyle.userCancelGreen,
+  //   headerStyle: {
+  //     backgroundColor: AppStyle.userHeaderBackgroundColor,
+  //   },
+  // });
   static navigationOptions = ({ navigation }) => ({
-    headerBackTitle: '',
-    headerTransparent: true,
-    headerTintColor: AppStyle.userCancelGreen,
-    headerStyle: {
-      backgroundColor: AppStyle.userHeaderBackgroundColor,
-    },
-  });
+    ...AppStyle.commonHeader,
+ });
 
   static propTypes = {
     navigation: PropTypes.object,
@@ -90,22 +93,21 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Header.HEIGHT + 50,
     backgroundColor: AppStyle.userBackgroundColor,
   },
   title: {
     flex: 1,
     paddingHorizontal: 50,
-    fontSize: AppStyle.fontMiddle,
-    color: AppStyle.lightGrey,
-    fontFamily: AppStyle.coverFont,
+    fontSize: AppStyle.fontSizeRegularTitle,
+    color: AppStyle.mainBlackColor,
+    fontFamily: AppStyle.fontFamilyRegularTitle,
   },
   subtitle: {
     flex: 1,
     paddingHorizontal: 50,
     fontSize: AppStyle.fontMiddleSmall,
-    color: AppStyle.lightGrey,
-    fontFamily: AppStyle.coverFont,
+    color: AppStyle.mainBlackColor,
+    fontFamily: AppStyle.fontFamilyExplanation,
   },
   inputContainer: {
     flex: 2,

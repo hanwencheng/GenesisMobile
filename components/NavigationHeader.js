@@ -35,9 +35,10 @@ const styles = StyleSheet.create({
   },
   backButton: {},
   centerTitle: {
-    color: 'white',
+    color: AppStyle.mainBlackColor,
     alignSelf: 'center',
-    fontSize: AppStyle.fontMiddle,
+    fontSize: AppStyle.fontSizeBodyBold,
+    fontFamily: AppStyle.fontFamilyBodyBold,
   },
   actionButton: {},
 });

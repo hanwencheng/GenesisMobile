@@ -15,6 +15,7 @@ export default class WalletImportScreen extends Component {
   static navigationOptions = {
     title: screensList.WalletImport.title,
     headerBackTitle: null,
+    ...AppStyle.commonHeader,
   };
 
   render() {

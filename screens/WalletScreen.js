@@ -28,6 +28,7 @@ class WalletScreen extends React.Component {
       />
     ),
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   constructor(props) {
@@ -87,13 +88,13 @@ class WalletScreen extends React.Component {
           <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
         }>
         <View style={styles.displayContainer}>
-          <View style={styles.iconContainer}>
+          {/* <View style={styles.iconContainer}>
             <Ionicons name="logo-yen" size={32} color={AppStyle.walletBackgroundColor} />
-          </View>
+          </View> */}
           <View style={styles.textContainer}>
             <Text style={styles.balanceText}>Balance</Text>
             <Text style={styles.amountText}>NES: {this.renderBalance(nes)}</Text>
-            <Text style={styles.amountText}>ETH: {this.renderBalance(eth)}</Text>
+            {/* <Text style={styles.amountText}>ETH: {this.renderBalance(eth)}</Text> */}
           </View>
         </View>
         <View style={styles.actionsContainer}>
@@ -162,11 +163,11 @@ const styles = StyleSheet.create({
   },
   displayContainer: {
     flex: 3,
-    paddingTop: 50,
-    paddingBottom: 30,
+    paddingTop: 20,
+    paddingBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: AppStyle.walletBackgroundColor,
+    backgroundColor: AppStyle.backgroundWhite,
   },
   iconContainer: {
     height: 50,
@@ -182,13 +183,13 @@ const styles = StyleSheet.create({
   },
   balanceText: {
     fontSize: AppStyle.fontMiddle,
-    color: 'white',
+    color: AppStyle.mainBlackColor,
     fontWeight: 'bold',
   },
   amountText: {
     fontSize: AppStyle.fontSmall,
-    paddingTop: 10,
-    color: 'white',
+    paddingTop: 15,
+    color: AppStyle.mainBlackColor,
   },
   actionsContainer: {
     flex: 7,
@@ -203,6 +204,7 @@ const styles = StyleSheet.create({
   },
   qrCode: {
     alignSelf: 'center',
+    paddingBottom: 50,
   },
   copyButton: {
     backgroundColor: AppStyle.lightGrey,

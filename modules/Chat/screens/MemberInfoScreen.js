@@ -22,10 +22,11 @@ class MemberInfoScreen extends React.Component {
       <HeaderButton
         title={'Info'}
         onPress={() => navigation.navigate(screensList.RulesDescription.label)}
-        color={'white'}
+        color={AppStyle.mainBlackColor}
       />
     ),
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {

@@ -16,12 +16,7 @@ import TinodeAPI from '../../Chat/TinodeAPI';
 
 class SetPasswordScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerBackTitle: '',
-    headerTransparent: true,
-    headerTintColor: AppStyle.userCancelGreen,
-    headerStyle: {
-      backgroundColor: AppStyle.userHeaderBackgroundColor,
-    },
+    ...AppStyle.commonHeader,
   });
 
   constructor(props) {
@@ -54,8 +49,10 @@ class SetPasswordScreen extends React.Component {
 
     return (
       <Container hasPadding style={styles.container}>
-        <Text style={styles.title}>{isSet ? t.REPEAT_TITLE : t.TITLE}</Text>
-        <Text style={styles.subtitle}>{t.SUBTITLE}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{isSet ? t.REPEAT_TITLE : t.TITLE}</Text>
+          <Text style={styles.subtitle}>{t.SUBTITLE}</Text>
+        </View>  
         <View style={styles.inputContainer}>
           <InputWithValidation
             onChangeText={input => {
@@ -100,24 +97,34 @@ export default connect(
 )(SetPasswordScreen);
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'stretch',
+  // container: {
+  //   alignItems: 'stretch',
+  // },
+  titleContainer: {
+    flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    flexDirection: 'column',
+    marginHorizontal: 50,
+    // paddingVertical: 10,
+    textAlign: 'left',
+    // backgroundColor: AppStyle.colorRed,
   },
   title: {
     flex: 1,
-    padding: 30,
-    fontSize: AppStyle.fontMiddleBig,
-    color: AppStyle.lightGrey,
-    fontFamily: AppStyle.mainFont,
-    alignSelf: 'center',
+    ...AppStyle.fontRegularTitle,
+    // paddingVertical: 60,
+    paddingTop: 80,
+    textAlign: 'left',
   },
   subtitle: {
     flex: 1,
-    paddingHorizontal: 50,
+    // paddingHorizontal: 50,
+    textAlign: 'left',
     fontSize: AppStyle.fontMiddleSmall,
-    color: AppStyle.lightGrey,
-    fontFamily: AppStyle.coverFont,
-  },
+    color: AppStyle.mainBlackColor,
+    fontFamily: AppStyle.fontFamilyBodyText,
+  }, 
   inputContainer: {
     flex: 2,
   },
@@ -129,8 +136,8 @@ const styles = StyleSheet.create({
   },
   resetText: {
     textAlign: 'center',
-    fontFamily: AppStyle.coverFont,
-    color: AppStyle.userCancelGreen,
+    fontFamily: AppStyle.fontFamilyBodyText,
+    color: AppStyle.mainBlue,
   },
 });
 

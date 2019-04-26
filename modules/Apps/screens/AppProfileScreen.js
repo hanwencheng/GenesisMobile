@@ -36,6 +36,7 @@ class AppProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: navigation.getParam('title', 'App Profile'),
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {

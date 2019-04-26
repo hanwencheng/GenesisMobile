@@ -27,7 +27,7 @@ export default class App extends React.Component {
       return (
         <Provider store={store}>
           <View style={styles.container}>
-            <StatusBar barStyle="light-content" />
+            <StatusBar barStyle="dark-content" />
             <Loader />
             <Connector />
             <AppNavigator>
@@ -62,7 +62,8 @@ export default class App extends React.Component {
         'OpenSans-Bold': require('./assets/fonts/OpenSans-Bold.ttf'),
         'OpenSans-SemiBold': require('./assets/fonts/OpenSans-SemiBold.ttf'),
         'SFProDisplay-Bold': require('./assets/fonts/SFProDisplay-Bold.ttf'),
-        'SF-Pro-Text-Semibold': require('./assets/fonts/SF-Pro-Text-Semibold.otf'),
+        'SFProText-Bold': require('./assets/fonts/SF-Pro-Text-Bold.otf'),
+        'SFProText-Semibold': require('./assets/fonts/SF-Pro-Text-Semibold.otf'),
         'SFProText-Regular': require('./assets/fonts/SF-Pro-Text-Regular.otf'),
       }),
     ]);
