@@ -51,7 +51,7 @@ class VoteInfoScreen extends React.Component {
     const that = this;
     Alert.alert(
       'Payment',
-      `${INIT_VALUE.origin.voteCost} NES`,
+      `${INIT_VALUE.origin.voteCost} ETH/NES (Alpha version no cost)`,
       [
         {
           text: 'Pay now',
@@ -98,7 +98,6 @@ class VoteInfoScreen extends React.Component {
       return;
     const voteData = topic.vote;
     const voteUser = _.find(topic.subs, {user: voteData.user})
-    debugger;
     const voteUserName = voteUser ? voteUser.public.fn : voteData.user;
     
     console.log('user list is', topic.subs);

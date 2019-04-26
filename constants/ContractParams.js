@@ -57,6 +57,6 @@ export const ContractFnMap = {
   kickOut: {
     name: 'kickOut',
     value: v => [v],
-    isContract: false,
+    isContract: true,
   },
 };

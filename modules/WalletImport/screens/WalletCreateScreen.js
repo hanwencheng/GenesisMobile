@@ -15,6 +15,8 @@ import { lockScreen } from '../../Unlock/lockScreenUtils';
 import { loaderAction } from '../../../actions/loaderAction';
 import Container from '../../../components/Container';
 import { resetNavigationToWallet } from '../../../utils/navigationUtils';
+import TinodeAPI from "../../Chat/TinodeAPI";
+import {popupAction} from "../../../actions/popupAction";
 
 class WalletCreateScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -25,10 +27,11 @@ class WalletCreateScreen extends React.Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
     saveAppData: PropTypes.func.isRequired,
+    showPopup: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    const { saveAppData, navigation } = this.props;
+    const { saveAppData, navigation, showPopup } = this.props;
 
     const createWallet = new Promise((resolve, reject) => {
       //TODO now I should get the public key and then save it into loader;s place and save private key into secure store.
@@ -37,11 +40,18 @@ class WalletCreateScreen extends React.Component {
       if (!wallet) {
         return reject();
       }
-      saveAppData({
-        [dataEntry.walletAddress.stateName]: wallet.address,
-        [dataEntry.publicKey.stateName]: wallet.signingKey.publicKey,
-      });
-      return resolve(wallet);
+      TinodeAPI.bindWallet(wallet.address)
+        .then(()=> {
+          saveAppData({
+            [dataEntry.walletAddress.stateName]: wallet.address,
+            [dataEntry.publicKey.stateName]: wallet.signingKey.publicKey,
+          });
+          resolve(wallet);
+        })
+        .catch( err => {
+          showPopup(t.WALLET_BIND_ERROR);
+          reject(err)
+        })
     });
 
     createWallet
@@ -92,8 +102,13 @@ class WalletCreateScreen extends React.Component {
 
 const mapStateToProps = state => ({});
 
+const t = {
+  WALLET_BIND_ERROR: 'You have already bind another wallet before.'
+}
+
 const mapDispatchToProps = _.curry(bindActionCreators)({
   saveAppData: loaderAction.saveAppData,
+  showPopup: popupAction.showPopup,
 });
 
 export default connect(

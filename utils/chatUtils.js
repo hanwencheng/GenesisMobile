@@ -64,7 +64,11 @@ export const reformatData = (result, value, key) => {
 export const saveUserData = meTopics => {
   if (meTopics && meTopics.public) {
     const privateData = meTopics.private || {};
-    const userInfo = _.reduce(meTopics.public, reformatData, privateData);
+    const userInfo = _.merge(
+      _.reduce(meTopics.public, reformatData, privateData),
+      { bindWallet: meTopics.pubaddr}
+    )
+    
     store.dispatch(chatAction.setUserInfo(userInfo, meTopics.public));
     store.dispatch(
       loaderAction.saveAppData({

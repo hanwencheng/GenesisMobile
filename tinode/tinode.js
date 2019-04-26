@@ -215,7 +215,7 @@ function mergeObj(dst, src, ignore) {
     if (src === Tinode.DEL_CHAR) {
       return undefined;
     }
-    return src ? src : dst;
+    return src != null ? src : dst;
   }
 
   // Handle Date
@@ -240,7 +240,7 @@ function mergeObj(dst, src, ignore) {
   for (let prop in src) {
     if (
       src.hasOwnProperty(prop) &&
-      (src[prop] || src[prop] === false) &&
+      (src[prop] != null || src[prop] === false) &&
       (!ignore || !ignore[prop]) &&
       prop != '_generated'
     ) {
@@ -4516,7 +4516,7 @@ TopicMe.prototype = Object.create(Topic.prototype, {
         sub.deleted = sub.deleted ? new Date(sub.deleted) : null;
 
         // Ensure the values are integer.
-        sub.seq = sub.seq | 0;
+        sub.seq = sub.seq == null ? -2 : sub.seq;
         sub.recv = sub.recv | 0;
         sub.read = sub.read | 0;
         sub.unread = sub.seq - sub.read;

@@ -174,6 +174,10 @@ class TinodeAPIClass {
       // this.handleLoginSuccessful();
     }
   }
+  
+  bindWallet(walletAddress) {
+    return this.tinode.setMeta("me", {desc: {pubaddr: walletAddress}})
+  }
 
   tnMeMetaSub(meTopic, topicData) {
     store.dispatch(chatAction.updateChatMap(topicData));
@@ -458,12 +462,12 @@ class TinodeAPIClass {
   }
 
   createAndSubscribeNewTopic(cachedVote, txParams, constructorParams) {
-    const { countryName, profile, description } = cachedVote;
+    const { countryName, profile, countrydesc } = cachedVote;
     const publicInfo = chatUtils.generatePublicInfo(countryName, profile);
     const topicName = this.tinode.newGroupTopicName();
     let topic = this.tinode.getTopic(topicName);
     const newTopicParams = {
-      desc: { ...constructorParams, public: publicInfo, private: { comment: description } },
+      desc: { ...constructorParams, public: publicInfo, private: { comment: countrydesc } },
     };
     let getQuery = topic
       .startMetaQuery()
