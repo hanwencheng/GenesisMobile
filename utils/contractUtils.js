@@ -96,6 +96,7 @@ export const createTopic = (walletAddress, userId, privateKey, topicParams, navi
         [ConstructorParams.VOTE_DURATION]: environment.disableVoteDuration
           ? environment.mockDurationSecond
           : voteDuration,
+          [ConstructorParams.COUNTRY_DESC]: countrydesc
       };
       TinodeAPI.createAndSubscribeNewTopic(topicParams, txParams, constructorParams).then(ctrl => {
         resetNavigationToTopic(navigation, {
