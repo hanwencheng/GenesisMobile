@@ -46,9 +46,9 @@ export default class ChatListNode extends React.Component {
           </View>
           <View style={styles.secondLineContainer}>
             <Text style={styles.text} numberOfLines={1}>
-              {chatNode.isSubscribed && chatNode.lastmsg
-                ? chatNode.lastmsg
-                : t.DESCRIPTION_PLACEHOLDER}
+              {chatNode.isSubscribed
+                ? chatNode.lastmsg || ''
+                : chatNode.countrydesc}
             </Text>
           </View>
         </View>

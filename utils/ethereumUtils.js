@@ -61,6 +61,8 @@ export const getTokenBalanceABI = [
 // NES and ETH decimals are both 18, format the bigNumber to a sting (in ether)
 export const getNumber = number => etherUtils.formatEther(etherUtils.bigNumberify(number));
 
+export const getBigNumber = hexNumber => getNumber(hexNumber).toString();
+
 export const getTokenBalance = queryAddress => {
   const tokenAddress = contractInfo.address;
   const contract = new Contract(tokenAddress, getTokenBalanceABI, provider);
@@ -80,6 +82,15 @@ export const getEtherBalance = walletAddress => {
       })
   );
 };
+
+export const getTreasury = (conaddr) => {
+  const abi = [
+    'function getTreasury() view returns (uint256)'
+  ]
+  let contract = new ethers.Contract(conaddr, abi, provider);
+  return contract.getTreasury()
+}
+
 
 const t = {
   WALLET_ERROR: '[Wallet Create Error in EthereumUtils.js]:',

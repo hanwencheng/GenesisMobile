@@ -491,18 +491,15 @@ class TinodeAPIClass {
     if (this.tinode) {
       this.tinode.onDisconnect = () => {
         store.dispatch(loaderAction.clearAppData());
-        // const resetAction = StackActions.reset({
-        //   index: 0,
-        //   actions: [NavigationActions.navigate({ routeName: screensList.Login.label })],
-        // });
 
         const navigateAction = NavigationActions.navigate({
           routeName: 'Login',
           params: {},
           action: StackActions.popToTop(),
         });
-
+        
         navigation.dispatch(navigateAction);
+        store.dispatch(chatAction.clearChat());
         this.init();
         this.connect();
       };
