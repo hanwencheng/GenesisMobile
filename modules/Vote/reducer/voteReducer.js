@@ -5,7 +5,7 @@ export const INIT_VALUE = {
   origin: {
     // Information extracted from topic
     countryName: 'New Country',
-    countrydesc: 'A brand new country.',
+    countrydesc: '',
     profile: {},
 
     // Information related to smart contract
