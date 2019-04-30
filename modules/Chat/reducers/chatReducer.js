@@ -81,7 +81,10 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
         chatMap: newChatMap,
         subscribedChatId: null,
       };
-
+    case chatActionType.CLEAR_CHAT_MAP:
+      return {
+        ...INITIAL_STATE,
+      }
     default:
       return state;
   }

@@ -8,6 +8,7 @@ export const chatActionType = {
   SET_USER_INFO: 'CHAT_SET_USER_INFO',
   SUBSCRIBE_CHAT: 'CHAT_SUBSCRIBE_CHAT',
   UNSUBSCRIBE_CHAT: 'CHAT_UNSUBSCRIBE_CHAT',
+  CLEAR_CHAT_MAP: 'CHAT_CLEAR_CHAT_MAP',
 };
 
 export const chatAction = {
@@ -23,4 +24,5 @@ export const chatAction = {
   }),
   subscribeChat: chatId => ({ type: chatActionType.SUBSCRIBE_CHAT, chatId }),
   unsubscribeChat: chatId => ({ type: chatActionType.UNSUBSCRIBE_CHAT, chatId }),
+  clearChat: () => ({type: chatActionType.CLEAR_CHAT_MAP})
 };

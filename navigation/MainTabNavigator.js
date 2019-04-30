@@ -156,4 +156,6 @@ const UserStack = createStackNavigator(
 export default createBottomTabNavigator({
   HomeStack,
   UserStack,
+}, {
+  initialRouteName: 'HomeStack'
 });
