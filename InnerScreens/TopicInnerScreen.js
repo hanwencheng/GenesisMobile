@@ -23,6 +23,7 @@ import VoteSession from '../modules/Chat/components/VoteSession';
 import TopicRules from '../modules/Rules/components/TopicRules';
 import { topicsAction } from '../modules/Chat/actions/topicsAction';
 import { INIT_VALUE } from '../modules/Vote/reducer/voteReducer';
+import {getBigNumber, getTreasury} from "../utils/ethereumUtils";
 
 class TopicInnerScreen extends React.Component {
   static propTypes = {
@@ -72,7 +73,11 @@ class TopicInnerScreen extends React.Component {
         ),
         requiredApproved: _.get(data, 'votepassrate', voteOrigin.votepassrate),
       })
-      initVote(newVote);
+      
+      if(!data.conaddr)
+        return initVote(newVote);
+      
+      getTreasury(data.conaddr).then(data => initVote(_.assign(newVote, {treasury: getBigNumber(data)})));
     });
 
     TinodeAPI.getVoteInfo(topicId, walletAddress, userId)
