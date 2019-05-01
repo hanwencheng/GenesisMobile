@@ -96,7 +96,7 @@ export const createTopic = (walletAddress, userId, privateKey, topicParams, navi
         [ConstructorParams.VOTE_DURATION]: environment.disableVoteDuration
           ? environment.mockDurationSecond
           : voteDuration,
-          [ConstructorParams.COUNTRY_DESC]: countrydesc
+        [ConstructorParams.COUNTRY_DESC]: countrydesc
       };
       TinodeAPI.createAndSubscribeNewTopic(topicParams, txParams, constructorParams).then(ctrl => {
         resetNavigationToTopic(navigation, {
@@ -184,10 +184,10 @@ export const createVote = (
 ) => {
   const { subs, conaddr } = topicParams;
   const voters = _.map(subs, 'user');
-  const votePassRate = topicParams.requiredApproved || 50;
+  const votePassRate = topicParams.votepassrate || 50;
   const voteDuration = environment.disableVoteDuration
     ? environment.mockDurationSecond
-    : topicParams.requiredHour * 3600 || 3600;
+    : topicParams.voteduration || 3600;
 
   const paramsConstructor = _.get(ContractFnMap, `${currentNewVote.name}`, {
     name: '',
