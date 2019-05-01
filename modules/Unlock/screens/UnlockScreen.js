@@ -108,7 +108,15 @@ class UnlockScreen extends Component {
       useNativeDriver: true,
     });
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center', paddingTop: 100, }}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: 100,
+          backgroundColor: 'white',
+          width: '100%',
+          height: '100%',
+        }}>
         <Text style={styles.desText}>{unlockDescription}</Text>
         {renderWrongPincodeWarning()}
         <Animated.View

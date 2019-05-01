@@ -1,5 +1,9 @@
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 
+import { Platform } from 'react-native';
+import PropTypes from 'prop-types';
+import React from 'react';
+import _ from 'lodash';
 import AboutScreen from '../modules/Settings/screens/AboutScreen';
 import AccountSettingScreen from '../modules/Settings/screens/AccountSettingScreen';
 import AmendCostScreen from '../modules/Vote/screens/AmendCostScreen';
@@ -22,14 +26,14 @@ import MemberInfoScreen from '../modules/Chat/screens/MemberInfoScreen';
 import MemberRulesScreen from '../modules/Rules/screens/MemberRulesScreen';
 import MembersScreen from '../modules/Chat/screens/MembersScreen';
 import PasswordSettingScreen from '../modules/Settings/screens/PasswordSettingScreen';
-import { Platform } from 'react-native';
-import PropTypes from 'prop-types';
-import React from 'react';
 import RulesDescriptionScreen from '../modules/Rules/screens/RulesDescriptionScreen';
 import RulesInfoScreen from '../modules/Rules/screens/RulesInfoScreen';
 import ScanQRCodeScreen from '../modules/WalletImport/screens/ScanQRCodeScreen';
 import SetPasswordScreen from '../modules/User/screens/SetPasswordScreen';
 import SettingsScreen from '../modules/Settings/screens/SettingsScreen';
+import MainSettingsScreen from '../modules/Settings/screens/MainSettingsScreen';
+import AccountSecuritySettingsScreen from '../modules/Settings/screens/AccountSecuritySettingsScreen';
+
 import StartScreen from '../modules/User/screens/StartScreen';
 import StartVoteScreen from '../modules/Vote/screens/StartVoteScreen';
 import TabBarIcon from '../components/TabBarIcon';
@@ -46,7 +50,6 @@ import VoteInfoScreen from '../modules/Vote/screens/VoteInfoScreen';
 import WalletCreateScreen from '../modules/WalletImport/screens/WalletCreateScreen';
 import WalletImportScreen from '../modules/WalletImport/screens/WalletImportScreen';
 import WalletScreen from '../screens/WalletScreen';
-import _ from 'lodash';
 import { screensList } from './screensList';
 
 const iconPropTypes = { focused: PropTypes.bool };
@@ -65,9 +68,7 @@ const commonScreens = {
   Transactions: TransactionsScreen,
 };
 
-const HomeStackIcon = ({ focused }) => (
-  <TabBarIcon focused={focused} name={'ios-chatbubbles'} />
-);
+const HomeStackIcon = ({ focused }) => <TabBarIcon focused={focused} name={'ios-chatbubbles'} />;
 HomeStackIcon.propTypes = iconPropTypes;
 
 const HomeStack = createStackNavigator(
@@ -118,14 +119,14 @@ const HomeStack = createStackNavigator(
   }
 );
 
-const UserStackIcon = ({ focused }) => (
-  <TabBarIcon focused={focused} name={'md-person'} />
-);
+const UserStackIcon = ({ focused }) => <TabBarIcon focused={focused} name={'md-person'} />;
 UserStackIcon.propTypes = iconPropTypes;
 
 const UserStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    MainSettings: MainSettingsScreen,
+    AccountSecuritySettings: AccountSecuritySettingsScreen,
     Wallet: WalletScreen,
     About: AboutScreen,
     PasswordSetting: PasswordSettingScreen,
@@ -155,10 +156,12 @@ const UserStack = createStackNavigator(
   }
 );
 
-export default createBottomTabNavigator({
-  HomeStack,
-  UserStack,
-}, {
+export default createBottomTabNavigator(
+  {
+    HomeStack,
+    UserStack,
+  },
+  {
     initialRouteName: 'HomeStack',
     tabBarOptions: {
       style: {
@@ -167,4 +170,5 @@ export default createBottomTabNavigator({
         backgroundColor: AppStyle.headerBackGroundColor,
       },
     },
-  });
+  }
+);

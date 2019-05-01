@@ -11,6 +11,8 @@ export const screensList = {
   PasswordSetting: { label: 'PasswordSetting', title: 'Setting Password' },
   AccountSetting: { label: 'AccountSetting', title: 'Account Settings' },
   Settings: { label: 'Settings', title: 'Me' },
+  MainSettings: { label: 'MainSettings', title: 'Settings' },
+  AccountSecuritySettings: { label: 'AccountSecuritySettings', title: 'Account Security' },
   About: { label: 'About', title: 'About' },
   ChatList: { label: 'ChatList', title: 'Genesis Space' },
   Start: { label: 'Start', title: 'Start' },

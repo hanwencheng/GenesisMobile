@@ -1,17 +1,17 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { AntDesign } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
+import React from 'react';
+import _ from 'lodash';
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
 import AppStyle from '../../../commons/AppStyle';
 import Container from '../../../components/Container';
 import Images from '../../../commons/Images';
 import NavigationHeader from '../../../components/NavigationHeader';
-import PropTypes from 'prop-types';
-import React from 'react';
 import SingleLineDisplay from '../../../components/SingleLineDisplay';
 import TinodeAPI from '../../Chat/TinodeAPI';
-import _ from 'lodash';
-import { bindActionCreators } from 'redux';
-import connect from 'react-redux/es/connect/connect';
 import packageJson from '../../../package';
 import { screensList } from '../../../navigation/screensList';
 
@@ -62,17 +62,12 @@ class SettingsScreen extends React.Component {
           style={styles.singleDisplay}
           onClick={() => navigation.push(screensList.Wallet.label)}
         />
+
         <SingleLineDisplay
-          title={t.ABOUT_TITLE}
-          style={styles.singleDisplay}
-          value={packageJson.version}
-          onClick={() => navigation.navigate(screensList.About.label)}
-        />
-        <SingleLineDisplay
-          title={t.LOG_OUT_TITLE}
+          title={screensList.MainSettings.title}
           style={styles.singleDisplay}
           value={''}
-          onClick={() => TinodeAPI.logout(navigation)}
+          onClick={() => navigation.navigate(screensList.MainSettings.label)}
         />
       </Container>
     );
@@ -105,8 +100,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 30,
+    paddingBottom: 30,
     padding: 10,
   },
   accountInfoContainer: {
@@ -147,7 +142,5 @@ const styles = StyleSheet.create({
 });
 
 const t = {
-  ABOUT_TITLE: 'About',
-  LOG_OUT_TITLE: 'Log out',
   WALLET_TITLE: 'Wallet',
 };
