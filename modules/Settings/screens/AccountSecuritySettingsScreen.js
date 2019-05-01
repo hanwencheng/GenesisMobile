@@ -14,6 +14,9 @@ import SingleLineDisplay from '../../../components/SingleLineDisplay';
 import TinodeAPI from '../../Chat/TinodeAPI';
 import packageJson from '../../../package';
 import { screensList } from '../../../navigation/screensList';
+import { lockScreen, resetPincode } from '../../Unlock/lockScreenUtils';
+import { getPrivateKeyAsync } from '../../../utils/secureStoreUtils';
+import { resetNavigation } from '../../../utils/navigationUtils';
 
 class AccountSecuritySettingsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -24,23 +27,38 @@ class AccountSecuritySettingsScreen extends React.Component {
 
   static propTypes = {
     navigation: PropTypes.object,
+    hasPassword: PropTypes.bool.isRequired,
   };
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, hasPassword } = this.props;
     return (
       <Container style={styles.container}>
         <SingleLineDisplay
           title={t.PASSCODE}
-          value={'Not Set'}
-          onClick={() => navigation.push(screensList.Unlock.label)}
+          value={hasPassword ? t.SET : t.NOT_SET}
+          onClick={() => {
+            if (hasPassword) {
+              lockScreen(navigation)
+                .then(() => resetPincode(navigation))
+                .then(() => resetNavigation(navigation, screensList.Settings.label));
+            } else {
+              lockScreen(navigation).then(() =>
+                resetNavigation(navigation, screensList.Settings.label)
+              );
+            }
+          }}
         />
       </Container>
     );
   }
 }
 
-export default connect()(AccountSecuritySettingsScreen);
+const mapStateToProps = state => ({
+  hasPassword: state.appState.hasPassword,
+});
+
+export default connect(mapStateToProps)(AccountSecuritySettingsScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -51,4 +69,6 @@ const styles = StyleSheet.create({
 
 const t = {
   PASSCODE: 'Passcode',
+  NOT_SET: 'Not Set',
+  SET: 'Change the Passcode',
 };

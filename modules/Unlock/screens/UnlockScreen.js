@@ -41,7 +41,6 @@ class UnlockScreen extends Component {
     pincodeToBeConfirm: PropTypes.string.isRequired,
     wrongPincodeCount: PropTypes.number.isRequired,
     hasPassword: PropTypes.bool.isRequired,
-    unlockDescription: PropTypes.string.isRequired,
   };
 
   // static defaultProps = {
@@ -88,9 +87,22 @@ class UnlockScreen extends Component {
     return dots;
   }
 
+  createDescription() {
+    const { navigation, hasPassword, pincodeToBeConfirm } = this.props;
+    const isReset = navigation.getParam('isReset');
+    if (hasPassword && !isReset) {
+      return t.UNLOCK_SCREEN;
+    } else if (pincodeToBeConfirm) {
+      return t.REPEAT_PINCODE;
+    }
+    return t.CREATE_PINCODE;
+  }
+
   renderContent = () => {
-    const { wrongPincodeCount, unlockDescription } = this.props;
+    const { wrongPincodeCount } = this.props;
     const { animatedValue } = this.state;
+    const unlockDescription = this.createDescription();
+
     if (this.shouldDisableApp) {
       return <DisableView />;
     }
@@ -149,22 +161,12 @@ class UnlockScreen extends Component {
   }
 }
 
-const createDescription = (hasPassword, pincodeToBeConfirm) => {
-  if (hasPassword) {
-    return t.UNLOCK_SCREEN;
-  } else if (pincodeToBeConfirm) {
-    return t.REPEAT_PINCODE;
-  }
-  return t.CREATE_PINCODE;
-};
-
 const mapStateToProps = state => ({
   hasPassword: state.appState.hasPassword,
   wrongPincodeCount: state.appState.wrongPincodeCount,
   pincode: state.unlock.pincode,
   pincodeToBeConfirm: state.unlock.pincodeToBeConfirm,
   animatedValue: state.unlock.animatedValue,
-  unlockDescription: createDescription(state.appState.hasPassword, state.unlock.pincodeToBeConfirm),
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({});

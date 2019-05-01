@@ -64,6 +64,7 @@ class Keyboard extends Component {
   _handlePress(number) {
     const { navigation } = this.props;
     const resolve = navigation.getParam('resolve');
+    const isReset = navigation.getParam('isReset');
 
     const {
       pincode,
@@ -81,7 +82,7 @@ class Keyboard extends Component {
     const newPinCode = pincode + number;
 
     if (newPinCode.length === 4) {
-      if (!hasPassword) {
+      if (!hasPassword || isReset) {
         if (pincodeToBeConfirm) {
           this._confirmPassword(newPinCode, resolve);
         } else {
