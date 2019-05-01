@@ -1,18 +1,19 @@
-import React from 'react';
-import { Text, Image, StyleSheet, View, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
-import connect from 'react-redux/es/connect/connect';
-import _ from 'lodash';
-import { bindActionCreators } from 'redux';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 import { AntDesign } from '@expo/vector-icons';
 import AppStyle from '../../../commons/AppStyle';
-import { screensList } from '../../../navigation/screensList';
-import NavigationHeader from '../../../components/NavigationHeader';
-import SingleLineDisplay from '../../../components/SingleLineDisplay';
-import packageJson from '../../../package';
-import TinodeAPI from '../../Chat/TinodeAPI';
 import Container from '../../../components/Container';
 import Images from '../../../commons/Images';
+import NavigationHeader from '../../../components/NavigationHeader';
+import PropTypes from 'prop-types';
+import React from 'react';
+import SingleLineDisplay from '../../../components/SingleLineDisplay';
+import TinodeAPI from '../../Chat/TinodeAPI';
+import _ from 'lodash';
+import { bindActionCreators } from 'redux';
+import connect from 'react-redux/es/connect/connect';
+import packageJson from '../../../package';
+import { screensList } from '../../../navigation/screensList';
 
 class SettingsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -59,7 +60,7 @@ class SettingsScreen extends React.Component {
           title={t.WALLET_TITLE}
           value={''}
           style={styles.singleDisplay}
-          onClick={() => navigation.navigate(screensList.Wallet.label)}
+          onClick={() => navigation.push(screensList.Wallet.label)}
         />
         <SingleLineDisplay
           title={t.ABOUT_TITLE}
@@ -94,7 +95,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   singleDisplay: {
-    marginBottom: 10,
+    marginTop: 10,
   },
   container: {
     flex: 1,
@@ -104,8 +105,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
+    paddingTop: 20,
+    paddingBottom: 20,
     padding: 10,
-    marginTop: 20,
   },
   accountInfoContainer: {
     flexGrow: 1,
@@ -119,19 +121,21 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   userIdText: {
-    fontSize: AppStyle.fontSmall,
+    fontSize: AppStyle.fontMiddleSmall,
     fontFamily: AppStyle.mainFont,
-    color: 'black',
+    color: AppStyle.bodyTextGrey,
   },
   imageContainer: {
-    height: 50,
-    width: 50,
+    height: 53,
+    width: 53,
     marginRight: 10,
   },
   image: {
-    height: 50,
-    width: 50,
+    height: 53,
+    width: 53,
     resizeMode: 'contain',
+    borderColor: '#999999',
+    borderWidth: 0.5,
   },
   arrowContainer: {
     flexDirection: 'row',

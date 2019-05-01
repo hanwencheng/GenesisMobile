@@ -1,16 +1,18 @@
-import React from 'react';
-import { StyleSheet, ListView, View, Text } from 'react-native';
+import { ListView, StyleSheet, Text, View } from 'react-native';
+
+import AppStyle from '../../../commons/AppStyle';
 import PropTypes from 'prop-types';
-import connect from 'react-redux/es/connect/connect';
+import React from 'react';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
-import AppStyle from '../../../commons/AppStyle';
+import connect from 'react-redux/es/connect/connect';
 import { screensList } from '../../../navigation/screensList';
 
 class TransactionsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: screensList.Transactions.title,
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {

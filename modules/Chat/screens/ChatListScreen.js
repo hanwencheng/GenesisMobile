@@ -1,23 +1,25 @@
-import React from 'react';
 import {
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-  RefreshControl,
   Button,
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+
+import { AntDesign } from '@expo/vector-icons';
+import AppStyle from '../../../commons/AppStyle';
+import ChatListNode from '../components/ChatListNode';
+import { Header } from 'react-navigation';
 import PropTypes from 'prop-types';
-import connect from 'react-redux/es/connect/connect';
+import React from 'react';
+import TinodeAPI from '../TinodeAPI';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
-import { AntDesign } from '@expo/vector-icons';
-import { Header } from 'react-navigation';
-import AppStyle from '../../../commons/AppStyle';
-import { screensList } from '../../../navigation/screensList';
-import TinodeAPI from '../TinodeAPI';
-import ChatListNode from '../components/ChatListNode';
+import connect from 'react-redux/es/connect/connect';
 import { loaderAction } from '../../../actions/loaderAction';
+import { screensList } from '../../../navigation/screensList';
 
 class ChatListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -65,6 +67,10 @@ class ChatListScreen extends React.Component {
     });
   };
 
+  renderSeparator = () => {
+    return <View style={styles.separator} />;
+  };
+
   render() {
     const { chatMap, navigation } = this.props;
     const sortedList = _.values(chatMap).sort((a, b) => {
@@ -83,28 +89,26 @@ class ChatListScreen extends React.Component {
           <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
         }>
         <FlatList
+          ItemSeparatorComponent={this.renderSeparator}
           style={styles.listContainer}
           data={sortedList}
           extraData={sortedList}
           keyExtractor={item => item.topic}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={[
-                styles.chatNode,
-                { backgroundColor: item.isSubscribed ? 'white' : AppStyle.mainBackgroundColor},
-              ]}
+              style={styles.chatNode}
               onPress={() =>
                 item.isSubscribed
                   ? navigation.navigate(screensList.Topic.label, {
-                      topicId: item.topic,
-                      title: item.public.fn,
-                    })
+                    topicId: item.topic,
+                    title: item.public.fn,
+                  })
                   : navigation.navigate(screensList.TopicInfo.label, {
-                      title: item.public.fn,
-                      topic: item,
-                      allowEdit: false,
-                      isJoined: false,
-                    })
+                    title: item.public.fn,
+                    topic: item,
+                    allowEdit: false,
+                    isJoined: false,
+                  })
               }>
               <ChatListNode chatNode={item} />
             </TouchableOpacity>
@@ -152,7 +156,12 @@ const styles = StyleSheet.create({
   },
   chatNode: {
     padding: 10,
-    borderBottomWidth: 0.5,
-    borderColor: AppStyle.chatBorder,
+    backgroundColor: 'white',
+  },
+  separator: {
+    height: 0.5,
+    width: '85%',
+    backgroundColor: AppStyle.chatBorder,
+    marginLeft: '15%',
   },
 });
