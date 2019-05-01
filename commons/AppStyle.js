@@ -82,13 +82,13 @@ const AppStyle = {
   userCorrect: '#30D126',
   userIncorrect: '#DF4F52',
   inputPlaceholder: '#A1A1A1',
-  mainBackgroundColor: '#EBEBEB',
+  mainBackgroundColor: '#EFEFF4',
   chatActionBackgroundColor: '#F4F4F6',
   blueIcon: '#10AEFF',
   blueButton: '#2F8DF4',
-  headerBackGroundColor: '#2D2C33',
+  headerBackGroundColor: '#EFEFF4',
 
-  chatBorder: '#DDD',
+  chatBorder: '#D8D8D8',
 
   mainBlue: '#2F8DF4',
   mainIcon: '#323136',
@@ -107,7 +107,7 @@ const AppStyle = {
   fontSizeBodyText: 18,
   fontFamilyBodyText: 'SFProText-Regular',
   fontSizeBodyBold: 18,
-  fontFamilyBodyBold:'SFProText-Bold',
+  fontFamilyBodyBold: 'SFProText-Bold',
   fontSizeExplanation: 13,
   fontFamilyExplanation: 'SFProText-Regular',
 };
@@ -153,11 +153,14 @@ AppStyle.commonHeader = {
   // headerTransparent: true,
   headerTintColor: AppStyle.colorBlack,
   headerStyle: {
-    backgroundColor: AppStyle.mainBackgroundGrey,
-    borderBottomColor: AppStyle.bodyTextGrey,
+    backgroundColor: AppStyle.headerBackGroundColor,
+    borderBottomColor: AppStyle.chatBorder,
     borderBottomWidth: 0.5,
-    borderColor: AppStyle.chatBorder,
   },
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+  headerBackTitle: null,
 }
 
 export default AppStyle;
