@@ -87,7 +87,7 @@ export default connect(
 const t = {
   RULES_INTRO:
     'Rules set governance of a virtual country. All rules changes must go through voting. ',
-  PEOPLE_RULES_TITLE: 'People rules',
+  PEOPLE_RULES_TITLE: 'People Rules',
   SUPPORT_TITLE: 'Voting Support',
   DURATION_TITLE: 'Duration',
   COST_TITLE: 'Cost',
