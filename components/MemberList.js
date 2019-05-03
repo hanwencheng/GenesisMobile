@@ -46,14 +46,14 @@ export default class MemberList extends React.Component {
   }
 
   renderFutureMember() {
-    return (
-      <MemberProfile
-        title={t.FUTURE_MEMBER_NAME}
-        imageSource={Images.futureMember}
-        key={t.FUTURE_MEMBER_NAME}
-        raw={null}
-      />
-    );
+    // return (
+    //   <MemberProfile
+    //     title={t.FUTURE_MEMBER_NAME}
+    //     imageSource={Images.futureMember}
+    //     key={t.FUTURE_MEMBER_NAME}
+    //     raw={null}
+    //   />
+    // );
   }
 
   render() {
