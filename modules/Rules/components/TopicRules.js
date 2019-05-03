@@ -38,16 +38,18 @@ class TopicRules extends React.Component {
         {/*<Text style={styles.introText}>{t.RULES_INTRO}</Text>*/}
         {/*</View>*/}
         {isJoined && <Text style={styles.rulesTitle}>{t.PEOPLE_RULES_TITLE}</Text>}
-        {isJoined && <SingleLineSingleValueDisplay
-          title={voteInfo.rulesDescription}
-          onClick={() => {
-            navigation.navigate(screensList.MemberRules.label, {
-              editEnabled,
-              rulesData: rules,
-            });
-          }}
-        />}
-        <Text style={styles.rulesTitle}>{t.VOTING_RULES_TITLE}</Text>
+        {isJoined && (
+          <SingleLineSingleValueDisplay
+            title={voteInfo.rulesDescription}
+            onClick={() => {
+              navigation.navigate(screensList.MemberRules.label, {
+                editEnabled,
+                rulesData: rules,
+              });
+            }}
+          />
+        )}
+
         <SingleLineDisplay
           title={t.SUPPORT_TITLE}
           value={rules.requiredApproved.toFixed(1) + '%'}
@@ -62,7 +64,8 @@ class TopicRules extends React.Component {
         />
         <SingleLineDisplay
           title={t.COST_TITLE}
-          value={`- ${rules.voteCost} NES`}
+          // value={`- ${rules.voteCost} NES`}
+          value={`- ${rules.voteCost} ETH`}
           onClick={() => conditionalOpen(screensList.AmendCost.label)}
         />
       </Container>
@@ -85,8 +88,7 @@ const t = {
   RULES_INTRO:
     'Rules set governance of a virtual country. All rules changes must go through voting. ',
   PEOPLE_RULES_TITLE: 'People rules',
-  VOTING_RULES_TITLE: 'Voting rules',
-  SUPPORT_TITLE: 'Support',
+  SUPPORT_TITLE: 'Voting Support',
   DURATION_TITLE: 'Duration',
   COST_TITLE: 'Cost',
   NO_EDIT: 'Please edit the proposing or current rules.',
@@ -94,7 +96,8 @@ const t = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: AppStyle.mainBackgroundColor,
+    marginTop: 10,
+    backgroundColor: 'white',
   },
   introContainer: {
     padding: 20,

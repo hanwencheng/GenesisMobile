@@ -23,7 +23,7 @@ import VoteSession from '../modules/Chat/components/VoteSession';
 import TopicRules from '../modules/Rules/components/TopicRules';
 import { topicsAction } from '../modules/Chat/actions/topicsAction';
 import { INIT_VALUE } from '../modules/Vote/reducer/voteReducer';
-import {getBigNumber, getTreasury} from "../utils/ethereumUtils";
+import { getBigNumber, getTreasury } from '../utils/ethereumUtils';
 
 class TopicInnerScreen extends React.Component {
   static propTypes = {
@@ -58,26 +58,26 @@ class TopicInnerScreen extends React.Component {
   componentDidMount() {
     const { initVote, topicId, voteOrigin, userId, updateTopic, walletAddress } = this.props;
     const topic = this.topicData;
-  
+
     initVote(voteOrigin);
-    if(this.isCreatingNewTopic)
-      return
-    
+    if (this.isCreatingNewTopic) return;
+
     TinodeAPI.getDescription(topicId).then(data => {
       updateTopic(topicId, data);
-      const newVote = _.assign({}, voteOrigin,{
+      const newVote = _.assign({}, voteOrigin, {
         countryName: _.get(data, 'public.fn', voteOrigin.countryName),
         countrydesc: _.get(data, 'countrydesc', voteOrigin.countrydesc),
         requiredHour: parseFloat(
           (_.get(data, 'voteduration', voteOrigin.voteduration) / 3600).toFixed(2)
         ),
         requiredApproved: _.get(data, 'votepassrate', voteOrigin.votepassrate),
-      })
-      
-      if(!data.conaddr)
-        return initVote(newVote);
-      
-      getTreasury(data.conaddr).then(data => initVote(_.assign(newVote, {treasury: getBigNumber(data)})));
+      });
+
+      if (!data.conaddr) return initVote(newVote);
+
+      getTreasury(data.conaddr).then(data =>
+        initVote(_.assign(newVote, { treasury: getBigNumber(data) }))
+      );
     });
 
     TinodeAPI.getVoteInfo(topicId, walletAddress, userId)
@@ -87,7 +87,6 @@ class TopicInnerScreen extends React.Component {
       .catch(error => {
         updateTopic(topicId, { vote: null });
       });
-    
   }
 
   onNewVote() {
@@ -285,8 +284,6 @@ class TopicInnerScreen extends React.Component {
       <ScrollView style={styles.container}>
         {isJoined && allowEdit && this.hasVote && <VoteSession />}
         {this.renderIntroOrMemberList()}
-        <Text style={styles.rulesTitle}>{t.META_INFO_TITLE}</Text>
-
         <View style={styles.infoContainer}>
           <SingleLineDisplay
             title={t.GROUP_TOPIC_TITLE}
@@ -328,6 +325,13 @@ class TopicInnerScreen extends React.Component {
         {/*/>*/}
         {/* TODO disable Dapp Store Now <Text style={styles.rulesTitle}>{t.MINI_DAPPS}</Text>*/}
         {/* TODO disable Dapp Store Now <DappsList />*/}
+        <Text style={styles.bottomTip}>
+          {this.isCreatingNewTopic
+            ? t.CREATE_COUNTRY_INTRO
+            : isJoined
+            ? t.VOTE_INTRO
+            : t.JOIN_INTRO}
+        </Text>
         {this.renderButton()}
       </ScrollView>
     );
@@ -362,10 +366,9 @@ export default connect(
 )(withNavigation(TopicInnerScreen));
 
 const t = {
-  VOTE_INTRO:
-    'To star a vote, simply provide new values. All changes must go through voting to take effect.' +
-    ' These changes affect everyone in the country. Amend with caution! ',
-  META_INFO_TITLE: 'Information',
+  // VOTE_INTRO: 'Current cost to start a vote is 500 ENS, paid to cover ETH smart contract fees.',
+  VOTE_INTRO: 'Current cost to start a vote is 500 ETH, paid to cover ETH smart contract fees.',
+  JOIN_INTRO: 'You will be asked to pay membership due immediately when you choose to join.',
   VOTE_RULES_TITLE: 'Rules',
   MINI_DAPPS: 'Dapps',
   GROUP_TOPIC_TITLE: 'Country Name',
@@ -378,11 +381,12 @@ const t = {
   BUTTON_RESET_EDIT: 'Reset the rules',
   BUTTON_LEAVE: 'Delete and leave',
   BUTTON_JOIN: 'Join',
-  BUTTON_CREATE: 'Confirm and create',
+  BUTTON_CREATE: 'Create Country',
 
+  // CREATE_COUNTRY_INTRO:
+  //   'Current cost to start a virtual country is 1000 NES, paid to cover ETH smart contract fees.',
   CREATE_COUNTRY_INTRO:
-    'To create a virtual country, start add your rules and description here, ' +
-    'all the information will be stored in the smart contract',
+    'Current cost to start a virtual country is 1000 ETH, paid to cover ETH smart contract fees.',
   CREATE_NAME_ERROR: 'Please fill a valid country name',
   CREATE_DESCRIPTION_ERROR: 'Please fill a description for your country',
   CREATE_PHOTO_ERROR: 'Please upload a profile photo for the country',
@@ -406,7 +410,12 @@ const styles = StyleSheet.create({
     // fontSize: AppStyle.fontMiddleSmall,
   },
   infoContainer: {
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: 'white',
+  },
+  bottomTip: {
+    padding: 40,
+    marginTop: 20,
+    color: AppStyle.bodyTextGrey,
   },
 });

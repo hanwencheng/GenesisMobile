@@ -28,10 +28,12 @@ class AmendCostScreen extends React.Component {
 }
 
 const t = {
-  UNIT_TEXT: 'NES',
+  // UNIT_TEXT: 'NES',
+  UNIT_TEXT: 'ETH',
   INTRO_TEXT: 'How much does it cost to start a vote? ',
   DESCRIPTION_TEXT:
-    'All the nes paid by whoever start a vote will be distributed averagely to voters. ',
+    // 'All the nes paid by whoever start a vote will be distributed averagely to voters. ',
+    'All the eth paid by whoever start a vote will be distributed averagely to voters. ',
 };
 
 const mapStateToProps = state => ({});

@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    fontFamily: 'OpenSans-SemiBold',
+    fontFamily: AppStyle.fontFamilyBodyBold,
     color: AppStyle.errorColor,
     alignSelf: 'flex-start',
     marginTop: 10,

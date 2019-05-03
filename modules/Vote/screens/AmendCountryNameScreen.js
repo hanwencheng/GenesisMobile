@@ -30,7 +30,7 @@ class AmendCountryNameScreen extends React.Component {
 
 const t = {
   UNIT_TEXT: '',
-  INTRO_TEXT: 'What is the country name? ',
+  INTRO_TEXT: 'What the name of this virtual country?',
   DESCRIPTION_TEXT: '',
 };
 

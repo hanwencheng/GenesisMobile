@@ -76,7 +76,8 @@ class TopicRulesScreen extends React.Component {
         />
         <SingleLineDisplay
           title={t.COST_TITLE}
-          value={`- ${rules.voteCost} NES`}
+          // value={`- ${rules.voteCost} NES`}
+          value={`- ${rules.voteCost} ETH`}
           onClick={() => this.conditionalOpen(screensList.AmendCost.label)}
         />
       </Container>

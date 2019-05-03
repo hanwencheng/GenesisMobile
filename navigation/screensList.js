@@ -35,7 +35,7 @@ export const screensList = {
   AmendCost: { label: 'AmendCost', title: 'Amend Cost' },
   AmendMemberRules: { label: 'AmendMemberRules', title: 'Amend Member Rule' },
   AmendCountryName: { label: 'AmendCountryName', title: 'Amend Country Name' },
-  AmendDescription: { label: 'AmendDescription', title: 'Amend Description' },
+  AmendDescription: { label: 'AmendDescription', title: 'Description' },
   VoteInfo: { label: 'VoteInfo', title: 'Participate a vote' },
   UploadUserProfile: { label: 'UploadUserProfile', title: 'Upload your profile' },
   UploadCountryProfile: { label: 'UploadCountryProfile', title: 'Upload country profile' },

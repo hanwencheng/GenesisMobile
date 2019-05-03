@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     flexDirection: 'row',
-    marginTop: 30,
     backgroundColor: 'white',
     alignItems: 'center',
   },

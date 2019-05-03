@@ -25,10 +25,11 @@ class MemberRulesScreen extends React.Component {
       <HeaderButton
         title={screensList.RulesInfo.title}
         onPress={() => navigation.navigate(screensList.RulesInfo.label)}
-        color={'white'}
+        color={AppStyle.mainBlackColor}
       />
     ),
     headerBackTitle: '',
+    ...AppStyle.commonHeader,
   });
 
   static propTypes = {
@@ -68,10 +69,10 @@ class MemberRulesScreen extends React.Component {
     const { navigation, userId, walletAddress, showPopup } = this.props;
 
     const editEnabled = navigation.getParam('editEnabled', false);
-    const userProfile = _.find(this.topicData.subs, {user: memberId})
-    if(_.isEmpty(userProfile) || userProfile.acs.mode === 255)
+    const userProfile = _.find(this.topicData.subs, { user: memberId });
+    if (_.isEmpty(userProfile) || userProfile.acs.mode === 255)
       return showPopup(t.KICK_OWNER_ERROR);
-    
+
     if (editEnabled) {
       const valueText = Number.parseFloat(
         contractInfo.kickOutDefaultValue / contractInfo.ethBaseValue
@@ -138,10 +139,10 @@ class MemberRulesScreen extends React.Component {
           <Text style={styles.rulesTitleText}>{voteInfo.rulesDescription}</Text>
         </View>
         {/*<SingleProfile*/}
-          {/*imageSource={Images.blankProfile}*/}
-          {/*info={this.renderRulesValue()}*/}
-          {/*name={t.FUTURE_CITIZEN}*/}
-          {/*onPress={() => this.conditionalOpen('default')}*/}
+        {/*imageSource={Images.blankProfile}*/}
+        {/*info={this.renderRulesValue()}*/}
+        {/*name={t.FUTURE_CITIZEN}*/}
+        {/*onPress={() => this.conditionalOpen('default')}*/}
         {/*/>*/}
 
         <FlatList
