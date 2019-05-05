@@ -17,6 +17,7 @@ class AmendInput extends React.Component {
     voteCached: PropTypes.object.isRequired,
     setVote: PropTypes.func.isRequired,
     isNumber: PropTypes.bool.isRequired,
+    multiline: PropTypes.bool,
     defaultValueString: PropTypes.string,
     defaultValueNumber: PropTypes.number,
     reader: PropTypes.func,
@@ -30,6 +31,7 @@ class AmendInput extends React.Component {
     placeholder: '',
     intro: '',
     description: '',
+    multiline: false,
     reader: _.identity,
     writer: _.identity,
   };
@@ -55,6 +57,7 @@ class AmendInput extends React.Component {
       propertyPath,
       isNumber,
       voteCached,
+      multiline,
       reader,
       writer,
     } = this.props;
@@ -70,6 +73,7 @@ class AmendInput extends React.Component {
           <View style={styles.mainInput}>
             <TextInput
               style={styles.input}
+              multiline={multiline}
               onChangeText={v => {
                 const formattedValue = isNumber ? numberWriter(v) : writer(v);
                 setVote(_.set({}, propertyPath, formattedValue));
@@ -77,7 +81,6 @@ class AmendInput extends React.Component {
               value={isNumber ? numberReader(value) : reader(value)}
               placeholder={placeholder}
             />
-            <Text style={styles.unitText}>{unit}</Text>
           </View>
         </View>
         <Text style={styles.description}>{description}</Text>
@@ -111,6 +114,7 @@ const styles = StyleSheet.create({
   intro: {
     paddingVertical: 50,
     paddingHorizontal: 30,
+    marginTop: 50,
     color: 'black',
     fontSize: AppStyle.fontMiddle,
     fontFamily: AppStyle.mainFont,
@@ -127,26 +131,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mainInput: {
-    borderBottomWidth: 2,
-    borderBottomColor: 'red',
-    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    width: '50%',
-    marginVertical: 80,
+    width: '80%',
     paddingVertical: 20,
   },
   input: {
-    flex: 2,
-    color: 'black',
-    textAlign: 'center',
-    fontFamily: AppStyle.mainFont,
-    fontSize: AppStyle.fontMiddle,
-  },
-  unitText: {
     flex: 1,
-    textAlign: 'right',
-    color: 'red',
+    color: 'black',
+    textAlign: 'left',
     fontFamily: AppStyle.mainFont,
     fontSize: AppStyle.fontMiddle,
   },

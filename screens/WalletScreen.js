@@ -95,6 +95,8 @@ class WalletScreen extends React.Component {
             <Text style={styles.balanceText}>Balance</Text>
             {/*<Text style={styles.amountText}>NES: {this.renderBalance(nes)}</Text>*/}
              <Text style={styles.amountText}>ETH: {this.renderBalance(eth)}</Text>
+            {/* <Text style={styles.amountText}>NES: {this.renderBalance(nes)}</Text> */}
+            <Text style={styles.amountText}>ETH: {this.renderBalance(eth)}</Text>
           </View>
         </View>
         <View style={styles.actionsContainer}>

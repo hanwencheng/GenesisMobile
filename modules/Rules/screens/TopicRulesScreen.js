@@ -76,7 +76,8 @@ class TopicRulesScreen extends React.Component {
         />
         <SingleLineDisplay
           title={t.COST_TITLE}
-          value={`- ${rules.voteCost} NES`}
+          // value={`- ${rules.voteCost} NES`}
+          value={`- ${rules.voteCost} ETH`}
           onClick={() => this.conditionalOpen(screensList.AmendCost.label)}
         />
       </Container>
@@ -98,8 +99,8 @@ export default connect(
 const t = {
   RULES_INTRO:
     'Rules set governance of a virtual country. All rules changes must go through voting. ',
-  PEOPLE_RULES_TITLE: 'People rules',
-  VOTING_RULES_TITLE: 'Voting rules',
+  PEOPLE_RULES_TITLE: 'People Rules',
+  VOTING_RULES_TITLE: 'Voting Rules',
   SUPPORT_TITLE: 'Support',
   DURATION_TITLE: 'Duration',
   COST_TITLE: 'Cost',

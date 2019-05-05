@@ -25,13 +25,16 @@ class MessageNode extends React.Component {
       flexDirection: isUser ? 'row-reverse' : 'row',
     };
     const backGroundColor = {
-      backgroundColor: isUser ? AppStyle.userCancelGreen : 'white',
+      backgroundColor: isUser ? AppStyle.conversationBackgroundColor : 'white',
     };
     const imageMargin = {
       [isUser ? 'marginLeft' : 'marginRight']: 10,
     };
     const titleAlign = {
       textAlign: isUser ? 'right' : 'left',
+    };
+    const imageBorder = {
+      borderRadius: isUser ? 0 : 5,
     };
     const arrowStyle = isUser ? styles.rightTriangle : styles.leftTriangle;
     const messageContent =
@@ -40,7 +43,7 @@ class MessageNode extends React.Component {
     return (
       <View style={[styles.container, containerFlexDirection]}>
         <View style={[styles.imageContainer, imageMargin]}>
-          <Image style={styles.image} source={imageSource} />
+          <Image style={[styles.image, imageBorder]} source={imageSource} />
         </View>
         <View style={styles.textContainer}>
           <Text style={[styles.title, titleAlign]}>{senderName}</Text>
@@ -70,14 +73,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   imageContainer: {
-    height: 30,
-    width: 30,
+    height: 50,
+    width: 50,
     marginTop: 10,
     position: 'relative',
   },
   image: {
-    height: 30,
-    width: 30,
+    height: 50,
+    width: 50,
     resizeMode: 'contain',
   },
   textContainer: {
@@ -92,10 +95,10 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   text: {
-    fontSize: AppStyle.fontSmall,
+    fontSize: AppStyle.fontMiddleSmall,
     fontFamily: AppStyle.mainFont,
     color: 'black',
-    paddingVertical: 5,
+    paddingVertical: 8,
     paddingHorizontal: 8,
     borderRadius: 10,
     overflow: 'hidden',
@@ -119,6 +122,6 @@ const styles = StyleSheet.create({
   rightTriangle: {
     right: -5,
     borderLeftWidth: 5,
-    borderLeftColor: AppStyle.userCancelGreen,
+    borderLeftColor: AppStyle.conversationBackgroundColor,
   },
 });

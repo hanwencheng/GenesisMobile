@@ -84,7 +84,8 @@ const t = {
     ['The amount an user pays to join the virtual country.'],
     ['The amount an user pays to quit the virtual country.'],
     [
-      'Tax are collected by National Treasury for purchasing dapps and paying universal taxes. Unit (NES/Day) ',
+      // 'Tax are collected by National Treasury for purchasing dapps and paying universal taxes. Unit (NES/Day) ',
+      'Tax are collected by National Treasury for purchasing dapps and paying universal taxes. Unit (ETH/Day) ',
     ],
     ['Number of ballots a user has in any voting'],
     ['1 - normal', '0 - to be kicked out from the virtual country'],

@@ -20,6 +20,7 @@ class AmendDescriptionScreen extends React.Component {
           propertyPath={groupMetaRules.DESCRIPTION}
           unit={t.UNIT_TEXT}
           intro={t.INTRO_TEXT}
+          multiline
           description={t.DESCRIPTION_TEXT}
           isNumber={false}
         />
@@ -30,7 +31,7 @@ class AmendDescriptionScreen extends React.Component {
 
 const t = {
   UNIT_TEXT: '',
-  INTRO_TEXT: 'What is the slogan of the country? ',
+  INTRO_TEXT: 'What is the virtual country about? ',
   DESCRIPTION_TEXT: '',
 };
 
