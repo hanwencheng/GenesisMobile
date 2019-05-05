@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 
 const t = {
   LOGIN_TITLE: 'Login',
-  USERNAME_PLACEHOLDER: 'Name',
+  USERNAME_PLACEHOLDER: 'Email',
   PASSWORD_PLACEHOLDER: 'Password',
   FORGET_TEXT: 'Forget password?',
   BUTTON_TEXT: 'Log in',

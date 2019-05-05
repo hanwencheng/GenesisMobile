@@ -17,6 +17,7 @@ import { getPrivateKeyAsync } from '../utils/secureStoreUtils';
 import HeaderButton from '../components/HeaderButton';
 import { alertNormal } from '../utils/alertUtils';
 import { ethereumConfig } from '../config';
+import WalletCreateInnerScreen from "../modules/WalletImport/innerScreens/WalletCreateInnerScreen";
 
 class WalletScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -44,6 +45,7 @@ class WalletScreen extends React.Component {
     updateNes: PropTypes.func.isRequired,
     updateEth: PropTypes.func.isRequired,
     isLoaded: PropTypes.bool.isRequired,
+    bindWallet: PropTypes.string,
     nes: PropTypes.number,
     eth: PropTypes.number,
   };
@@ -78,9 +80,14 @@ class WalletScreen extends React.Component {
   renderBalance = balance => (_.isNull(balance) ? '0' : balance.toString());
 
   render() {
-    const { walletAddress, nes, eth, navigation, isLoaded } = this.props;
+    const { walletAddress, nes, eth, navigation, isLoaded, bindWallet } = this.props;
     if (!isLoaded) return null;
-    if (_.isEmpty(walletAddress)) return <NewWalletInnerScreen />;
+    if (_.isEmpty(walletAddress)){
+      if(_.isEmpty(bindWallet))
+        return <WalletCreateInnerScreen/>
+      
+      return <NewWalletInnerScreen />;
+    }
     return (
       <ScrollView
         style={styles.container}
@@ -143,6 +150,7 @@ const t = {
 
 const mapStateToProps = state => ({
   walletAddress: state.appState.walletAddress,
+  bindWallet: state.chat.userInfo.bindWallet,
   nes: state.wallet.nes,
   eth: state.wallet.eth,
   isLoaded: state.appState.isLoaded,

@@ -9,6 +9,7 @@ export const chatActionType = {
   SUBSCRIBE_CHAT: 'CHAT_SUBSCRIBE_CHAT',
   UNSUBSCRIBE_CHAT: 'CHAT_UNSUBSCRIBE_CHAT',
   CLEAR_CHAT_MAP: 'CHAT_CLEAR_CHAT_MAP',
+  BIND_WALLET: 'CHAT_BIND_WALLET',
 };
 
 export const chatAction = {
@@ -24,5 +25,6 @@ export const chatAction = {
   }),
   subscribeChat: chatId => ({ type: chatActionType.SUBSCRIBE_CHAT, chatId }),
   unsubscribeChat: chatId => ({ type: chatActionType.UNSUBSCRIBE_CHAT, chatId }),
-  clearChat: () => ({type: chatActionType.CLEAR_CHAT_MAP})
+  clearChat: () => ({type: chatActionType.CLEAR_CHAT_MAP}),
+  bindWallet: walletAddress => ({type: chatActionType.BIND_WALLET, walletAddress})
 };

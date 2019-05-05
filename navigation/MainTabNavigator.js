@@ -47,7 +47,6 @@ import UploadCountryProfileScreen from '../modules/CreateTopic/screens/UploadCou
 import UploadUserProfileScreen from '../modules/User/screens/UploadUserProfileScreen';
 import VerifyCredentialScreen from '../modules/User/screens/VerifyCredentialScreen';
 import VoteInfoScreen from '../modules/Vote/screens/VoteInfoScreen';
-import WalletCreateScreen from '../modules/WalletImport/screens/WalletCreateScreen';
 import WalletImportScreen from '../modules/WalletImport/screens/WalletImportScreen';
 import WalletScreen from '../screens/WalletScreen';
 import { screensList } from './screensList';
@@ -133,7 +132,6 @@ const UserStack = createStackNavigator(
     AccountSetting: AccountSettingScreen,
     UploadUserProfile: UploadUserProfileScreen,
     WalletImport: WalletImportScreen,
-    WalletCreate: WalletCreateScreen,
     ImportViaPrivate: ImportViaPrivateScreen,
     ImportViaMnemonic: ImportViaMnemonicScreen,
     ScanQRCode: ScanQRCodeScreen,
