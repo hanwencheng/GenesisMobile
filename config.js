@@ -1,6 +1,6 @@
 export const environment = {
   disableQRScan: false,
-  disableVoteDuration: true,
+  disableVoteDuration: false,
   mockDurationSecond: 120,
 };
 
@@ -30,9 +30,9 @@ export const contractProps = [
 
 export const aboutInfo = {
   appName: 'Genesis Space Mobile',
-  date: '2019-02-10',
+  date: '2019-05-01',
   designer: ['历', 'Alex'],
-  developer: ['heawen110', '傻米', 'handez', 'lambdari', 'moehringen', 'cuiny', 'ranger-woo'],
+  developer: ['heawen110', '傻米', 'lambdari', 'handez',  'moehringen', 'cuiny', 'ranger-woo', 'lin', ],
   contact: ['Thegenesisspace@gmail.com'],
   todo: 'Coming soon',
 };

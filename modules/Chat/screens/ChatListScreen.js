@@ -96,19 +96,22 @@ class ChatListScreen extends React.Component {
           keyExtractor={item => item.topic}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={styles.chatNode}
+              style={[
+                styles.chatNode,
+                { backgroundColor: item.isSubscribed ? 'white' : AppStyle.mainBackgroundColor },
+              ]}
               onPress={() =>
                 item.isSubscribed
                   ? navigation.navigate(screensList.Topic.label, {
-                    topicId: item.topic,
-                    title: item.public.fn,
-                  })
+                      topicId: item.topic,
+                      title: item.public.fn,
+                    })
                   : navigation.navigate(screensList.TopicInfo.label, {
-                    title: item.public.fn,
-                    topic: item,
-                    allowEdit: false,
-                    isJoined: false,
-                  })
+                      title: item.public.fn,
+                      topic: item,
+                      allowEdit: false,
+                      isJoined: false,
+                    })
               }>
               <ChatListNode chatNode={item} />
             </TouchableOpacity>
