@@ -48,6 +48,21 @@ IOS和安卓有些地方有点不同，这里有写。如何在react native里�
 https://facebook.github.io/react-native/docs/platform-specific-code
 
 
+### 如何部署
+ 
+##### Build
+
+具体参阅 [Expo Document](https://docs.expo.io/versions/latest/distribution/building-standalone-apps/)
+
+
+##### Deploy
+具体参阅 [Expo Document](https://docs.expo.io/versions/latest/distribution/uploading-apps/)
+
+简单介绍：
+* 先在本地BUILD一个版本 `expo build:ios`
+* 然后通过 Application Loader 上传IPA文件
+
+
 
 
 
