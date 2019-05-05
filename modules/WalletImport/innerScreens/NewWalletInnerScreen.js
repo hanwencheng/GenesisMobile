@@ -13,18 +13,7 @@ import {connect} from "react-redux";
 class NewWalletInnerScreen extends Component {
   static propTypes = {
     navigation: PropTypes.object,
-    bindWallet: PropTypes.string.isRequired,
   };
-
-  static navigationOptions = {
-    title: screensList.WalletCreate.title,
-    headerBackTitle: null,
-  };
-  
-  get isFirstBinding () {
-    const { bindWallet } = this.props;
-    return _.isEmpty(bindWallet)
-  }
 
   goBack = () => {
     this.props.navigation.goBack();
@@ -34,19 +23,10 @@ class NewWalletInnerScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        {this.isFirstBinding && <SmallCard
-          style={styles.card}
-          title={t.createTitle}
-          subtitle={t.createSubtitle}
-          imageCard={Images.imgCardCreate}
-          onPress={() => navigate(screensList.WalletCreate.label)}
-          subtitleTextStyle={styles.subtitle}
-        />}
-
         <SmallCard
           style={styles.card}
-          title={this.isFirstBinding ? t.importTitle : t.recoverTitle}
-          subtitle={this.isFirstBinding ? t.importSubtitle : t.recoverSubtitle}
+          title={ t.recoverTitle}
+          subtitle={t.recoverSubtitle}
           imageCard={Images.imgCardImport}
           onPress={() => navigate(screensList.WalletImport.label)}
           subtitleTextStyle={styles.subtitle}
@@ -56,9 +36,7 @@ class NewWalletInnerScreen extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  bindWallet: state.chat.userInfo.bindWallet,
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = _.curry(bindActionCreators)({});
 

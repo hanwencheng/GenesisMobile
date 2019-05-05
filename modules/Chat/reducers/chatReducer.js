@@ -33,7 +33,7 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
       if (currentSeq < oldSeq) {
         return state;
       } else {
-        action.data.isSubscribed = ( currentSeq > -2 );
+        action.data.isSubscribed = currentSeq > -2;
         return {
           ...state,
           chatMap: set(topicId, action.data, state.chatMap),
@@ -84,7 +84,14 @@ export const chatReducer = (state = INITIAL_STATE, action) => {
     case chatActionType.CLEAR_CHAT_MAP:
       return {
         ...INITIAL_STATE,
+      };
+    case chatActionType.BIND_WALLET: {
+      const newUserInfo = _.merge({}, state.userInfo, { bindAddress: action.walletAddress });
+      return {
+        ...state,
+        userInfo:  newUserInfo,
       }
+    }
     default:
       return state;
   }

@@ -1,7 +1,6 @@
 export const screensList = {
   Home: { label: 'Home', title: 'Space' },
   Wallet: { label: 'Wallet', title: 'Wallet' },
-  WalletCreate: { label: 'WalletCreate', title: 'Create Wallet' },
   WalletImport: { label: 'WalletImport', title: 'Import Wallet' },
   ImportViaPrivate: { label: 'ImportViaPrivate', title: 'Import Wallet via PrivateKey' },
   ImportViaMnemonic: { label: 'ImportViaMnemonic', title: 'Import Wallet via Mnemonic Phrase' },
