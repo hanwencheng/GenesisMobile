@@ -26,6 +26,7 @@ class PopupModal extends React.Component {
           <View style={styles.overlay}>
             <View style={styles.innerContainer}>
               <View style={styles.contentContainer}>
+              <Text style={styles.contentTitle}>{t.TITLE_NOTICE}</Text>
                 <Text style={styles.contentText}>{content}</Text>
               </View>
               <TouchableHighlight
@@ -50,32 +51,36 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.75)',
+    backgroundColor: 'rgba(0,0,0,0.85)',
   },
   innerContainer: {
-    width: '60%',
-    height: 150,
+    width: '65%',
+    height: 158,
     alignItems: 'stretch',
   },
   contentContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 46,
     flex: 2,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  contentTitle: {
+    ...AppStyle.fontBodyBold,
+    paddingBottom: 9,
+  },
   contentText: {
-    color: AppStyle.lightGrey,
-    fontSize: AppStyle.fontMiddleSmall,
-    fontFamily: AppStyle.mainFont,
+    color: AppStyle.popupTextGrey,
+    fontSize: AppStyle.fontSizeExplanation,
+    fontFamily: AppStyle.fontFamilyExplanation,
   },
   buttonContainer: {
     flex: 1,
-    backgroundColor: AppStyle.userCancelGreen,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    backgroundColor: AppStyle.mainBlue,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -88,6 +93,7 @@ const styles = StyleSheet.create({
 
 const t = {
   BUTTON_OK: 'OK',
+  TITLE_NOTICE: 'Notice',
 };
 
 const mapStateToProps = state => ({

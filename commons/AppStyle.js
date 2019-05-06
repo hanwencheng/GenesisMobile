@@ -97,6 +97,7 @@ const AppStyle = {
   conversationBackgroundColor: '#DFE9F5',
   mainBackgroundGrey: '#EAEAEA',
   mainBlackColor: '#000000',
+  popupTextGrey: '#696969',
 
   fontSizeLargeTitle: 33,
   fontFamilyLargeTitle: 'Impact',
