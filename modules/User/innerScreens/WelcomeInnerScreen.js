@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import _ from 'lodash';
@@ -22,22 +22,17 @@ class WelcomeInnerScreen extends React.Component {
         <Text style={styles.intro} key="intro">
           {t.INTRO}
         </Text>
-        <View style={styles.nameContainer}>
-          <View style={styles.nameBorder}>
-            <Text style={styles.name} key="name">
-              {t.NAME}
-            </Text>
-          </View>
-        </View>
         <View style={styles.buttonContainer}>
           <GenesisButton
             action={() => navigation.navigate(screensList.CreateAccount.label)}
             text={t.BUTTON_TEXT}
           />
-          <GenesisButton
-            action={() => navigation.navigate(screensList.Login.label)}
-            text={t.LOGIN_TEXT}
-          />
+        </View>
+        <View style={styles.loginContainer}>
+          <Text style={styles.loginTip}>{t.LOGIN_TIP}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate(screensList.Login.label)}>
+            <Text style={styles.loginText}>{t.LOGIN_TEXT}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -65,39 +60,33 @@ const styles = StyleSheet.create({
   },
   intro: {
     padding: 50,
-    textAlign: 'center',
+    marginTop: 50,
     flex: 2,
-    color: AppStyle.coverTextBlack,
-    fontSize: AppStyle.fontMiddleBig,
-    fontFamily: AppStyle.coverFont,
-  },
-  nameContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  nameBorder: {
-    margin: 30,
-    borderBottomWidth: 2,
-    borderBottomColor: AppStyle.lightGrey,
-  },
-  name: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    textAlign: 'center',
-    fontFamily: AppStyle.coverFont,
-    color: AppStyle.coverTextBlack,
-    fontSize: AppStyle.fontMiddleBig,
+    color: AppStyle.mainBlackColor,
+    fontSize: AppStyle.fontLarge,
+    fontFamily: AppStyle.mainFontBold,
   },
   buttonContainer: {
     flex: 1,
   },
+  loginContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 50,
+  },
+  loginTip: {
+    fontSize: AppStyle.fontMiddle,
+    color: AppStyle.grayColor,
+  },
+  loginText: {
+    fontSize: AppStyle.fontMiddle,
+    color: AppStyle.mainBlue,
+  },
 });
 
 const t = {
-  INTRO:
-    'We are creating a world where anyone, anywhere may express his or her beliefs, no matter how singular, without fear of being coerced into silence or conformity.',
-  NAME: 'John Perry Barlow',
-  BUTTON_TEXT: 'Get Started',
+  INTRO: 'Welcome to \nGenesis Space',
+  LOGIN_TIP: 'Have an account already? ',
+  BUTTON_TEXT: 'Create account',
   LOGIN_TEXT: 'Log in',
 };

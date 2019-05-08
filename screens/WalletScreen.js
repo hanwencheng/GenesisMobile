@@ -101,7 +101,6 @@ class WalletScreen extends React.Component {
           <View style={styles.textContainer}>
             <Text style={styles.balanceText}>Balance</Text>
             {/*<Text style={styles.amountText}>NES: {this.renderBalance(nes)}</Text>*/}
-             <Text style={styles.amountText}>ETH: {this.renderBalance(eth)}</Text>
             {/* <Text style={styles.amountText}>NES: {this.renderBalance(nes)}</Text> */}
             <Text style={styles.amountText}>ETH: {this.renderBalance(eth)}</Text>
           </View>
@@ -116,7 +115,7 @@ class WalletScreen extends React.Component {
             style={styles.copyButton}
             text={t.COPY_ADDRESS_TEXT}
           />
-          <GenesisButton
+          {/* <GenesisButton
             action={() =>
               lockScreen(navigation)
                 .then(() => new Promise(getPrivateKeyAsync))
@@ -129,7 +128,7 @@ class WalletScreen extends React.Component {
             }
             style={styles.copyButton}
             text={t.SHOW_PRIVATE}
-          />
+          /> */}
           {/*<GenesisButton*/}
           {/*action={()=> {}}*/}
           {/*text={'Receive'}*/}

@@ -61,7 +61,7 @@ class AmendInput extends React.Component {
       reader,
       writer,
     } = this.props;
-    const numberWriter = v => (isNaN(v) || v === '' ? 0 : Number(Number.parseFloat(v).toFixed(1)));
+    const numberWriter = v => (isNaN(v) || v === '' ? 0 : Number(Number.parseFloat(v).toFixed(2)));
     const numberReader = v => v.toString();
     const defaultValue = _.get(this.topicData, propertyPath);
     const value = _.get(voteCached, propertyPath, defaultValue);

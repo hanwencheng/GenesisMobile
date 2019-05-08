@@ -22,7 +22,7 @@ export const screensList = {
   Topic: { label: 'Topic', title: 'Topic' },
   TopicInfo: { label: 'TopicInfo', title: 'Topic Info' },
   Members: { label: 'Members', title: 'All members' },
-  MemberInfo: { label: 'MemberInfo', title: 'Member Info' },
+  MemberInfo: { label: 'MemberInfo', title: 'Member Status' },
   RulesDescription: { label: 'RulesDescription', title: 'RulesDescription' },
   Treasure: { label: 'Treasure', title: 'Treasure' },
   TopicRules: { label: 'TopicRules', title: 'Rules' },

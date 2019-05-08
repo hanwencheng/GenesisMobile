@@ -37,7 +37,7 @@ class TopicRules extends React.Component {
         {/*/>*/}
         {/*<Text style={styles.introText}>{t.RULES_INTRO}</Text>*/}
         {/*</View>*/}
-        {isJoined && <Text style={styles.rulesTitle}>{t.PEOPLE_RULES_TITLE}</Text>}
+        {/* {isJoined && <Text style={styles.rulesTitle}>{t.PEOPLE_RULES_TITLE}</Text>}
         {isJoined && (
           <SingleLineSingleValueDisplay
             title={voteInfo.rulesDescription}
@@ -48,7 +48,7 @@ class TopicRules extends React.Component {
               });
             }}
           />
-        )}
+        )} */}
 
         <SingleLineDisplay
           title={t.SUPPORT_TITLE}
@@ -89,7 +89,7 @@ const t = {
     'Rules set governance of a virtual country. All rules changes must go through voting. ',
   PEOPLE_RULES_TITLE: 'People Rules',
   SUPPORT_TITLE: 'Voting Support',
-  DURATION_TITLE: 'Duration',
+  DURATION_TITLE: 'Membership Due',
   COST_TITLE: 'Cost',
   NO_EDIT: 'Please edit the proposing or current rules.',
 };

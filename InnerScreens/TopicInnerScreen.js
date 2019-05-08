@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Alert, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import _ from 'lodash';
@@ -24,6 +24,8 @@ import TopicRules from '../modules/Rules/components/TopicRules';
 import { topicsAction } from '../modules/Chat/actions/topicsAction';
 import { INIT_VALUE } from '../modules/Vote/reducer/voteReducer';
 import { getBigNumber, getTreasury } from '../utils/ethereumUtils';
+
+const { height, width } = Dimensions.get('window');
 
 class TopicInnerScreen extends React.Component {
   static propTypes = {
@@ -218,7 +220,6 @@ class TopicInnerScreen extends React.Component {
         <GenesisButton
           action={() => this.onLeave()}
           text={t.BUTTON_LEAVE}
-          variant={variantList.CANCEL}
         />
       );
     if (this.isBlockedUser)
@@ -279,6 +280,24 @@ class TopicInnerScreen extends React.Component {
 
     const topicTitle = voteCached.countryName;
     const topicDescription = voteCached.countrydesc;
+    let topicDescriptionLine;
+    if (topicDescription === '') {
+      topicDescriptionLine = (
+        <SingleLineDisplay
+          title={t.TOPIC_DESCRIPTION_TITLE}
+          value={t.NOT_SET}
+          onClick={() => this.conditionalOpen(screensList.AmendDescription.label)}
+        />
+      );
+    } else {
+      topicDescriptionLine = (
+        <SingleSectionDisplay
+          title={t.TOPIC_DESCRIPTION_TITLE}
+          value={topicDescription}
+          onClick={() => this.conditionalOpen(screensList.AmendDescription.label)}
+        />
+      );
+    }
 
     return (
       <ScrollView style={styles.container}>
@@ -287,18 +306,19 @@ class TopicInnerScreen extends React.Component {
         <View style={styles.infoContainer}>
           <SingleLineDisplay
             title={t.GROUP_TOPIC_TITLE}
-            value={topicTitle}
+            value={topicTitle || t.NOT_SET}
             onClick={
               this.isCreatingNewTopic
                 ? () => this.conditionalOpen(screensList.AmendCountryName.label)
                 : null
             }
           />
-          <SingleSectionDisplay
+          {/* <SingleSectionDisplay
             title={t.TOPIC_DESCRIPTION_TITLE}
             value={topicDescription}
             onClick={() => this.conditionalOpen(screensList.AmendDescription.label)}
-          />
+          /> */}
+          {topicDescriptionLine}
           {isJoined && (
             <SingleLineDisplay
               title={t.TOPIC_META_TITLE}
@@ -393,6 +413,7 @@ const t = {
 
   NO_WALLET: 'please set wallet first',
   SEND_TRANSACTION: 'Transaction sending to the blockchain network',
+  NOT_SET: 'Not Set',
 };
 
 const styles = StyleSheet.create({
@@ -414,8 +435,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   bottomTip: {
-    padding: 40,
-    marginTop: 20,
+    marginVertical: width * 0.025,
+    marginHorizontal: width * 0.15,
+    marginTop: 80,
     color: AppStyle.bodyTextGrey,
   },
 });

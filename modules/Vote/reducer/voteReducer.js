@@ -4,7 +4,7 @@ import { voteActionType } from '../voteAction';
 export const INIT_VALUE = {
   origin: {
     // Information extracted from topic
-    countryName: 'New Country',
+    countryName: '',
     countrydesc: '',
     profile: {},
 

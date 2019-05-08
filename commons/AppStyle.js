@@ -73,6 +73,7 @@ const AppStyle = {
   fontMiddle: 18,
   fontMiddleBig: 22,
   fontBig: 26,
+  fontLarge: 33,
 
   userHeaderBackgroundColor: 'white',
   voteHeaderBackgroundColor: 'black',
@@ -141,14 +142,13 @@ AppStyle.fontBodyBold = {
   fontSize: AppStyle.fontSizeBodyBold,
   fontFamily: AppStyle.fontFamilyBodyBold,
   color: AppStyle.mainBlackColor,
-
-}
+};
 
 AppStyle.fontExplanation = {
   fontSize: AppStyle.fontSizeExplanation,
   fontFamily: AppStyle.fontFamilyExplanation,
   color: AppStyle.bodyTextGrey,
-}
+};
 
 AppStyle.commonHeader = {
   // headerTransparent: true,
@@ -162,6 +162,6 @@ AppStyle.commonHeader = {
     fontWeight: 'bold',
   },
   headerBackTitle: null,
-}
+};
 
 export default AppStyle;

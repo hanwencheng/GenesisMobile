@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'row',
+    paddingRight: 8,
   },
   imageContainer: {
     height: 50,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: AppStyle.lightGrey,
-    fontSize: AppStyle.fontSmall,
+    fontSize: AppStyle.fontMiddleSmall,
     fontFamily: AppStyle.mainFont,
     flex: 1,
   },

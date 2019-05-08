@@ -56,7 +56,11 @@ const iconPropTypes = { focused: PropTypes.bool };
 const checkIsVisible = navigation => {
   let tabBarVisible = true;
   const currentRouter = _.last(navigation.state.routes).routeName;
-  if (navigation.state.index > 0 || currentRouter === screensList.Login.label) {
+  if (
+    navigation.state.index > 0 ||
+    currentRouter === screensList.Login.label ||
+    currentRouter === screensList.Start.label
+  ) {
     tabBarVisible = false;
   }
   return tabBarVisible;
@@ -72,6 +76,7 @@ HomeStackIcon.propTypes = iconPropTypes;
 
 const HomeStack = createStackNavigator(
   {
+    Start: StartScreen,
     Login: LoginScreen,
     // Start: StartScreen,
     SetPassword: SetPasswordScreen,

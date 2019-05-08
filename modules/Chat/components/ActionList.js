@@ -29,7 +29,7 @@ class ActionList extends React.Component {
     const { navigation, topic, walletAddress, showPopup, userId } = this.props;
     const dappList = [
       {
-        name: 'vote',
+        name: 'Vote',
         imageSource: Images.vote,
         action: () => navigation.navigate(screensList.VoteInfo.label),
       },
@@ -42,7 +42,7 @@ class ActionList extends React.Component {
       //   },
       // },
       {
-        name: 'sendTransaction',
+        name: 'Send',
         imageSource: Images.appStore,
         action: () => {
           TinodeAPI.sendTransaction(topic.topic, {
