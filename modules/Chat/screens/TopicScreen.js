@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   sendButton: {
     margin: 14,
     borderRadius: 5,
-    backgroundColor: AppStyle.userCancelGreen,
+    backgroundColor: AppStyle.mainBlue,
     justifyContent: 'center',
     alignItems: 'center',
   },
