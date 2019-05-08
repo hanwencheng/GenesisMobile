@@ -12,7 +12,8 @@ import HeaderButton from '../../../components/HeaderButton';
 import Container from '../../../components/Container';
 
 const mock = {
-  rule: [-150, -150, -10, 1, 1],
+  // rule: [-150, -150, -10, 1, 1],
+  rule: [1],
 };
 
 class MemberInfoScreen extends React.Component {
@@ -51,9 +52,10 @@ class MemberInfoScreen extends React.Component {
           </View>
         </View>
         <View style={styles.ruleInfoContainer}>
-          <Text style={styles.ruleTitleText}>{voteInfo.rulesDescription}</Text>
+          {/* <Text style={styles.ruleTitleText}>{voteInfo.rulesDescription}</Text> */}
           <Text style={styles.ruleValueText}>{mock.rule.join('/').toString()}</Text>
         </View>
+        <Text style={styles.ruleExplanation}>{'1 - normal; 0 - disabled'}</Text>
       </Container>
     );
   }
@@ -110,8 +112,8 @@ const styles = StyleSheet.create({
   ruleInfoContainer: {
     marginTop: 20,
     backgroundColor: 'white',
-    alignItems: 'center',
-    paddingVertical: 50,
+    alignItems: 'flex-start',
+    paddingVertical: 0,
   },
   ruleTitleText: {
     fontSize: AppStyle.fontMiddle,
@@ -119,10 +121,17 @@ const styles = StyleSheet.create({
     fontFamily: AppStyle.mainFont,
   },
   ruleValueText: {
+    paddingVertical: 10,
+    paddingLeft: 50,
     fontSize: AppStyle.fontMiddle,
     color: 'black',
     fontFamily: AppStyle.mainFont,
   },
+  ruleExplanation: {
+    paddingTop: 20,
+    paddingLeft: 50,
+    ...AppStyle.fontExplanation,
+  }
 });
 
 const t = {

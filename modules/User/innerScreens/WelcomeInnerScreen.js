@@ -59,14 +59,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   intro: {
-    padding: 50,
-    marginTop: 50,
+    padding: 60,
+    marginTop: 110,
     flex: 2,
     color: AppStyle.mainBlackColor,
     fontSize: AppStyle.fontLarge,
     fontFamily: AppStyle.mainFontBold,
   },
   buttonContainer: {
+    marginTop: 75,
     flex: 1,
   },
   loginContainer: {
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
     padding: 50,
   },
   loginTip: {
+    paddingLeft: 10,
     fontSize: AppStyle.fontMiddle,
     color: AppStyle.grayColor,
   },
