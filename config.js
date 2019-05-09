@@ -50,7 +50,7 @@ export const wsInfo = {
 };
 
 export const voteInfo = {
-  rulesDescription: '(Join/Quit/Tax/Vote/Status)',
+  rulesDescription: '(Status)',
 };
 
 export const ethereumConfig = {
