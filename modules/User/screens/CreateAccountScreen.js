@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     ...AppStyle.fontRegularTitle,
     paddingVertical: 30,
+    // paddingBottom: 15,
     textAlign: 'left',
   },
   inputContainer: {

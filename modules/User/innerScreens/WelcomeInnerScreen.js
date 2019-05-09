@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   intro: {
     padding: 60,
-    marginTop: 110,
+    marginTop: 50,
     flex: 2,
     color: AppStyle.mainBlackColor,
     fontSize: AppStyle.fontLarge,
