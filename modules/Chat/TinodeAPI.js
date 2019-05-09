@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import _ from 'lodash';
 import Tinode from '../../tinode/tinode';
-import { chatConfig, contractInfo, wsInfo, contractProps, countryProps } from '../../config';
+import {chatConfig, contractInfo, wsInfo, contractProps, countryProps, defaultUnsubscribedChatSeq} from '../../config';
 import { store } from '../../reducers/store';
 import { chatAction } from './actions/chatAction';
 import { screensList } from '../../navigation/screensList';
@@ -51,13 +51,13 @@ class TinodeAPIClass {
   }
 
   getDescription(topic) {
-    return this.tinode
-      .getMeta(topic, {
+    const Topic = this.tinode.getTopic(topic);
+    return Topic.getMetaInactive({
         what: 'desc',
       })
       .catch(err => console.log('get description err is', err));
   }
-
+  
   getVoteInfo = (topic, walletAddress, userId) =>
     this.tinode.vote(topic, {
       what: VoteTypes.STATUS,
@@ -181,6 +181,13 @@ class TinodeAPIClass {
 
   tnMeMetaSub(meTopic, topicData) {
     store.dispatch(chatAction.updateChatMap(topicData));
+  
+    const topicId = topicData.topic;
+    if(topicData.seq === defaultUnsubscribedChatSeq) {
+      TinodeAPI.getDescription(topicId).then(topicData => {
+        store.dispatch(topicsAction.updateTopic(topicId, _.assign(topicData, {vote: null})));
+      })
+    }
   }
 
   onData(data) {
@@ -248,8 +255,8 @@ class TinodeAPIClass {
     console.log('contact update', what, count);
   }
 
-  tnMeSubsUpdated(meTopics, data) {
-    console.log('me subs updates!', data);
+  tnMeSubsUpdated(meTopics, topicIds) {
+    console.log('me subs updates!', topicIds);
     // let chatList = [];
     // meTopics.contacts(c => {
     //   if(c.topic==='grp_aauZ9a8yFU'){

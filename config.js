@@ -4,6 +4,8 @@ export const environment = {
   mockDurationSecond: 7200,
 };
 
+export const defaultUnsubscribedChatSeq = -2
+
 const baseValue = 100000000000000;
 
 export const contractInfo = {
@@ -80,6 +82,7 @@ export const groupMetaRules = {
   DESCRIPTION: 'countrydesc',
   MEMBER_RULES: 'memberRules',
   PROFILE: 'profile',
+  ENTRY_COST: 'entryCost',
 };
 
 export const chatConfig = {

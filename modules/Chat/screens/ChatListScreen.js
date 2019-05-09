@@ -47,6 +47,7 @@ class ChatListScreen extends React.Component {
     navigation: PropTypes.object,
     chatMap: PropTypes.object.isRequired,
     userId: PropTypes.string.isRequired,
+    topicsMap: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -72,7 +73,7 @@ class ChatListScreen extends React.Component {
   };
 
   render() {
-    const { chatMap, navigation } = this.props;
+    const { chatMap, navigation, topicsMap } = this.props;
     const sortedList = _.values(chatMap).sort((a, b) => {
       //TODO add timestamp sorting
       const conditionA = a.isSubscribed < b.isSubscribed;
@@ -113,7 +114,7 @@ class ChatListScreen extends React.Component {
                       isJoined: false,
                     })
               }>
-              <ChatListNode chatNode={item} />
+              <ChatListNode chatNode={item} description={_.get(topicsMap, `${item.topic}.countrydesc`, "")}/>
             </TouchableOpacity>
           )}
         />
@@ -126,6 +127,7 @@ const mapStateToProps = state => ({
   walletAddress: state.appState.walletAddress,
   chatMap: state.chat.chatMap,
   userId: state.appState.userId,
+  topicsMap: state.topics.topicsMap,
 });
 
 const mapDispatchToProps = _.curry(bindActionCreators)({

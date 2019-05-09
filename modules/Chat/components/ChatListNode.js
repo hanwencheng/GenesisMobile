@@ -11,12 +11,13 @@ import { renderImageSource } from '../../../utils/imageUtils';
 export default class ChatListNode extends React.Component {
   static propTypes = {
     chatNode: PropTypes.object.isRequired,
+    description: PropTypes.string.isRequired,
   };
 
   static defaultProps = {};
 
   render() {
-    const { chatNode } = this.props;
+    const { chatNode, description } = this.props;
     const { unread } = chatNode;
     if (!chatNode.public) {
       console.log('topic with null public is', chatNode);
@@ -48,7 +49,7 @@ export default class ChatListNode extends React.Component {
             <Text style={styles.text} numberOfLines={1}>
               {chatNode.isSubscribed
                 ? chatNode.lastmsg || ''
-                : chatNode.countrydesc}
+                : description}
             </Text>
           </View>
         </View>

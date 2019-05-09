@@ -1518,7 +1518,7 @@ var Tinode = function(appname_, host_, apiKey_, transport_, secure_, platform_) 
 
         // Preferred API: Route meta to topic, if one is registered
         const topic = cacheGet('topic', pkt.meta.topic);
-        if (topic) {
+        if (topic ) {
           topic._routeMeta(pkt.meta);
         }
 
@@ -3521,6 +3521,10 @@ Topic.prototype = {
     // Send {get} message, return promise.
     return this._tinode.getMeta(this.name, params);
   },
+  
+  getMetaInactive(params) {
+    return this._tinode.getMeta(this.name, params);
+  },
 
   /**
    * Request more messages from the server
@@ -4301,7 +4305,7 @@ Topic.prototype = {
 
   // Called by Tinode when meta.desc packet is received.
   // Called by 'me' topic on contact update (fromMe is true).
-  _processMetaDesc(desc, fromMe) {
+  _processMetaDesc(desc, fromMe, shouldDisableSub) {
     // Copy parameters from desc object to this topic.
     _.merge(this, desc);
 
@@ -4315,21 +4319,23 @@ Topic.prototype = {
       this.touched = new Date(this.touched);
     }
 
+    // Disable the update here;
     // Update relevant contact in the me topic, if available:
     if (this.name !== 'me' && !fromMe && !desc._generated) {
+      
       const me = this._tinode.getMeTopic();
       if (me) {
-        me._processMetaSub([
-          {
-            _generated: true,
-            topic: this.name,
-            updated: this.updated,
-            touched: this.touched,
-            acs: this.acs,
-            public: this.public,
-            private: this.private,
-          },
-        ]);
+        // me._processMetaSub([
+        //   {
+        //     _generated: true,
+        //     topic: this.name,
+        //     updated: this.updated,
+        //     touched: this.touched,
+        //     acs: this.acs,
+        //     public: this.public,
+        //     private: this.private,
+        //   },
+        // ]);
       }
     }
 
