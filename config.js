@@ -1,7 +1,7 @@
 export const environment = {
   disableQRScan: false,
-  disableVoteDuration: false,
-  mockDurationSecond: 120,
+  disableVoteDuration: true,
+  mockDurationSecond: 7200,
 };
 
 const baseValue = 100000000000000;
