@@ -65,7 +65,7 @@ class TopicRules extends React.Component {
         <SingleLineDisplay
           title={t.COST_TITLE}
           // value={`- ${rules.voteCost} NES`}
-          value={`- ${rules.voteCost} ETH`}
+          value={`- ${rules.entryCost} Wei`}
           onClick={() => conditionalOpen(screensList.AmendCost.label)}
         />
       </Container>

@@ -16,7 +16,7 @@ class AmendCostScreen extends React.Component {
     return (
       <Container>
         <AmendInput
-          propertyPath={groupMetaRules.VOTE_COST}
+          propertyPath={groupMetaRules.ENTRY_COST}
           unit={t.UNIT_TEXT}
           intro={t.INTRO_TEXT}
           description={t.DESCRIPTION_TEXT}

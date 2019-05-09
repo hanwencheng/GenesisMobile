@@ -49,7 +49,7 @@ export const ContractFnMap = {
     value: v => [(v * 3600).toString()],
     isContract: false,
   },
-  voteCost: {
+  entryCost: {
     name: 'setCost',
     value: v => [v.toString(), '100'],
     isContract: true,

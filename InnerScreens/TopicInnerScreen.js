@@ -1,5 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 import _ from 'lodash';
@@ -65,7 +74,7 @@ class TopicInnerScreen extends React.Component {
     if (this.isCreatingNewTopic) return;
 
     TinodeAPI.getDescription(topicId).then(data => {
-      updateTopic(topicId, data);
+      updateTopic(topicId, _.assign(data, { vote: null }));
       const newVote = _.assign({}, voteOrigin, {
         countryName: _.get(data, 'public.fn', voteOrigin.countryName),
         countrydesc: _.get(data, 'countrydesc', voteOrigin.countrydesc),
@@ -215,13 +224,7 @@ class TopicInnerScreen extends React.Component {
           />
         </React.Fragment>
       );
-    if (isJoined)
-      return (
-        <GenesisButton
-          action={() => this.onLeave()}
-          text={t.BUTTON_LEAVE}
-        />
-      );
+    if (isJoined) return <GenesisButton action={() => this.onLeave()} text={t.BUTTON_LEAVE} />;
     if (this.isBlockedUser)
       return (
         <GenesisButton
