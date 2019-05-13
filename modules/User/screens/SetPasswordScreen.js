@@ -148,6 +148,6 @@ const t = {
   BUTTON_TEXT: 'Next',
   PLACEHOLDER: 'Password',
   ERROR_MESSAGE: 'Sorry, this password is too weak',
-  REPEAT_ERROR: 'this password is not the same as before',
-  RESET: 'reset the password',
+  REPEAT_ERROR: 'This password is not the same as before',
+  RESET: 'Reset password',
 };

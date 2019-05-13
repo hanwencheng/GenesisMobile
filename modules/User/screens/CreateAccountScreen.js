@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   hint: {
     position: 'relative',
-    bottom: -85,
+    bottom: -65,
     flex: 2,
     padding: 45,
     ...AppStyle.fontExplanation,

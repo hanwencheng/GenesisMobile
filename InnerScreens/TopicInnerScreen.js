@@ -414,7 +414,7 @@ const t = {
   CREATE_DESCRIPTION_ERROR: 'Please fill a description for your country',
   CREATE_PHOTO_ERROR: 'Please upload a profile photo for the country',
 
-  NO_WALLET: 'please set wallet first',
+  NO_WALLET: 'Please make sure you have enough fund in your wallet',
   SEND_TRANSACTION: 'Transaction sending to the blockchain network',
   NOT_SET: 'Not Set',
 };

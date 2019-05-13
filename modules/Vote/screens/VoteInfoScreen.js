@@ -190,7 +190,7 @@ const t = {
   VIEW_MORE_MEMBERS: 'View more voters',
   YES_BUTTON: 'Vote support',
   NO_BUTTON: 'Vote against',
-  NO_WALLET: 'please set wallet first',
+  NO_WALLET: 'Please make sure you have enough fund in your wallet',
 };
 
 export default connect(
