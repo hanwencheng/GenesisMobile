@@ -31,7 +31,7 @@ class ActionList extends React.Component {
       {
         name: 'Vote',
         imageSource: Images.vote,
-        action: () => navigation.navigate(screensList.VoteInfo.label),
+        // action: () => navigation.navigate(screensList.VoteInfo.label),
       },
       // TODO disable App Store now.
       // {

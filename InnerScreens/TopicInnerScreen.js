@@ -390,7 +390,7 @@ export default connect(
 
 const t = {
   // VOTE_INTRO: 'Current cost to start a vote is 500 ENS, paid to cover ETH smart contract fees.',
-  VOTE_INTRO: 'Current cost to start a vote is 500 ETH, paid to cover ETH smart contract fees.',
+  VOTE_INTRO: 'Current cost to start a vote is 0.0005 Eth, paid to cover Eth smart contract fees.',
   JOIN_INTRO: 'You will be asked to pay membership due immediately when you choose to join.',
   VOTE_RULES_TITLE: 'Rules',
   MINI_DAPPS: 'Dapps',
@@ -409,7 +409,7 @@ const t = {
   // CREATE_COUNTRY_INTRO:
   //   'Current cost to start a virtual country is 1000 NES, paid to cover ETH smart contract fees.',
   CREATE_COUNTRY_INTRO:
-    'Current cost to start a virtual country is 1000 ETH, paid to cover ETH smart contract fees.',
+    'Current cost to start a virtual country is 0.0001 Eth, paid to cover Eth smart contract fees.',
   CREATE_NAME_ERROR: 'Please fill a valid country name',
   CREATE_DESCRIPTION_ERROR: 'Please fill a description for your country',
   CREATE_PHOTO_ERROR: 'Please upload a profile photo for the country',
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
   bottomTip: {
     marginVertical: width * 0.025,
     marginHorizontal: width * 0.15,
-    marginTop: 80,
+    marginTop: 70,
     color: AppStyle.bodyTextGrey,
   },
 });
